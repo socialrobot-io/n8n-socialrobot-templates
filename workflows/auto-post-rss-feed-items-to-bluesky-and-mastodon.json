@@ -7,7 +7,7 @@
         "width": 480,
         "height": 762
       },
-      "id": "1fbfb221-f720-4c2f-88bf-60946fe96747",
+      "id": "46ad3474-0a7c-4dbf-a974-4e2b8c935e1f",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "4e29ff32-d708-4caf-bcc6-e624c5d6236f",
+      "id": "26d9bc04-ecf7-42ab-9514-e5230274bfb6",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "6b45c0b2-da12-4b30-82e9-b3d29ef7d414",
+      "id": "c135aced-43ab-44d4-8428-9235f51b485b",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "e49b9ecd-01a2-42fb-98a0-a160dbbb72c4",
+      "id": "124ad716-f4c1-4e3a-9e4b-f2ef0aa422e5",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "4ba2e9ea-bf05-4ed7-9e2d-98d999437612",
+      "id": "8f390b68-7d4c-40f4-b300-8d8969efc66d",
       "name": "Every Hour",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -88,7 +88,7 @@
       "parameters": {
         "url": "https://example.com/feed.xml"
       },
-      "id": "818320a1-2e18-49dc-a65f-a3a5e7e2aa9e",
+      "id": "da09aea8-269d-483e-82df-1e07a0b10ec1",
       "name": "Fetch RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
@@ -107,7 +107,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "4bbc96d8-1c1a-42a8-aea0-b934945c18b7",
+      "id": "3bee2d2e-934a-4598-8256-9fdee5e2b185",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
       "typeVersion": 1,
@@ -132,7 +132,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "82d9174b-8bf3-42a4-8c8d-82d50ac715dc",
+      "id": "98addb0e-1572-49e8-a213-67d972d61e60",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
       "typeVersion": 1,
@@ -170,9 +170,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "30ced37d-2f33-414a-ad01-3700714cd568",
+  "versionId": "f7f833c5-69ec-4044-bac7-b3fc7dbec196",
   "meta": {
-    "instanceId": "a442a538-921a-43f1-8144-774a9bc53dd0",
+    "instanceId": "38d24cad-57c8-4556-92f0-18e4a6839ba7",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

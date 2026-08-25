@@ -7,7 +7,7 @@
         "width": 480,
         "height": 696
       },
-      "id": "b64da0cf-6396-4734-bc7d-0cd7b2a6a733",
+      "id": "fba90890-8276-4e05-b28a-2bbeebdceeb4",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "3fb757df-0a70-4465-9069-affbac4c1739",
+      "id": "33ab6f92-3c2d-4355-9094-7f3d3fb8b53c",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "a20e045c-aa12-475b-82b8-873ce63637bc",
+      "id": "79ad826c-a281-43bf-96bd-77c78ed55170",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -60,7 +60,7 @@
           }
         ]
       },
-      "id": "dda6d467-d449-4267-b498-a2dbc8b06fd2",
+      "id": "a9d04d64-d5ad-42c5-be50-b6f159b57def",
       "name": "Publish to TikTok",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
       "typeVersion": 1,
@@ -93,9 +93,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "a2407027-c2fe-4f0b-a753-1d2ad231ba86",
+  "versionId": "3193b89e-88ad-4c72-a982-fb040270ff5e",
   "meta": {
-    "instanceId": "061e5ca8-7828-4493-b35d-3ad298323873",
+    "instanceId": "b7974509-24f2-41d9-8681-3eda0f8eb2de",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

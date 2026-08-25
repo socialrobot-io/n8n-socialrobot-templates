@@ -7,7 +7,7 @@
         "width": 480,
         "height": 850
       },
-      "id": "e80bca10-95a5-4163-9786-59cfe145b1bd",
+      "id": "b3729926-5324-4a8d-bb92-91cc3ee29d32",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "67780a3d-71fe-4333-aaad-1a75519617cd",
+      "id": "b3a1e55e-87c3-468d-8c0b-ec3a51e60365",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "e580c321-ff4c-4d37-ac91-3fcbb1d16097",
+      "id": "e4a2ddfd-d5f3-4727-bc1f-d1be8a235f49",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -59,7 +59,7 @@
           ]
         }
       },
-      "id": "6875fc37-ed47-442c-9962-1c5288e42235",
+      "id": "4ec41592-aa81-4720-8383-8f2f0ec3b38a",
       "name": "Every 6 Hours",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -72,7 +72,7 @@
       "parameters": {
         "url": "https://example.com/feed.xml"
       },
-      "id": "9425ede7-7b79-4748-a097-bfcfa7ffc28b",
+      "id": "878fd548-08e7-4196-b63b-767e067db8a9",
       "name": "Fetch RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
@@ -91,7 +91,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "e73cc8fb-2993-4078-905c-d0cb7b6ef516",
+      "id": "7326b9eb-e8d3-40c8-9312-613eb3567df8",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
       "typeVersion": 1,
@@ -116,7 +116,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "1e29ce9f-a10c-45b4-bc71-4c4579322c86",
+      "id": "0fa33e1a-3c31-4fbd-ba09-8ea1d0df3493",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
       "typeVersion": 1,
@@ -141,7 +141,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "a77eeb0c-c518-422b-9e14-bdfb00466e9c",
+      "id": "459492bc-451d-45b7-91c5-35bab7923868",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
       "typeVersion": 1,
@@ -166,7 +166,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "14873db2-8dbe-4a49-b2b9-07ed9b6b7ef8",
+      "id": "1c0c97e9-fc02-4ddc-bc71-9d9a0a188e26",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
       "typeVersion": 1,
@@ -191,7 +191,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "5b5dadcf-1190-4169-ae60-8e72f62409b6",
+      "id": "8e9c5e0c-3262-400e-97f9-bdf6617b77ce",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
       "typeVersion": 1,
@@ -216,7 +216,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "eb23cab4-c871-4aa9-9b76-502157c2da38",
+      "id": "2698892c-f62c-4f3f-b127-7e36111ad2bb",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
       "typeVersion": 1,
@@ -274,9 +274,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "9efc9566-5bdc-477b-94ac-a827a21eb6e4",
+  "versionId": "ad6ca979-53b3-41ad-b5be-3b93dff6c218",
   "meta": {
-    "instanceId": "9e70d0bd-3006-4400-9739-283da552c475",
+    "instanceId": "362400c0-e203-47d6-b433-40c0a90121b6",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

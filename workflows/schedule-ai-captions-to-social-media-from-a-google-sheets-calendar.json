@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Schedule AI captions to social media from a Google Sheets calendar\n\n### Who's it for\n\nSocial media teams that plan content in a spreadsheet and want it published on schedule.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reads the rows of your content calendar spreadsheet.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Schedules a post to X (Twitter) at the given date and time. Schedules a post to Bluesky at the given date and time. Schedules a post to Mastodon at the given date and time. Schedules a post to Threads at the given date and time. Schedules a post to LinkedIn at the given date and time.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Connect Google Sheets and pick your spreadsheet and sheet.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A Google account and a Google Sheet with date and caption columns.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n",
+        "content": "## Schedule AI captions to social media from a Google Sheets calendar\n\n### Who's it for\n\nSocial media teams that plan content in a spreadsheet and want it published on schedule.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reads the rows of your content calendar spreadsheet.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Schedules a post to X (Twitter) at the given date and time. Schedules a post to Bluesky at the given date and time. Schedules a post to Mastodon at the given date and time. Schedules a post to Threads at the given date and time. Schedules a post to LinkedIn at the given date and time.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Connect Google Sheets and pick your spreadsheet and sheet.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A Google account and a Google Sheet with date and caption columns.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n",
         "width": 480,
-        "height": 1224
+        "height": 1048
       },
-      "id": "2e0dfb3d-8dab-4218-abd5-28c4b42a948f",
+      "id": "de1d9673-26a4-4727-9690-17c3adb6c768",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "aeb46905-ed0f-4d05-ad02-3ec4b861b6b0",
+      "id": "e1f37be2-c83a-4480-8acf-2ce17b5e3a03",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 242,
         "color": 7
       },
-      "id": "9c370998-86ae-450c-a87c-e38ee1dad78e",
+      "id": "ddfc1a2d-e3d9-42b5-a54f-416a05291a3b",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "5c1308b7-fe19-474c-a79a-4560000b411e",
+      "id": "c1006ce5-235c-402d-866c-91fe615d48a9",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -74,7 +74,7 @@
           "value": ""
         }
       },
-      "id": "707852f8-f8f5-4fd5-bc4c-30e051b2363c",
+      "id": "ef7a4578-5a1f-422a-a044-af96333a7518",
       "name": "Read Content Calendar",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
@@ -98,7 +98,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "515ac0a8-2184-45f7-9dd2-2f2b219b70bc",
+      "id": "66d599a0-5ece-45ee-b025-8ebcdaf7628a",
       "name": "AI Caption Rewriter",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -120,7 +120,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "0e9ea37a-8a3b-4b66-9a66-24a5d338768f",
+      "id": "127dfd77-dceb-4270-bd3b-b1b0b6eeec34",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -140,7 +140,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"caption\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "5bfa7552-05bb-4eb0-ad48-155726881267",
+      "id": "6185dde3-2eda-4000-b82e-f241aac2e7ee",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -160,7 +160,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "83b9641c-ce25-475c-b897-4c6c501949d4",
+      "id": "c1918448-39c6-4a8a-b8e5-0bbac6480c01",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
       "typeVersion": 1,
@@ -186,7 +186,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "292c7fb0-b71a-4311-ad22-d7a98da60bf3",
+      "id": "3620491f-3d77-4c9e-9e9f-190562aa4213",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
       "typeVersion": 1,
@@ -212,7 +212,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "09cec266-9916-4995-b478-38659e73e7b5",
+      "id": "99107d0c-9108-40ec-ab05-f97af0b29ad2",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
       "typeVersion": 1,
@@ -238,7 +238,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "84880d10-31a4-4ec1-a840-6c350fcba191",
+      "id": "8662955b-baff-4e68-a72b-9ecef49a4e5f",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
       "typeVersion": 1,
@@ -264,7 +264,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "81198cd2-3358-4bc8-8fbe-d027b7e3b199",
+      "id": "3acbf684-1812-4b70-a959-eea5e4031086",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
       "typeVersion": 1,
@@ -361,9 +361,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "232cd410-60a2-4f61-8637-20a016be14da",
+  "versionId": "693877e2-e7a0-4eb0-9f89-9b8cbc65b7ae",
   "meta": {
-    "instanceId": "981843ad-75f8-4c29-96ad-a525189be994",
+    "instanceId": "1899d303-56e5-4e5c-89a0-f2bf81b8832f",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

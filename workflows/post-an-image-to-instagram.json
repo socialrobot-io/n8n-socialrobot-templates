@@ -7,7 +7,7 @@
         "width": 480,
         "height": 696
       },
-      "id": "23f3006d-8166-4266-9df6-aa856b880f1e",
+      "id": "b57af5ae-8158-4e25-87a1-d3a7e42150f0",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "a2c49b5f-8385-4b49-9ae7-76227b17a199",
+      "id": "27e1e790-c2ec-42ac-ae44-b779fd5eae3a",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "a7c9cdfc-9c8a-49e6-9371-de6da4ac37fd",
+      "id": "e3cbd4e9-55e0-4d75-97d9-864e0dbfd4eb",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -56,7 +56,7 @@
         "mediaType": "IMAGE",
         "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
       },
-      "id": "fdc07a2c-18a9-4e22-9aff-9f073aae3850",
+      "id": "4653f287-5349-4726-8db6-5d641c2aa010",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
       "typeVersion": 1,
@@ -89,9 +89,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "0d1da624-d470-4448-896c-9277bbe8a2f9",
+  "versionId": "a1828bdb-2303-42e6-825f-83d8561762e0",
   "meta": {
-    "instanceId": "41fb8835-9572-44f3-87a1-72cdb8bf3da1",
+    "instanceId": "b8456423-a085-453c-871d-61f1729c9f6b",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

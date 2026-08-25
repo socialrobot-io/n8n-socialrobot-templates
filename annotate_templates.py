@@ -224,9 +224,15 @@ def describe_source(node):
     if t == "n8n-nodes-base.set":
         return "Sets the topic, text, or other inputs used to build the post."
     if "httpRequest" in t:
-        return "Downloads the media file from a URL into binary data."
+        return "Calls an external API over HTTP (media generation, status polling, or download)."
     if "langchain.agent" in t:
         return "Generates platform-optimized post text with the OpenAI model."
+    if t == "n8n-nodes-base.code":
+        return "Converts the generated image into binary data for upload."
+    if t == "n8n-nodes-base.wait":
+        return "Pauses between status checks while the AI media renders."
+    if t == "n8n-nodes-base.if":
+        return "Checks whether the AI media finished generating; retries until ready."
     return ""
 
 
@@ -276,9 +282,11 @@ def build_overview(wf, nodes, trigger, sources, action):
     name = wf.get("name", "Untitled workflow")
 
     how = ["1. " + describe_trigger(trigger) if trigger else "1. Starts the workflow."]
+    seen_how = set()
     for s in sources:
         d = describe_source(s)
-        if d:
+        if d and d not in seen_how:
+            seen_how.add(d)
             how.append(f"{len(how) + 1}. " + d)
     desc = describe_action(action)
     if desc:
@@ -288,8 +296,12 @@ def build_overview(wf, nodes, trigger, sources, action):
     steps = [
         "[ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.",
     ]
+    seen_step_types = set()
     for s in sources:
         t = s.get("type", "")
+        if t in seen_step_types:
+            continue
+        seen_step_types.add(t)
         if "rssFeedRead" in t:
             steps.append("[ ] Set the RSS feed URL to your own feed.")
         elif "googleSheets" in t:
@@ -297,7 +309,7 @@ def build_overview(wf, nodes, trigger, sources, action):
         elif t == "n8n-nodes-base.set":
             steps.append("[ ] Edit the fields in the Set node to set your topic or text.")
         elif "httpRequest" in t:
-            steps.append("[ ] Set the media URL in the Download node.")
+            steps.append("[ ] Connect your Replicate account in the HTTP Request nodes (media generation, status checks, and download).")
         elif "langchain.agent" in t:
             steps.append("[ ] Connect your OpenAI account in the OpenAI Chat Model node.")
 
@@ -307,14 +319,18 @@ def build_overview(wf, nodes, trigger, sources, action):
 
     if publish_nodes:
         steps.append("[ ] Select your connected account in each Publish node.")
+    seen_publish_steps = set()
     for n in publish_nodes:
         platform = PLATFORM_BY_TYPE[n.get("type")]
         params = n.get("parameters", {})
-        if platform == "pinterest":
+        if platform == "pinterest" and "pin" not in seen_publish_steps:
+            seen_publish_steps.add("pin")
             steps.append("[ ] Set the Pinterest board ID in the Pinterest Publish node.")
-        if platform == "instagram" and params.get("mediaSource") == "binary":
+        if platform == "instagram" and params.get("mediaSource") == "binary" and "igbin" not in seen_publish_steps:
+            seen_publish_steps.add("igbin")
             steps.append("[ ] Make sure an upstream node provides the image as binary data (for example an HTTP Request node).")
-        if params.get("publishMode") == "SCHEDULE":
+        if params.get("publishMode") == "SCHEDULE" and "sched" not in seen_publish_steps:
+            seen_publish_steps.add("sched")
             steps.append("[ ] Confirm the schedule date, or map it from an upstream field.")
 
     has_media_placeholder = json.dumps([n.get("parameters", {}) for n in publish_nodes]).count("example.com") > 0
@@ -356,8 +372,12 @@ def _who_is_it_for(sources, action):
 
 def _requirements(sources, action):
     reqs = ["A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key."]
+    seen_req_types = set()
     for s in sources:
         t = s.get("type", "")
+        if t in seen_req_types:
+            continue
+        seen_req_types.add(t)
         if "rssFeedRead" in t:
             reqs.append("A public RSS feed URL.")
         elif t == "n8n-nodes-base.googleSheets":
@@ -366,16 +386,20 @@ def _requirements(sources, action):
             reqs.append("An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.")
 
     actions = action if isinstance(action, list) else ([action] if action else [])
+    seen_platform_reqs = set()
     for n in actions:
         if n.get("type") not in PLATFORM_BY_TYPE:
             continue
         platform = PLATFORM_BY_TYPE[n.get("type")]
         params = n.get("parameters", {})
-        if platform == "pinterest":
+        if platform == "pinterest" and "pin" not in seen_platform_reqs:
+            seen_platform_reqs.add("pin")
             reqs.append("A Pinterest board ID.")
-        if platform == "instagram" and params.get("mediaSource") == "binary":
+        if platform == "instagram" and params.get("mediaSource") == "binary" and "igbin" not in seen_platform_reqs:
+            seen_platform_reqs.add("igbin")
             reqs.append("An upstream node that provides the image as binary data (for example an HTTP Request node).")
-        elif "medias" in params or "mediaUrl" in params:
+        elif ("medias" in params or "mediaUrl" in params) and platform not in seen_platform_reqs and platform != "pinterest" and not (platform == "instagram" and params.get("mediaSource") == "binary"):
+            seen_platform_reqs.add(platform)
             reqs.append(f"A public image or video URL for {PLATFORM_LABELS[platform]}.")
     return reqs
 

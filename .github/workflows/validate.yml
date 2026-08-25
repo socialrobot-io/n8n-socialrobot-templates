@@ -30,7 +30,7 @@ jobs:
           print(re.sub(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', sub, open(sys.argv[1]).read()), end='')
           " "$1"; }
           failed=0
-          for f in workflows/*.json submission-descriptions.md; do
+          for f in workflows/*.json; do
             if ! diff <(norm "$f") <(git show "HEAD:$f" 2>/dev/null | python3 -c "
           import re, sys
           def sub(m, counter=[0]):

@@ -7,7 +7,7 @@
         "width": 480,
         "height": 1136
       },
-      "id": "13b15319-49df-4edc-903f-fd515bfce22a",
+      "id": "88d4885f-e601-49df-89dd-90686061b2da",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "b41359c2-68c8-4e87-ac58-9fe9df7bc369",
+      "id": "f03a5985-91df-4f60-9db7-74d06cad6e5d",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 264,
         "color": 7
       },
-      "id": "3ae4d5f0-3a94-4575-a0b0-d3ac92e956ce",
+      "id": "a327cd38-b6dd-4c8f-913f-2bc58e239e54",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -59,7 +59,7 @@
           ]
         }
       },
-      "id": "93950ab0-7109-4fb2-b025-eaff36154cc5",
+      "id": "ec48b2b6-4fb2-4eb4-bdc5-66f8c72bb495",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -74,7 +74,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "0c3a6239-f164-43bc-8f77-adec0a21d283",
+              "id": "2beb2bdc-83c2-458c-8e52-5ff6ad809ddf",
               "name": "theme",
               "type": "string",
               "value": "indie hacking and automation"
@@ -82,7 +82,7 @@
           ]
         }
       },
-      "id": "38ca7293-dad4-4e6c-b2c5-9feae10446c2",
+      "id": "5d42be4b-fe2d-49f2-90e4-adf5c436371b",
       "name": "Set post theme",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -100,7 +100,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "671c6872-0297-4f8c-afc7-8d4e96e27f2e",
+      "id": "b95d7dbb-314c-4961-8780-a9d6f270c48b",
       "name": "AI Draft Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -122,7 +122,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "155677e0-ea01-4de6-a764-bf48f7ca90af",
+      "id": "05dc8ab4-2855-4752-9080-97b69765a860",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -142,7 +142,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"instagram\": {\n      \"type\": \"string\"\n    },\n    \"twitter\": {\n      \"type\": \"string\"\n    },\n    \"linkedin\": {\n      \"type\": \"string\"\n    },\n    \"tiktok\": {\n      \"type\": \"string\"\n    },\n    \"facebook\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_title\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_description\": {\n      \"type\": \"string\"\n    },\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    },\n    \"threads\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "9935cf90-fdcd-45a1-9060-da02a08545ac",
+      "id": "39614a11-493f-4f74-a865-acba56d9b774",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -161,7 +161,7 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.instagram }}"
       },
-      "id": "ab5c3760-951a-4ae4-a7b0-27937df49ff0",
+      "id": "11b976de-3949-44e6-8e4f-26e67f25b6e4",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
       "typeVersion": 1,
@@ -186,7 +186,7 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.twitter }}"
       },
-      "id": "60bf1697-3a07-4540-b807-defb45b6c295",
+      "id": "7645f789-3aed-4941-9154-a7d7950ae25d",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
       "typeVersion": 1,
@@ -211,7 +211,7 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.linkedin }}"
       },
-      "id": "2c9cdeb1-6d83-44a5-8032-297e58797ab1",
+      "id": "3c5136a2-7104-4f7f-859a-f191a3ee9302",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
       "typeVersion": 1,
@@ -236,7 +236,7 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.tiktok }}"
       },
-      "id": "3488cb2f-32a9-4630-99e3-6b7b126efb73",
+      "id": "1f9c3c55-d9bf-41b5-a52c-ae8bf732f016",
       "name": "Publish to TikTok",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
       "typeVersion": 1,
@@ -261,7 +261,7 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.facebook }}"
       },
-      "id": "e953d3eb-b996-4d9c-b540-6704f751730c",
+      "id": "32c52948-b604-4a74-8551-b84f78a3ab1c",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
       "typeVersion": 1,
@@ -287,7 +287,7 @@
         "caption": "={{ $json.output.pinterest_description }}",
         "boardId": "your-board-id"
       },
-      "id": "9a8ed697-88b9-4042-b345-4781fa0f7873",
+      "id": "ca9dae9c-c263-436d-9697-7268b2942b9f",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
       "typeVersion": 1,
@@ -312,7 +312,7 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.bluesky }}"
       },
-      "id": "a28c769e-0003-416e-9675-a101413abbc8",
+      "id": "9ba45a5f-01a9-4997-9e57-bfecfe9d2a02",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
       "typeVersion": 1,
@@ -337,7 +337,7 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.mastodon }}"
       },
-      "id": "14963d7c-7539-4838-9dba-32aa67fbebef",
+      "id": "1a48410b-17b3-4ff9-93a4-e8ea083a6a13",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
       "typeVersion": 1,
@@ -362,7 +362,7 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.threads }}"
       },
-      "id": "ede7d055-27c5-4290-9af4-887afc46ab8e",
+      "id": "017e960e-e708-4ac3-ba4d-d1c6822de61a",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
       "typeVersion": 1,
@@ -479,9 +479,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "c31dbfaf-d0d2-480b-99a2-4f07b47dd9a7",
+  "versionId": "72e6980b-70d9-4af2-bbf7-30282c50aa43",
   "meta": {
-    "instanceId": "631b550e-08bf-4574-b357-55cc04dcb981",
+    "instanceId": "d11ce2e7-06a2-4cee-b046-46f92cb68e97",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

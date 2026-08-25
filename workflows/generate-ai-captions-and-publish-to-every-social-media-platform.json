@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Generate AI captions and publish to every social media platform\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Publishes a post to Instagram via the SocialRobot API. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to LinkedIn via the SocialRobot API. Publishes a post to TikTok via the SocialRobot API. Publishes a post to Facebook via the SocialRobot API. Publishes a post to Pinterest via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API. Publishes a post to Threads via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n- A public image or video URL for Instagram.\n- A public image or video URL for X (Twitter).\n- A public image or video URL for LinkedIn.\n- A public image or video URL for TikTok.\n- A public image or video URL for Facebook.\n- A Pinterest board ID.\n- A public image or video URL for Pinterest.\n- A public image or video URL for Mastodon.\n- A public image or video URL for Threads.\n",
+        "content": "## Generate AI captions and publish to every social media platform\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Publishes a post to Instagram via the SocialRobot API. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to LinkedIn via the SocialRobot API. Publishes a post to TikTok via the SocialRobot API. Publishes a post to Facebook via the SocialRobot API. Publishes a post to Pinterest via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API. Publishes a post to Threads via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n- A public image or video URL for Instagram.\n- A public image or video URL for X (Twitter).\n- A public image or video URL for LinkedIn.\n- A public image or video URL for TikTok.\n- A public image or video URL for Facebook.\n- A Pinterest board ID.\n- A public image or video URL for Mastodon.\n- A public image or video URL for Threads.\n",
         "width": 480,
-        "height": 1312
+        "height": 1290
       },
-      "id": "bfeabd81-1f60-4bd9-a0fc-8f95b289ec8c",
+      "id": "c1e7cf51-8f6f-4131-b22e-35b03b2b0115",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "bb3113f0-e3bf-4c87-a08a-a899a3caf5b2",
+      "id": "37022010-09ed-4cdd-a84b-95ac5efeacfd",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 242,
         "color": 7
       },
-      "id": "2b5d936f-d21d-43e4-a095-938853dd1e71",
+      "id": "c98add20-de3c-412d-9013-4b00e46aff8e",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "1c6d13b4-9073-4f15-a5fc-adf724106231",
+      "id": "a1155c88-3cad-490f-8e3d-d54012b20e69",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -65,13 +65,13 @@
         "assignments": {
           "assignments": [
             {
-              "id": "585b4510-ce67-4b97-89e0-35c4614af49a",
+              "id": "7547ba9b-09e6-4ec7-83d0-b68d2fd00276",
               "name": "topic",
               "type": "string",
               "value": "How small teams can automate their social media posting"
             },
             {
-              "id": "c81ebc6a-8e39-4720-b6b7-5f79d2131cd6",
+              "id": "55c6f7c3-d28b-49a4-b434-8f127ff428ae",
               "name": "tone",
               "type": "string",
               "value": "friendly and expert"
@@ -79,7 +79,7 @@
           ]
         }
       },
-      "id": "4892ab19-c1ab-4782-89ce-0107637221dc",
+      "id": "05306b8b-0f30-43b2-8d78-e2f641c7f511",
       "name": "Set post topic",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -97,7 +97,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "850172f6-0138-4e4b-8fd2-57fe378d2bef",
+      "id": "5952cc34-f201-4874-a2aa-cf8ffa8618d6",
       "name": "AI Content Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -119,7 +119,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "ec2320f5-719b-40af-9d8f-135529784089",
+      "id": "9145b409-9acb-4051-b665-644bfad70e33",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -139,7 +139,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"instagram\": {\n      \"type\": \"string\"\n    },\n    \"twitter\": {\n      \"type\": \"string\"\n    },\n    \"linkedin\": {\n      \"type\": \"string\"\n    },\n    \"tiktok\": {\n      \"type\": \"string\"\n    },\n    \"facebook\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_title\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_description\": {\n      \"type\": \"string\"\n    },\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    },\n    \"threads\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "a16c664e-2e7c-4ea1-8731-f784faf97682",
+      "id": "6f3a9c50-395f-46d6-a25d-5f311bfba049",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -161,7 +161,7 @@
         "mediaType": "IMAGE",
         "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
       },
-      "id": "f23800c6-d97e-490c-9c2e-20c6f954e690",
+      "id": "ed0c3b61-c65e-46ef-b05d-a05c674cbcc1",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
       "typeVersion": 1,
@@ -193,7 +193,7 @@
           }
         ]
       },
-      "id": "3dc3083c-a023-4260-993b-9e039580cf64",
+      "id": "df81bc66-4c30-43ef-af8f-43223961ac90",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
       "typeVersion": 1,
@@ -225,7 +225,7 @@
           }
         ]
       },
-      "id": "6fb52063-8d12-4519-9604-a5c0aa2f6daa",
+      "id": "abfb190c-87df-46e8-b7df-9e71a671c152",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
       "typeVersion": 1,
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "id": "d76efd26-e096-4eda-bfb3-a68b4400db5d",
+      "id": "d35cec74-4787-4350-8c35-abb5c67eb4c9",
       "name": "Publish to TikTok",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
       "typeVersion": 1,
@@ -289,7 +289,7 @@
           }
         ]
       },
-      "id": "9bc2eb9e-01d4-4211-992a-94fef828d545",
+      "id": "4986856e-8d71-4d18-916c-0838e668dd5d",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
       "typeVersion": 1,
@@ -322,7 +322,7 @@
           }
         ]
       },
-      "id": "3d3bd363-114a-41e3-b4e3-974f21bc7cc9",
+      "id": "b63c8a89-3d02-4c9d-a418-94553f081b5f",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
       "typeVersion": 1,
@@ -347,7 +347,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.bluesky }}"
       },
-      "id": "9113c218-b785-4bc4-a4c3-64f789670020",
+      "id": "9905ee66-94be-434e-b395-fc3917f94777",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
       "typeVersion": 1,
@@ -379,7 +379,7 @@
           }
         ]
       },
-      "id": "0a26743e-dc0a-4f36-a96a-a9b73bde5257",
+      "id": "e59c6a0c-3663-4183-9935-7eb5f27c66a1",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
       "typeVersion": 1,
@@ -411,7 +411,7 @@
           }
         ]
       },
-      "id": "a2abdf63-0160-43b4-93a6-44d25392a192",
+      "id": "edc81914-65e6-4733-8be1-5b86ca927ccf",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
       "typeVersion": 1,
@@ -528,9 +528,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "81e7036e-39d7-4a41-894f-c3867e3c2fb5",
+  "versionId": "06e4dea1-e877-4774-bf98-dc47df7bcdc9",
   "meta": {
-    "instanceId": "78e99eb4-eb63-4720-add8-702cfa12e485",
+    "instanceId": "d43d9fd5-d266-46b6-bda4-17e93d5c2b9d",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

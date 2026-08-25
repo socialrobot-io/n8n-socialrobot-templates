@@ -7,7 +7,7 @@
         "width": 480,
         "height": 696
       },
-      "id": "925f73e7-1e2f-41ce-a62b-cc16345bca00",
+      "id": "c8790d85-6545-4bfd-8240-a594fbadf357",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "94e70b83-d741-430b-8fa5-9642387a5ab5",
+      "id": "bcd77731-b4ee-497f-a63c-bdc5e3da8be7",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "782181ac-3e52-4b69-8931-a63f7731c30c",
+      "id": "8dd03b47-b09e-4592-8d59-fb42fbb6f17b",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -60,7 +60,7 @@
           }
         ]
       },
-      "id": "2c724cba-56d4-48b8-b135-480b3aee55b4",
+      "id": "f684cc02-385c-41f7-8b9e-3008708a6bc8",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
       "typeVersion": 1,
@@ -93,9 +93,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "2bf1c656-1c18-4190-9edd-6c9374d9ef69",
+  "versionId": "e8ada824-9922-4248-9871-373f12c437eb",
   "meta": {
-    "instanceId": "1f4d9cf7-20ea-43ed-8afd-8cae596b008f",
+    "instanceId": "a9de22d1-468f-4f81-a735-4ed90addc233",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Schedule social media posts from a Google Sheets calendar\n\n### Who's it for\n\nSocial media teams that plan content in a spreadsheet and want it published on schedule.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reads the rows of your content calendar spreadsheet.\n3. Schedules a post to X (Twitter) at the given date and time. Schedules a post to Bluesky at the given date and time. Schedules a post to Mastodon at the given date and time. Schedules a post to Threads at the given date and time. Schedules a post to LinkedIn at the given date and time.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Connect Google Sheets and pick your spreadsheet and sheet.\n- [ ] Select your connected account in each Publish node.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A Google account and a Google Sheet with date and caption columns.\n",
+        "content": "## Schedule social media posts from a Google Sheets calendar\n\n### Who's it for\n\nSocial media teams that plan content in a spreadsheet and want it published on schedule.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reads the rows of your content calendar spreadsheet.\n3. Schedules a post to X (Twitter) at the given date and time. Schedules a post to Bluesky at the given date and time. Schedules a post to Mastodon at the given date and time. Schedules a post to Threads at the given date and time. Schedules a post to LinkedIn at the given date and time.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Connect Google Sheets and pick your spreadsheet and sheet.\n- [ ] Select your connected account in each Publish node.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A Google account and a Google Sheet with date and caption columns.\n",
         "width": 480,
-        "height": 1092
+        "height": 916
       },
-      "id": "392093bd-affc-422e-842c-e6a3d4027a9e",
+      "id": "df6e3ca9-bd45-4f2d-8a13-8a65770672bc",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "9c8f7773-d5b5-45e7-94d8-39a1ac156327",
+      "id": "49b463ca-3af6-4c39-8a6c-ecdc7c301006",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 242,
         "color": 7
       },
-      "id": "c23b5fb2-1079-4569-8749-3fe2fa67d760",
+      "id": "05163b0c-a758-4002-9895-357a717de542",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "6b454241-da27-4362-900e-77e83f9759ee",
+      "id": "1798e07a-4464-4fbf-9725-701fbf006e1a",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -74,7 +74,7 @@
           "value": ""
         }
       },
-      "id": "6b1ca553-001d-4b05-8541-ed48685f5652",
+      "id": "d0bb5602-7adc-4737-b82e-61be2f9c7737",
       "name": "Read Content Calendar",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
@@ -100,7 +100,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "ff472c78-4a02-4e0c-9d1c-f1b49af40425",
+      "id": "0731ca54-412b-4a9e-8c30-e5ebdefa6ffc",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
       "typeVersion": 1,
@@ -126,7 +126,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "49140f75-9ce5-45e3-a46e-96c56b3ddeb8",
+      "id": "1be0cb84-9fa0-49f0-8882-3f919938482d",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
       "typeVersion": 1,
@@ -152,7 +152,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "74704029-3f09-4469-8b68-0c622d33ee82",
+      "id": "1368250d-0e9b-4c7b-821a-8f6c4a68df75",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
       "typeVersion": 1,
@@ -178,7 +178,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "1f113ce6-1c07-4aea-af0c-f07a196c32fb",
+      "id": "77abd614-2c4f-4dd8-8acb-c40f036ca8be",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
       "typeVersion": 1,
@@ -204,7 +204,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "80680603-30f2-4467-8d3e-55dc63df258c",
+      "id": "0a8a1be1-6d75-43f2-b9f3-cae3baa5cf21",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
       "typeVersion": 1,
@@ -257,9 +257,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "785c2e3b-6f33-470a-b35d-f3a98c321423",
+  "versionId": "987535a3-49b7-4cc0-8ca6-f99cc2ed10cf",
   "meta": {
-    "instanceId": "f24a1cf2-ccf5-41be-8545-dfdce944dc11",
+    "instanceId": "5add6d3e-1af9-44d5-a2a4-d8fb5112b5e7",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

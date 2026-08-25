@@ -7,7 +7,7 @@
         "width": 480,
         "height": 916
       },
-      "id": "f715cab4-2e7d-4baf-a474-96fe61771826",
+      "id": "3f759b2e-2b0d-45db-9f83-fdf4d62777d0",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "b4f6bd18-e3b4-4029-bfa3-63a1ac945a4d",
+      "id": "fdb1e2f8-9cc2-4b15-a2a7-cd57cffa8955",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "276337ce-d145-48f5-b74b-79b067d6b7c3",
+      "id": "8afd47b8-a863-49f7-83b8-575b7a684874",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "39eaf14f-8fa5-42ce-860c-150f669bea2d",
+      "id": "9e0b5e62-05b4-4d1e-9a3d-e03f8db71940",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "d7cb25fd-10af-47ad-8cf3-2e5bf389f0b1",
+      "id": "216f1c22-b84a-4bbb-bd70-9f29a5f5a8bf",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -90,7 +90,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "dbf66e32-cc22-456c-9c9b-7bf432426f5b",
+              "id": "aeb1a82d-fd72-4af0-882e-13039c5f6e6a",
               "name": "theme",
               "type": "string",
               "value": "indie hacking and automation"
@@ -98,7 +98,7 @@
           ]
         }
       },
-      "id": "23514a96-5962-4958-a352-fcca5a86acc9",
+      "id": "08dc15af-5f9f-4018-9a67-d2aa2680734e",
       "name": "Set post theme",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -116,7 +116,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "089c61d2-b148-493e-ac51-262998bb8a7a",
+      "id": "8711d98c-03ea-444d-a84b-abb827d87928",
       "name": "AI Daily Post Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -138,7 +138,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "85d75147-6cc0-4008-904d-a64997ac836a",
+      "id": "5d67a6ba-13ff-4af4-b157-bf58291d213c",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -158,7 +158,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "e5612fe3-f6af-47b8-9f5d-5f74cba4c624",
+      "id": "aa980968-1ab4-4018-afad-4c3a601243cd",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -177,7 +177,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.bluesky }}"
       },
-      "id": "3379981f-1630-4b7f-adae-b21b1af8913a",
+      "id": "5933994c-39d9-4a36-9650-8ffb3c31a55f",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
       "typeVersion": 1,
@@ -202,7 +202,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.mastodon }}"
       },
-      "id": "7cfa1461-2170-4488-99a3-8b361fa9dc97",
+      "id": "eaabb274-2fe3-452a-b16c-ef54f015432d",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
       "typeVersion": 1,
@@ -284,9 +284,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "de7870f5-3b20-4627-9df6-c87689ffafd4",
+  "versionId": "41c66d02-af92-4c16-b181-2c9f34dd0bda",
   "meta": {
-    "instanceId": "16b48be1-b665-4acf-b0e9-714b32a116d1",
+    "instanceId": "ad47960d-a735-4d7d-afbf-0bff9f19f2cc",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

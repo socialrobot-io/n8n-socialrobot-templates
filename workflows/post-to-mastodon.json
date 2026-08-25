@@ -7,7 +7,7 @@
         "width": 480,
         "height": 696
       },
-      "id": "efa0b9a4-f0e7-487a-83b8-5a4b6cec9b74",
+      "id": "f30b02e7-672d-47fa-93e0-9a8c9fbeba00",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "52e59dc9-1bd5-460b-b026-82b5b36aa91e",
+      "id": "a9087e8d-be2a-417a-8d04-9ee410fde1ee",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "96f3188d-37f7-44ff-b176-cbf83581dcb4",
+      "id": "302a82d2-711a-49e3-a34b-dc3f1fa89125",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -60,7 +60,7 @@
           }
         ]
       },
-      "id": "d9be3992-bf1f-4c78-b826-71fd5a3fca01",
+      "id": "97de0550-c597-4753-8db9-f80f4621fc40",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
       "typeVersion": 1,
@@ -93,9 +93,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "cabc1610-90f5-41a0-b909-2f4c9b0bf4ff",
+  "versionId": "717daad2-98ff-4077-9e39-b86d05ffd9a2",
   "meta": {
-    "instanceId": "78ed0549-146c-493e-adf9-79499dffd1e6",
+    "instanceId": "f7723248-f0de-44b0-9447-99233f23ee55",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

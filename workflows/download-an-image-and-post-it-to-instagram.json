@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Download an image and post it to Instagram\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Instagram.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Downloads the media file from a URL into binary data.\n3. Publishes a post to Instagram via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Set the media URL in the Download node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Make sure an upstream node provides the image as binary data (for example an HTTP Request node).\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An upstream node that provides the image as binary data (for example an HTTP Request node).\n",
+        "content": "## Download an image and post it to Instagram\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Instagram.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Calls an external API over HTTP (media generation, status polling, or download).\n3. Publishes a post to Instagram via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Connect your Replicate account in the HTTP Request nodes (media generation, status checks, and download).\n- [ ] Select your connected account in each Publish node.\n- [ ] Make sure an upstream node provides the image as binary data (for example an HTTP Request node).\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An upstream node that provides the image as binary data (for example an HTTP Request node).\n",
         "width": 480,
-        "height": 806
+        "height": 850
       },
-      "id": "d58aba83-b8b1-43fd-8a02-c37ab866070a",
+      "id": "3e7fa48c-0ba7-4c72-b617-b26b957e3add",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "93dca7d8-2067-48fd-815f-396f004a7043",
+      "id": "78df12f5-b4cd-468f-b5f3-768a1314843d",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "d8ffe59a-df96-4cd0-96e8-502b9c9cad7c",
+      "id": "e452731a-ec7b-4646-b801-ade8e56387a1",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "d840c593-f719-421c-897c-ce8487612356",
+      "id": "3e75081b-c596-41ab-9fbb-a205647eab5a",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -66,7 +66,7 @@
         "responseFormat": "file",
         "options": {}
       },
-      "id": "4cc60134-d42b-4936-98bc-1ff526c76e33",
+      "id": "762b9724-1099-44a8-a651-e16029e8ba1d",
       "name": "Download image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -88,7 +88,7 @@
         "mediaType": "IMAGE",
         "binaryPropertyName": "data"
       },
-      "id": "fdcc4eec-1448-4e93-95b3-17c71a492ffe",
+      "id": "9d3070ff-697f-4738-a036-17983f355f81",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
       "typeVersion": 1,
@@ -132,9 +132,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "eb41c03f-a1e1-4aa9-9063-a65b982e6896",
+  "versionId": "77c474af-dbe8-43c9-ba34-9aafcf42fe43",
   "meta": {
-    "instanceId": "44663c68-ff61-4874-878a-52aaaae24e83",
+    "instanceId": "08de5f4e-9544-4b9d-aa88-9e84b986d410",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}
