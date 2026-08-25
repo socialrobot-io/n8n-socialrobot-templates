@@ -20,8 +20,29 @@ jobs:
         run: |
           python3 generate_templates.py
           python3 generate_descriptions.py
-          git diff --exit-code workflows submission-descriptions.md \
-            || (echo "::error::Generated files are stale. Run 'python3 generate_templates.py && python3 generate_descriptions.py' and commit." && exit 1)
+          # UUIDs (node ids, versionId, instanceId, webhookIds) are random per run;
+          # normalize them before comparing so only real drift fails the check.
+          norm() { python3 -c "
+          import re, sys, hashlib
+          def sub(m, counter=[0]):
+              counter[0] += 1
+              return f'UUID-{counter[0]}'
+          print(re.sub(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', sub, open(sys.argv[1]).read()), end='')
+          " "$1"; }
+          failed=0
+          for f in workflows/*.json submission-descriptions.md; do
+            if ! diff <(norm "$f") <(git show "HEAD:$f" 2>/dev/null | python3 -c "
+          import re, sys
+          def sub(m, counter=[0]):
+              counter[0] += 1
+              return f'UUID-{counter[0]}'
+          print(re.sub(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', sub, sys.stdin.read()), end='')
+          ") > /dev/null; then
+              echo "::error::Real (non-UUID) drift in $f"
+              failed=1
+            fi
+          done
+          exit $failed
 
       - name: Validate workflow JSON structure
         run: |
