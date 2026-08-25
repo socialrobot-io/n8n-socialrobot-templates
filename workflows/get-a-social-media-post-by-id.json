@@ -1,0 +1,91 @@
+{
+  "name": "Get a social media post by ID",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Get a social media post by ID\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Fetches a single post by ID.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Provide the Post ID, mapped from an upstream node or typed directly.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 674
+      },
+      "id": "94d538c0-4e75-4b11-9bba-71413d641ff0",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Manage posts\n\nReads, deletes, or reschedules posts through the SocialRobot API.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "12ef571b-a687-41d5-80e5-54c6aefb6311",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "5233f1ed-c5c7-4362-816b-8045a1f9043f",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "get",
+        "postId": "={{ $json.postId }}"
+      },
+      "id": "446fcb9a-2343-4cef-9953-36ffa1dece7d",
+      "name": "Get Post",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "5f12ccbf-4f92-4504-ac82-7d6e7f7ab2ba",
+  "meta": {
+    "instanceId": "d2e7422e-0cb8-4733-9388-9500bcb79e48",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

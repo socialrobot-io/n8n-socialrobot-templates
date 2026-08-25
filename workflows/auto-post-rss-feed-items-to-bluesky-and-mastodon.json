@@ -1,0 +1,179 @@
+{
+  "name": "Auto-post RSS feed items to Bluesky and Mastodon",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Auto-post RSS feed items to Bluesky and Mastodon\n\n### Who's it for\n\nPublishers and bloggers who want new content shared to social media automatically.\n\n### How it works\n\n1. Runs automatically every hour.\n2. Fetches the latest items from the configured RSS feed.\n3. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Set the RSS feed URL to your own feed.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public RSS feed URL.\n",
+        "width": 480,
+        "height": 762
+      },
+      "id": "1fbfb221-f720-4c2f-88bf-60946fe96747",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Fetch content\n\nReads new items from the RSS feed to turn them into posts.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "4e29ff32-d708-4caf-bcc6-e624c5d6236f",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        620,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Bluesky\n\nPublishes the content to Bluesky.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "6b45c0b2-da12-4b30-82e9-b3d29ef7d414",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Mastodon\n\nPublishes the content to Mastodon.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "e49b9ecd-01a2-42fb-98a0-a160dbbb72c4",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        172
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "4ba2e9ea-bf05-4ed7-9e2d-98d999437612",
+      "name": "Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        430
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://example.com/feed.xml"
+      },
+      "id": "818320a1-2e18-49dc-a65f-a3a5e7e2aa9e",
+      "name": "Fetch RSS Feed",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        620,
+        290
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.title }} {{ $json.link }}"
+      },
+      "id": "4bbc96d8-1c1a-42a8-aea0-b934945c18b7",
+      "name": "Publish to Bluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        290
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.title }} {{ $json.link }}"
+      },
+      "id": "82d9174b-8bf3-42a4-8c8d-82d50ac715dc",
+      "name": "Publish to Mastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        430
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Fetch RSS Feed": {
+      "main": [
+        [
+          {
+            "node": "Publish to Bluesky",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Mastodon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "30ced37d-2f33-414a-ad01-3700714cd568",
+  "meta": {
+    "instanceId": "a442a538-921a-43f1-8144-774a9bc53dd0",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

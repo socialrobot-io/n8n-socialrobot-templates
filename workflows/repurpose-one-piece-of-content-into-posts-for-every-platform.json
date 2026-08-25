@@ -1,0 +1,388 @@
+{
+  "name": "Repurpose one piece of content into posts for every platform",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Repurpose one piece of content into posts for every platform\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to LinkedIn via the SocialRobot API. Publishes a post to Facebook via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API. Publishes a post to Threads via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n",
+        "width": 480,
+        "height": 1004
+      },
+      "id": "a6885470-eb7e-439d-8773-0a8519862bf2",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "410cf7e4-67ad-4c89-82c8-0c02a5c98bdb",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish\n\nPublishes the content to X (Twitter), LinkedIn, Facebook, Bluesky, Mastodon, and Threads.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "cc2efed3-5cdd-48f7-839a-a1bad7d830c1",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        430
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "05369583-1d93-4493-80fa-ba39229a43eb",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "options": {},
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5d1a0bae-425e-46ed-801e-6199c16eaab5",
+              "name": "content",
+              "type": "string",
+              "value": "Paste your long-form article or script here. The AI rewrites it for each platform."
+            }
+          ]
+        }
+      },
+      "id": "c3f378c4-95e7-4500-a0ce-f162974b55fd",
+      "name": "Set source content",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "text": "=You are a content repurposing expert. Turn the long-form content below into a platform-native post for each platform.\n\nSource content:\n{{ $json.content }}\n\nGuidelines:\n- X (Twitter): under 280 characters, punchy, 2-3 hashtags.\n- LinkedIn: professional, 3-4 short lines, end with a question or CTA.\n- Facebook: friendly and conversational, 2-3 sentences.\n- Bluesky: under 300 characters, warm and authentic.\n- Mastodon: thoughtful, can be longer, include 2-3 hashtags.\n- Threads: casual, 1-2 sentences.\n\nReturn plain text with no markdown.",
+        "options": {
+          "systemMessage": "=You always follow the output schema exactly."
+        },
+        "promptType": "define",
+        "hasOutputParser": true
+      },
+      "id": "3740cd8d-8280-4da6-911f-0c66301aa71f",
+      "name": "AI Repurposing Engine",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1460,
+        360
+      ],
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "responseFormat": "text"
+        }
+      },
+      "id": "6d83637c-274f-4641-8e1c-1c345257ab03",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        580
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"twitter\": {\n      \"type\": \"string\"\n    },\n    \"linkedin\": {\n      \"type\": \"string\"\n    },\n    \"facebook\": {\n      \"type\": \"string\"\n    },\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    },\n    \"threads\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+      },
+      "id": "7c4e37ca-532b-4036-88ca-db1cfb09d5b4",
+      "name": "Content Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.twitter }}"
+      },
+      "id": "5800b26c-6dc4-4f7d-8add-ad29fda41c1e",
+      "name": "Publish to X (Twitter)",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        710
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.linkedin }}"
+      },
+      "id": "ce511c09-8632-44c5-8fb0-0a1a155df5fc",
+      "name": "Publish to LinkedIn",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        290
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.facebook }}"
+      },
+      "id": "6f657519-13a8-48a8-aebf-6e58c57a26e4",
+      "name": "Publish to Facebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        150
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.bluesky }}"
+      },
+      "id": "86e224a9-a6b4-4df9-827b-70f331b6cd52",
+      "name": "Publish to Bluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        10
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.mastodon }}"
+      },
+      "id": "03d2a4f4-4101-4484-bc96-2909f6a1ccfa",
+      "name": "Publish to Mastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        430
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.threads }}"
+      },
+      "id": "269cb2bf-3a4c-49c7-bb0a-6b7e05396722",
+      "name": "Publish to Threads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        570
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set source content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set source content": {
+      "main": [
+        [
+          {
+            "node": "AI Repurposing Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Repurposing Engine",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Repurposing Engine",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Repurposing Engine": {
+      "main": [
+        [
+          {
+            "node": "Publish to X (Twitter)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to LinkedIn",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Facebook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Bluesky",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Mastodon",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Threads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "5d5733bb-03fb-49a9-b2f6-7328ff15e8c8",
+  "meta": {
+    "instanceId": "b6bb4cf2-5a75-4029-8f0d-5af43b62b85e",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

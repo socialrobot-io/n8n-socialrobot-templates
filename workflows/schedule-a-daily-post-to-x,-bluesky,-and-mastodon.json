@@ -1,0 +1,196 @@
+{
+  "name": "Schedule a daily post to X, Bluesky, and Mastodon",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Schedule a daily post to X, Bluesky, and Mastodon\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs automatically every day.\n2. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 718
+      },
+      "id": "3950144e-fac4-427d-8148-ae0ed136e2d1",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to X (Twitter)\n\nPublishes the content to X (Twitter).",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "dabbd5f5-6da6-4bee-8df5-a59dbfb82d52",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        242
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Bluesky\n\nPublishes the content to Bluesky.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "b80014a8-6d43-4698-a8bc-c5612cfd1f27",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Mastodon\n\nPublishes the content to Mastodon.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "12e6a2a4-c8d2-4cde-ba50-1f500ac1b57e",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "165d433e-49f5-4ec1-ba5b-f21714e39615",
+      "name": "Every Day",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Your daily post"
+      },
+      "id": "1921d65c-e55c-4f8d-905b-81e4debfc5ad",
+      "name": "Publish to X (Twitter)",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        500
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Your daily post"
+      },
+      "id": "a1573a9a-b292-4026-b3cc-29216e60e2ab",
+      "name": "Publish to Bluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        220
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Your daily post"
+      },
+      "id": "641283dd-7173-46bd-96f6-9b99adeff130",
+      "name": "Publish to Mastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Day": {
+      "main": [
+        [
+          {
+            "node": "Publish to X (Twitter)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Bluesky",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Mastodon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "7bc93ea4-2e88-4a8c-bc10-d3d68e7f71f8",
+  "meta": {
+    "instanceId": "85c7f8c2-41aa-4117-93db-dd068c0a3314",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

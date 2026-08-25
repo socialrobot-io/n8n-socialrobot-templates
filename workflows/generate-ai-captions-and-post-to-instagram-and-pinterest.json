@@ -1,0 +1,295 @@
+{
+  "name": "Generate AI captions and post to Instagram and Pinterest",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Generate AI captions and post to Instagram and Pinterest\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Publishes a post to Instagram via the SocialRobot API. Publishes a post to Pinterest via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n- A public image or video URL for Instagram.\n- A Pinterest board ID.\n- A public image or video URL for Pinterest.\n",
+        "width": 480,
+        "height": 1026
+      },
+      "id": "afbbb78f-ccf4-4710-9b42-8cf97074e6fe",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "e4f492b1-bf60-4707-974b-1c16a5480f1b",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "05628405-dee0-4cfa-baf1-d894bb4d5394",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Pinterest\n\nPublishes the content to Pinterest.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "b8629e53-e383-4947-a222-518887a21531",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        172
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b6de2268-9e5d-4525-835f-e4134e8190ae",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "options": {},
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b8932800-64b2-4e89-a8b8-1a670277befa",
+              "name": "topic",
+              "type": "string",
+              "value": "Automate your social media with one workflow"
+            }
+          ]
+        }
+      },
+      "id": "081f3832-3746-4c48-8f71-58a851fdfe25",
+      "name": "Set post topic",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "text": "=You are a social media writer. Write a caption and a Pinterest title and description for the topic below.\n\nTopic: {{ $json.topic }}\nImage description (for context): a promotional graphic for the topic\n\nGuidelines:\n- Instagram: a catchy caption with emojis and 3-5 hashtags.\n- Pinterest title: under 100 characters, keyword-rich.\n- Pinterest description: 2-3 sentences with keywords.\n\nReturn plain text with no markdown.",
+        "options": {
+          "systemMessage": "=You always follow the output schema exactly."
+        },
+        "promptType": "define",
+        "hasOutputParser": true
+      },
+      "id": "dea68996-69db-4acf-a9fa-1288362be51b",
+      "name": "AI Caption Generator",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1460,
+        360
+      ],
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "responseFormat": "text"
+        }
+      },
+      "id": "306f93f6-538d-4a8d-a258-54ed49cb9bd8",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        580
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"instagram\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_title\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_description\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+      },
+      "id": "fb84c471-ff38-427c-904e-b010d97c32db",
+      "name": "Content Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.instagram }}",
+        "mediaSource": "url",
+        "mediaType": "IMAGE",
+        "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+      },
+      "id": "7386f533-27dc-4722-b92c-6e693e6c42fd",
+      "name": "Publish to Instagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        290
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.pinterest_description }}",
+        "boardId": "your-board-id",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "3a6ec1fd-2b5f-42ad-850d-10085af45907",
+      "name": "Publish to Pinterest",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        430
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set post topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set post topic": {
+      "main": [
+        [
+          {
+            "node": "AI Caption Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Caption Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Caption Generator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Caption Generator": {
+      "main": [
+        [
+          {
+            "node": "Publish to Instagram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Pinterest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "5159b0ee-150e-4b05-a717-73aaa5016366",
+  "meta": {
+    "instanceId": "a67348f1-f848-40b2-957f-349c589d7c3c",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

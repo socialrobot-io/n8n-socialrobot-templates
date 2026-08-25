@@ -1,0 +1,91 @@
+{
+  "name": "Delete a social media post",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Delete a social media post\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Deletes a post by ID.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Provide the Post ID, mapped from an upstream node or typed directly.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 674
+      },
+      "id": "1d31b737-6636-48c3-806d-438ac618192a",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Manage posts\n\nReads, deletes, or reschedules posts through the SocialRobot API.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "9a7cbc58-68a0-47ba-b84d-c56c65707c53",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "489cec90-de03-4e19-b48f-2da2a0afa582",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "delete",
+        "postId": "={{ $json.id }}"
+      },
+      "id": "f04edeed-e299-44fa-88d7-d7c748c7e79b",
+      "name": "Delete Post",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Delete Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "1a7c76ff-0d70-4e55-b61a-ce0c6845ce06",
+  "meta": {
+    "instanceId": "924cf032-7545-4edf-9eb6-4c8855f07051",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

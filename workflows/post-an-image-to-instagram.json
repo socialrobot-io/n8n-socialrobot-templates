@@ -1,0 +1,98 @@
+{
+  "name": "Post an image to Instagram",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post an image to Instagram\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Instagram.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Instagram via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Instagram.\n",
+        "width": 480,
+        "height": 696
+      },
+      "id": "23f3006d-8166-4266-9df6-aa856b880f1e",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "a2c49b5f-8385-4b49-9ae7-76227b17a199",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a7c9cdfc-9c8a-49e6-9371-de6da4ac37fd",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Here's what we shipped this week. Full breakdown in the comments.",
+        "mediaSource": "url",
+        "mediaType": "IMAGE",
+        "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+      },
+      "id": "fdc07a2c-18a9-4e22-9aff-9f073aae3850",
+      "name": "Publish to Instagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "0d1da624-d470-4448-896c-9277bbe8a2f9",
+  "meta": {
+    "instanceId": "41fb8835-9572-44f3-87a1-72cdb8bf3da1",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

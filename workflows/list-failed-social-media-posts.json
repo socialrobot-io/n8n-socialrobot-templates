@@ -1,0 +1,94 @@
+{
+  "name": "List failed social media posts",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## List failed social media posts\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Lists posts from SocialRobot.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Optionally set the status, platform, and date filters.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 674
+      },
+      "id": "ebfe2d4f-05bb-448e-891e-253366f3eb21",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## List posts\n\nLists posts from SocialRobot with optional filters.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "4b35fb51-de4e-453d-8d7d-c0aa1f6e4fce",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "2b294bb0-cf7a-45d9-ba76-bf881cadeeb1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "status": "FAILED"
+        }
+      },
+      "id": "524d763b-9931-4241-9973-70aed77e4d25",
+      "name": "List Failed Posts",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "List Failed Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "feadeb4a-bfdb-4ad9-aadb-d2c525e151ae",
+  "meta": {
+    "instanceId": "893e5643-fcc1-4c12-a887-4aa5748dfa0b",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

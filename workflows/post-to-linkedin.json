@@ -1,0 +1,95 @@
+{
+  "name": "Post to LinkedIn",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post to LinkedIn\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to LinkedIn.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to LinkedIn via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 674
+      },
+      "id": "77f2a8ef-131e-4da1-853a-a3f321dc60cb",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to LinkedIn\n\nPublishes the content to LinkedIn.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "6729375f-ce72-4946-8344-4f5f54afc1b4",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "6a4d34f9-a06b-45a4-9995-34b8c358b1a0",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "We just automated our social media publishing end to end. What used to take an hour a day now takes one workflow. How much time do you spend scheduling posts?"
+      },
+      "id": "6152e74e-4410-49f3-a80d-1950bb5b33c7",
+      "name": "Publish to LinkedIn",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "c562e026-f33c-4869-8275-c81a41afa5bf",
+  "meta": {
+    "instanceId": "d33fd599-5f55-4823-bda1-568d386e43a9",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

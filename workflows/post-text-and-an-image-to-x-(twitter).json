@@ -1,0 +1,102 @@
+{
+  "name": "Post text and an image to X (Twitter)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post text and an image to X (Twitter)\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to X (Twitter).\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to X (Twitter) via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for X (Twitter).\n",
+        "width": 480,
+        "height": 696
+      },
+      "id": "cefe898d-5977-47ab-b3d8-3843ee6b1257",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to X (Twitter)\n\nPublishes the content to X (Twitter).",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "bc85b375-6b92-48be-9f24-6a2ec20209aa",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f1a0e89e-3ed9-443e-839d-d3a282a9e7be",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Shipping a new workflow today. Here is a look at it.",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "52fb5d72-1bc6-4ce0-8697-0dbe91687328",
+      "name": "Publish to X (Twitter)",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to X (Twitter)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "e75796f6-7de0-4e92-8907-6590bb1fd1f0",
+  "meta": {
+    "instanceId": "366422f2-176f-4c06-88f4-a69fd3c110b3",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

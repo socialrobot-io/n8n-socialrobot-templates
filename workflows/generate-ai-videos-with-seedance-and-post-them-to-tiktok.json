@@ -1,0 +1,392 @@
+{
+  "name": "Generate AI videos with Seedance and post them to TikTok",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Generate AI videos with Seedance and post them to TikTok\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Downloads the media file from a URL into binary data.\n5. Downloads the media file from a URL into binary data.\n6. Downloads the media file from a URL into binary data.\n7. Publishes a post to TikTok via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Set the media URL in the Download node.\n- [ ] Set the media URL in the Download node.\n- [ ] Set the media URL in the Download node.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n- A public image or video URL for TikTok.\n",
+        "width": 480,
+        "height": 1048
+      },
+      "id": "7cf5541f-4e5b-4c0d-9653-ac841e5cd859",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "08676536-768a-494c-a2df-512ecfd835ea",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to TikTok\n\nPublishes the content to TikTok.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "98825383-4001-47bf-ba9f-28d05e973ec8",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3560,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "6aaaad5a-2a83-4963-9a70-f1d3e9faad08",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "options": {},
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6838b4df-fe01-4e4c-8b49-2adbc3d221f9",
+              "name": "topic",
+              "type": "string",
+              "value": "A cozy desk setup at golden hour while code compiles"
+            }
+          ]
+        }
+      },
+      "id": "dc70c054-02d6-47bd-82f6-4b60a8df99dc",
+      "name": "Set video topic",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "text": "=You are a short-form video director. Turn the topic below into one vivid,\nconcrete video generation prompt for an AI text-to-video model. Describe the\nscene, camera movement, lighting, and mood in one flowing paragraph of at most\n120 words. No camera jargon a model would not understand. Return only the prompt.\n\nTopic: {{ $json.topic }}",
+        "options": {
+          "systemMessage": "=You always follow the output schema exactly."
+        },
+        "promptType": "define"
+      },
+      "id": "3efb5104-419a-45d3-aef0-5e2e7edb085c",
+      "name": "AI Video Prompt Writer",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1460,
+        360
+      ],
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "responseFormat": "text"
+        }
+      },
+      "id": "ebb90455-3140-47c3-b789-d1dd02d6faf7",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        580
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/bytedance/seedance-2.0/predictions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ input: { prompt: $(\"AI Video Prompt Writer\").item.json.output || $(\"Set video topic\").item.json.topic, duration: 5, resolution: \"720p\", aspect_ratio: \"16:9\" } }) }}",
+        "options": {}
+      },
+      "id": "7a390a75-badb-4c79-a0ec-c8a979537892",
+      "name": "Generate Video (Seedance)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1880,
+        360
+      ],
+      "credentials": {
+        "replicateApi": {
+          "id": "",
+          "name": "Replicate account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.replicate.com/v1/predictions/{{ $json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "6cdb4ee0-c114-48b4-949f-4075b541c654",
+      "name": "Check Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2300,
+        360
+      ],
+      "credentials": {
+        "replicateApi": {
+          "id": "",
+          "name": "Replicate account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "601f9c80-7d51-40ca-949f-220240e759db",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "succeeded",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "76c88a08-cdd0-4df7-88bc-5eaec3861494",
+      "name": "Video Ready?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2720,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "id": "0a40672b-676b-41d2-9413-76f2ede2f33f",
+      "name": "Wait 30 Seconds",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3140,
+        430
+      ],
+      "webhookId": "5207f9fe-f0fb-4284-b161-c3524c3c5a52"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.output }}",
+        "responseFormat": "file",
+        "options": {}
+      },
+      "id": "b35fd181-2f29-40fd-ba8e-0a0214c6f258",
+      "name": "Download Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3140,
+        290
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $('Set video topic').item.json.topic }} #ai #automation",
+        "medias": [
+          {
+            "mediaSource": "binary",
+            "mediaType": "VIDEO",
+            "binaryPropertyName": "data"
+          }
+        ]
+      },
+      "id": "06dbc378-0e71-4739-b38b-b4545e1181dd",
+      "name": "Publish to TikTok",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
+      "typeVersion": 1,
+      "position": [
+        3560,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set video topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set video topic": {
+      "main": [
+        [
+          {
+            "node": "AI Video Prompt Writer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Video Prompt Writer": {
+      "main": [
+        [
+          {
+            "node": "Generate Video (Seedance)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Video (Seedance)": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status": {
+      "main": [
+        [
+          {
+            "node": "Video Ready?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video Ready?": {
+      "main": [
+        [
+          {
+            "node": "Download Video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 30 Seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30 Seconds": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video": {
+      "main": [
+        [
+          {
+            "node": "Publish to TikTok",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Video Prompt Writer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "98973d53-a9d8-40af-81b2-98772938c419",
+  "meta": {
+    "instanceId": "9210a316-698a-4acb-b322-d567cba11058",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

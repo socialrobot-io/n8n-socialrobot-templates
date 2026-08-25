@@ -1,0 +1,254 @@
+{
+  "name": "Cross-post text to X, Bluesky, Mastodon, Threads, and LinkedIn",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Cross-post text to X, Bluesky, Mastodon, Threads, and LinkedIn\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API. Publishes a post to Threads via the SocialRobot API. Publishes a post to LinkedIn via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 850
+      },
+      "id": "78230543-774b-4ed5-a881-38c6650e7b53",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Set input\n\nHolds the topic, text, or image used to build the post.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "85830106-da1f-4ed2-96e9-0a467fe91044",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        620,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish\n\nPublishes the content to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "078fd439-34b4-48be-aac3-984d878bfdd1",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "e02579e2-3c6a-442e-8b70-38496aa57144",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        430
+      ]
+    },
+    {
+      "parameters": {
+        "options": {},
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4e55e2df-a43f-4502-8880-3b93c7b2b6da",
+              "name": "caption",
+              "type": "string",
+              "value": "One post, every network. Type your text here."
+            }
+          ]
+        }
+      },
+      "id": "d7b0d2da-b5ac-4526-9730-8aa19c89fe00",
+      "name": "Set post text",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        620,
+        290
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.caption }}"
+      },
+      "id": "1df9ba8e-1dcc-4f9b-bb69-68f1a6ceec2d",
+      "name": "Publish to X (Twitter)",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        640
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.caption }}"
+      },
+      "id": "0ea66766-533f-4255-9898-d96c814cc0ce",
+      "name": "Publish to Bluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.caption }}"
+      },
+      "id": "fe6a39c7-bbf1-419f-81fe-16fc6dac0822",
+      "name": "Publish to Mastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.caption }}"
+      },
+      "id": "ba5628e3-8c65-4408-ba45-028e742557f4",
+      "name": "Publish to Threads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        500
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.caption }}"
+      },
+      "id": "a12241b7-428b-4da1-94be-97aa745004b8",
+      "name": "Publish to LinkedIn",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        220
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Set post text": {
+      "main": [
+        [
+          {
+            "node": "Publish to X (Twitter)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Bluesky",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Mastodon",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Threads",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "9b7e85ac-8bb7-43cf-8132-3e4123bcdc76",
+  "meta": {
+    "instanceId": "6d99ec46-a557-43e2-a4a5-e3859441ddcc",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

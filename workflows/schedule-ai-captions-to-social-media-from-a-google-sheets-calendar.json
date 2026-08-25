@@ -1,0 +1,370 @@
+{
+  "name": "Schedule AI captions to social media from a Google Sheets calendar",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Schedule AI captions to social media from a Google Sheets calendar\n\n### Who's it for\n\nSocial media teams that plan content in a spreadsheet and want it published on schedule.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reads the rows of your content calendar spreadsheet.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Schedules a post to X (Twitter) at the given date and time. Schedules a post to Bluesky at the given date and time. Schedules a post to Mastodon at the given date and time. Schedules a post to Threads at the given date and time. Schedules a post to LinkedIn at the given date and time.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Connect Google Sheets and pick your spreadsheet and sheet.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A Google account and a Google Sheet with date and caption columns.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n",
+        "width": 480,
+        "height": 1224
+      },
+      "id": "2e0dfb3d-8dab-4218-abd5-28c4b42a948f",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "aeb46905-ed0f-4d05-ad02-3ec4b861b6b0",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Schedule posts\n\nSchedules the content to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn at each node's date.",
+        "width": 360,
+        "height": 242,
+        "color": 7
+      },
+      "id": "9c370998-86ae-450c-a87c-e38ee1dad78e",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        338
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "5c1308b7-fe19-474c-a79a-4560000b411e",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "sheet",
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "id": "707852f8-f8f5-4fd5-bc4c-30e051b2363c",
+      "name": "Read Content Calendar",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "=You are a social media writer. Rewrite the draft caption below into a polished, publish-ready post.\n\nDraft caption: {{ $json.caption }}\n\nReturn only the polished caption as plain text, no markdown, no quotes around it.",
+        "options": {
+          "systemMessage": "=You always follow the output schema exactly."
+        },
+        "promptType": "define",
+        "hasOutputParser": true
+      },
+      "id": "515ac0a8-2184-45f7-9dd2-2f2b219b70bc",
+      "name": "AI Caption Rewriter",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1460,
+        360
+      ],
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "responseFormat": "text"
+        }
+      },
+      "id": "0e9ea37a-8a3b-4b66-9a66-24a5d338768f",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        580
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"caption\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+      },
+      "id": "5bfa7552-05bb-4eb0-ad48-155726881267",
+      "name": "Content Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $json.date }}",
+        "caption": "={{ $json.output.caption }}"
+      },
+      "id": "83b9641c-ce25-475c-b897-4c6c501949d4",
+      "name": "Publish to X (Twitter)",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        640
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $json.date }}",
+        "caption": "={{ $json.output.caption }}"
+      },
+      "id": "292c7fb0-b71a-4311-ad22-d7a98da60bf3",
+      "name": "Publish to Bluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        80
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $json.date }}",
+        "caption": "={{ $json.output.caption }}"
+      },
+      "id": "09cec266-9916-4995-b478-38659e73e7b5",
+      "name": "Publish to Mastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $json.date }}",
+        "caption": "={{ $json.output.caption }}"
+      },
+      "id": "84880d10-31a4-4ec1-a840-6c350fcba191",
+      "name": "Publish to Threads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        500
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $json.date }}",
+        "caption": "={{ $json.output.caption }}"
+      },
+      "id": "81198cd2-3358-4bc8-8fbe-d027b7e3b199",
+      "name": "Publish to LinkedIn",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        220
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Content Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Content Calendar": {
+      "main": [
+        [
+          {
+            "node": "AI Caption Rewriter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Caption Rewriter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Caption Rewriter",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Caption Rewriter": {
+      "main": [
+        [
+          {
+            "node": "Publish to X (Twitter)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Bluesky",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Mastodon",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Threads",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "232cd410-60a2-4f61-8637-20a016be14da",
+  "meta": {
+    "instanceId": "981843ad-75f8-4c29-96ad-a525189be994",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

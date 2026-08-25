@@ -1,0 +1,102 @@
+{
+  "name": "Post to Mastodon",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post to Mastodon\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Mastodon.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Mastodon via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Mastodon.\n",
+        "width": 480,
+        "height": 696
+      },
+      "id": "efa0b9a4-f0e7-487a-83b8-5a4b6cec9b74",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Mastodon\n\nPublishes the content to Mastodon.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "52e59dc9-1bd5-460b-b026-82b5b36aa91e",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "96f3188d-37f7-44ff-b176-cbf83581dcb4",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Took the manual work out of posting today. One workflow, every platform. #automation #indieweb",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "d9be3992-bf1f-4c78-b826-71fd5a3fca01",
+      "name": "Publish to Mastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to Mastodon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "cabc1610-90f5-41a0-b909-2f4c9b0bf4ff",
+  "meta": {
+    "instanceId": "78ed0549-146c-493e-adf9-79499dffd1e6",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

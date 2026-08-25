@@ -1,0 +1,388 @@
+{
+  "name": "Cross-post a post to every social media platform",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Cross-post a post to every social media platform\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Instagram via the SocialRobot API. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to LinkedIn via the SocialRobot API. Publishes a post to TikTok via the SocialRobot API. Publishes a post to Facebook via the SocialRobot API. Publishes a post to Pinterest via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API. Publishes a post to Threads via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Instagram.\n- A public image or video URL for X (Twitter).\n- A public image or video URL for LinkedIn.\n- A public image or video URL for TikTok.\n- A public image or video URL for Facebook.\n- A Pinterest board ID.\n- A public image or video URL for Pinterest.\n- A public image or video URL for Mastodon.\n- A public image or video URL for Threads.\n",
+        "width": 480,
+        "height": 1092
+      },
+      "id": "1c6468f1-a305-4fc4-8b99-ae585a60d299",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish\n\nPublishes the content to Instagram, X (Twitter), LinkedIn, TikTok, Facebook, Pinterest, Bluesky, Mastodon, and Threads.",
+        "width": 360,
+        "height": 242,
+        "color": 7
+      },
+      "id": "ef9a1e54-7276-4b0b-819c-c6a627f9c47e",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        40
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f5d25d43-e276-45fc-bbab-fdaac712c4b9",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Post everywhere caption",
+        "mediaSource": "url",
+        "mediaType": "IMAGE",
+        "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+      },
+      "id": "dd53fb8f-4baf-4815-a964-8c5f96825118",
+      "name": "Publish to Instagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Post everywhere caption",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "7799dd6d-75d0-437d-9e6b-325a259fb28f",
+      "name": "Publish to X (Twitter)",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        920
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Post everywhere caption",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "631a3f02-baff-4bb4-9884-4baa5f122bdf",
+      "name": "Publish to LinkedIn",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        220
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Post everywhere caption",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "ab7ef747-7f73-469a-a162-f707584c8a48",
+      "name": "Publish to TikTok",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        780
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Post everywhere caption",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "2accf602-32e7-433b-9ad3-3dec9cef932e",
+      "name": "Publish to Facebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -60
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Post everywhere caption",
+        "boardId": "your-board-id",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "df99ba6a-01a1-424d-9f4e-cf437e13cb0a",
+      "name": "Publish to Pinterest",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        500
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Post everywhere caption"
+      },
+      "id": "61d161b3-7f9c-4a12-ae17-1b032c7cd589",
+      "name": "Publish to Bluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -200
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Post everywhere caption",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "c663ca25-d3aa-4c61-8d21-210b7570a9b4",
+      "name": "Publish to Mastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Post everywhere caption",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "be209a61-ac3a-40bf-978a-ea402cf2fd96",
+      "name": "Publish to Threads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        640
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to Instagram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to X (Twitter)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to LinkedIn",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to TikTok",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Facebook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Pinterest",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Bluesky",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Mastodon",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Threads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "e793a1cf-85a7-48bb-802f-04654fd1b5ca",
+  "meta": {
+    "instanceId": "7379900b-8df6-44e5-aef9-90ba662da6d0",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

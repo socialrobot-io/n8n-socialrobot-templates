@@ -1,0 +1,293 @@
+{
+  "name": "Generate daily AI posts for Bluesky and Mastodon",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Generate daily AI posts for Bluesky and Mastodon\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs automatically every day.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n",
+        "width": 480,
+        "height": 916
+      },
+      "id": "f715cab4-2e7d-4baf-a474-96fe61771826",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "b4f6bd18-e3b4-4029-bfa3-63a1ac945a4d",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Bluesky\n\nPublishes the content to Bluesky.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "276337ce-d145-48f5-b74b-79b067d6b7c3",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Mastodon\n\nPublishes the content to Mastodon.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "39eaf14f-8fa5-42ce-860c-150f669bea2d",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        172
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "d7cb25fd-10af-47ad-8cf3-2e5bf389f0b1",
+      "name": "Every Day",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "options": {},
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dbf66e32-cc22-456c-9c9b-7bf432426f5b",
+              "name": "theme",
+              "type": "string",
+              "value": "indie hacking and automation"
+            }
+          ]
+        }
+      },
+      "id": "23514a96-5962-4958-a352-fcca5a86acc9",
+      "name": "Set post theme",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "text": "=You are a social media writer. Write a fresh, original post for Bluesky and Mastodon about the theme below. Vary the angle and wording each run so posts never repeat.\n\nTheme: {{ $json.theme }}\n\nGuidelines:\n- Bluesky: under 300 characters, warm and authentic, 1-2 hashtags.\n- Mastodon: thoughtful, can be longer, 2-3 hashtags.\n\nReturn plain text with no markdown.",
+        "options": {
+          "systemMessage": "=You always follow the output schema exactly."
+        },
+        "promptType": "define",
+        "hasOutputParser": true
+      },
+      "id": "089c61d2-b148-493e-ac51-262998bb8a7a",
+      "name": "AI Daily Post Generator",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1460,
+        360
+      ],
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "responseFormat": "text"
+        }
+      },
+      "id": "85d75147-6cc0-4008-904d-a64997ac836a",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        580
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+      },
+      "id": "e5612fe3-f6af-47b8-9f5d-5f74cba4c624",
+      "name": "Content Schema",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1460,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.bluesky }}"
+      },
+      "id": "3379981f-1630-4b7f-adae-b21b1af8913a",
+      "name": "Publish to Bluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        290
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.output.mastodon }}"
+      },
+      "id": "7cfa1461-2170-4488-99a3-8b361fa9dc97",
+      "name": "Publish to Mastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "typeVersion": 1,
+      "position": [
+        1880,
+        430
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Day": {
+      "main": [
+        [
+          {
+            "node": "Set post theme",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set post theme": {
+      "main": [
+        [
+          {
+            "node": "AI Daily Post Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Daily Post Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Schema": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Daily Post Generator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Daily Post Generator": {
+      "main": [
+        [
+          {
+            "node": "Publish to Bluesky",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Mastodon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "de7870f5-3b20-4627-9df6-c87689ffafd4",
+  "meta": {
+    "instanceId": "16b48be1-b665-4acf-b0e9-714b32a116d1",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

@@ -1,0 +1,143 @@
+{
+  "name": "Schedule a social media post for a future date",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Schedule a social media post for a future date\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Schedules a post to X (Twitter) at the given date and time. Schedules a post to LinkedIn at the given date and time.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 784
+      },
+      "id": "73dfb911-294f-4c63-a3a5-b579bb212f5a",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Schedule X (Twitter)\n\nSchedules the content to X (Twitter) at the given date.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "ef7c872a-914d-4042-ac1b-549a3fb69a35",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Schedule LinkedIn\n\nSchedules the content to LinkedIn at the given date.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "90023b11-686b-4089-9449-239eec781341",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        40
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a3d2ea2c-9658-4f32-905c-15495a12c154",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "2026-08-20T09:00:00-03:00",
+        "caption": "Scheduled ahead of time: this post went out without touching a button."
+      },
+      "id": "9c3647c3-2c63-4ad3-a604-b29ca62f8f2b",
+      "name": "Publish to X (Twitter)",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        430
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "2026-08-20T09:00:00-03:00",
+        "caption": "Scheduled ahead of time: this post went out without touching a button."
+      },
+      "id": "40b4e0be-0972-46d4-a6cf-ef168f7a51e7",
+      "name": "Publish to LinkedIn",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        290
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to X (Twitter)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "6ab8b557-ec22-435b-ac5f-c2389c108376",
+  "meta": {
+    "instanceId": "df387924-2d1b-486f-8081-b8fe9ce2539b",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

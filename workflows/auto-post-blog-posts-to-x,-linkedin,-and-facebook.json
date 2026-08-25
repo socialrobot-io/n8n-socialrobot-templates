@@ -1,0 +1,225 @@
+{
+  "name": "Auto-post blog posts to X, LinkedIn, and Facebook",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Auto-post blog posts to X, LinkedIn, and Facebook\n\n### Who's it for\n\nPublishers and bloggers who want new content shared to social media automatically.\n\n### How it works\n\n1. Runs automatically every day.\n2. Fetches the latest items from the configured RSS feed.\n3. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to LinkedIn via the SocialRobot API. Publishes a post to Facebook via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Set the RSS feed URL to your own feed.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public RSS feed URL.\n",
+        "width": 480,
+        "height": 784
+      },
+      "id": "32c841b7-4d0a-4954-b9f6-18ccddde35e3",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Fetch content\n\nReads new items from the RSS feed to turn them into posts.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "a86acca1-3db3-47d6-ba4f-402f6315cc5b",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        620,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to X (Twitter)\n\nPublishes the content to X (Twitter).",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "b8e65ddf-7eca-4c76-a6d3-370bd9834932",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        242
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to LinkedIn\n\nPublishes the content to LinkedIn.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "e5cb89f8-ac47-4757-ac29-e19ddb67250e",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Facebook\n\nPublishes the content to Facebook.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "be9c0c2c-2ef9-4158-95e2-41e27f7560ad",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "5d622f83-d0d2-40ed-9f7d-79c80ae2401d",
+      "name": "Every Day",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        620,
+        430
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://example.com/blog/feed.xml"
+      },
+      "id": "413ab230-77f7-45a7-96ed-e58cc5ea06fd",
+      "name": "Fetch Blog Feed",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        620,
+        290
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "New on the blog: {{ $json.title }} {{ $json.link }}"
+      },
+      "id": "f67ac1c3-4f38-4899-95c7-9286c033db35",
+      "name": "Publish to X (Twitter)",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        500
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "New on the blog: {{ $json.title }} {{ $json.link }}"
+      },
+      "id": "11ea2429-5a30-4fa8-8a81-ee507a3c27b0",
+      "name": "Publish to LinkedIn",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "New on the blog: {{ $json.title }} {{ $json.link }}"
+      },
+      "id": "18b9759b-2653-4b3d-991b-aba757af1f53",
+      "name": "Publish to Facebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        220
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Fetch Blog Feed": {
+      "main": [
+        [
+          {
+            "node": "Publish to X (Twitter)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to LinkedIn",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Facebook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "62f4acbf-1d87-4802-b632-0ed14e9bd70b",
+  "meta": {
+    "instanceId": "66fd9e38-8dca-4386-891d-d02396da0174",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

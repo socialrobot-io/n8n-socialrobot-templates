@@ -1,0 +1,102 @@
+{
+  "name": "Post to Threads",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post to Threads\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Threads.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Threads via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Threads.\n",
+        "width": 480,
+        "height": 696
+      },
+      "id": "925f73e7-1e2f-41ce-a62b-cc16345bca00",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Threads\n\nPublishes the content to Threads.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "94e70b83-d741-430b-8fa5-9642387a5ab5",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "782181ac-3e52-4b69-8931-a63f7731c30c",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Automation hot take: the best workflow is the one you actually run.",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "2c724cba-56d4-48b8-b135-480b3aee55b4",
+      "name": "Publish to Threads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to Threads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "2bf1c656-1c18-4190-9edd-6c9374d9ef69",
+  "meta": {
+    "instanceId": "1f4d9cf7-20ea-43ed-8afd-8cae596b008f",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

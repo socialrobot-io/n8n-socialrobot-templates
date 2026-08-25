@@ -1,0 +1,303 @@
+{
+  "name": "Cross-post an image to Instagram, Pinterest, Facebook, and Threads",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Cross-post an image to Instagram, Pinterest, Facebook, and Threads\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Publishes a post to Instagram via the SocialRobot API. Publishes a post to Pinterest via the SocialRobot API. Publishes a post to Facebook via the SocialRobot API. Publishes a post to Threads via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Select your connected account in each Publish node.\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Instagram.\n- A Pinterest board ID.\n- A public image or video URL for Pinterest.\n- A public image or video URL for Facebook.\n- A public image or video URL for Threads.\n",
+        "width": 480,
+        "height": 982
+      },
+      "id": "04468198-d56a-44fc-b8bd-d0174ec9468b",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Set input\n\nHolds the topic, text, or image used to build the post.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "0bd49215-fc34-45e7-b1dd-029f6369f054",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        620,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "2bb25b18-8bb4-43a3-9c7b-31abbe29fc68",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Pinterest\n\nPublishes the content to Pinterest.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "6b972c58-2d01-41ef-87f4-b63639a76321",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        172
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Facebook\n\nPublishes the content to Facebook.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "bedc91b8-363b-4575-acb3-5ab2f3eaa407",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Threads\n\nPublishes the content to Threads.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "582771b9-5f48-46d4-8afb-abae048fb353",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        312
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "0012cb17-78bc-4066-b32d-a7838a15455b",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        430
+      ]
+    },
+    {
+      "parameters": {
+        "options": {},
+        "assignments": {
+          "assignments": [
+            {
+              "id": "584b271f-f864-4441-b33d-6f5a0ec4f0e5",
+              "name": "caption",
+              "type": "string",
+              "value": "A caption that works across visual platforms."
+            },
+            {
+              "id": "70f0948b-83ce-4166-b7b6-612b8765cb4c",
+              "name": "imageUrl",
+              "type": "string",
+              "value": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+            }
+          ]
+        }
+      },
+      "id": "001c4b8a-2618-40f4-8fc4-9e1e367e818a",
+      "name": "Set post image",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        620,
+        290
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.caption }}",
+        "mediaSource": "url",
+        "mediaType": "IMAGE",
+        "mediaUrl": "={{ $json.imageUrl }}"
+      },
+      "id": "04ffadac-63f2-4b1b-9072-5119e9c3ec4e",
+      "name": "Publish to Instagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        290
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.caption }}",
+        "boardId": "your-board-id",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "={{ $json.imageUrl }}"
+          }
+        ]
+      },
+      "id": "e444baae-1f0c-4bf8-ab00-0beed6f28c60",
+      "name": "Publish to Pinterest",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        430
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.caption }}",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "={{ $json.imageUrl }}"
+          }
+        ]
+      },
+      "id": "6780c612-506d-485b-9aa8-8dbd1665391b",
+      "name": "Publish to Facebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        150
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "={{ $json.caption }}",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "={{ $json.imageUrl }}"
+          }
+        ]
+      },
+      "id": "b2489518-45e7-4dc0-a18e-d01ec772351c",
+      "name": "Publish to Threads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        570
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Set post image": {
+      "main": [
+        [
+          {
+            "node": "Publish to Instagram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Pinterest",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Facebook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish to Threads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "0d0c2e8b-a208-4c73-ab13-6a2e82090c3d",
+  "meta": {
+    "instanceId": "7d6d231b-01f6-4be6-b2d2-25669823b2aa",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

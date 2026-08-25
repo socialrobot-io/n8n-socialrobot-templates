@@ -1,0 +1,79 @@
+name: Validate templates
+
+on:
+  push:
+    branches: [main]
+    paths: ["workflows/**", "generate_templates.py", "annotate_templates.py", ".github/workflows/validate.yml"]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Regenerate templates and check nothing drifts
+        run: |
+          python3 generate_templates.py
+          python3 generate_descriptions.py
+          git diff --exit-code workflows submission-descriptions.md \
+            || (echo "::error::Generated files are stale. Run 'python3 generate_templates.py && python3 generate_descriptions.py' and commit." && exit 1)
+
+      - name: Validate workflow JSON structure
+        run: |
+          python3 - <<'EOF'
+          import json, glob, os, sys
+
+          PUBLISH = {f"socialRobot{p}" for p in (
+              "Instagram", "X", "Linkedin", "Tiktok", "Facebook",
+              "Pinterest", "Bluesky", "Mastodon", "Threads")}
+          MANAGE = "@socialrobot-io/n8n-nodes-socialrobot.socialRobot"
+          KNOWN_BASE = ("n8n-nodes-base.", "@n8n/n8n-nodes-langchain.")
+          errors = []
+
+          for fn in sorted(glob.glob("workflows/*.json")):
+              base = os.path.basename(fn)
+              wf = json.load(open(fn))
+              names = {n["name"] for n in wf["nodes"]}
+              # connection endpoints must exist
+              for src, cd in wf["connections"].items():
+                  if src not in names:
+                      errors.append(f"{base}: orphan connection source '{src}'")
+                  for ctype, outs in cd.items():
+                      for arr in outs:
+                          for c in arr:
+                              if c["node"] not in names:
+                                  errors.append(f"{base}: orphan connection target '{c['node']}'")
+              # SocialRobot nodes must be well-formed
+              for n in wf["nodes"]:
+                  t = n.get("type", "")
+                  if t == MANAGE:
+                      p = n.get("parameters", {})
+                      if "resource" not in p or "operation" not in p:
+                          errors.append(f"{base}: management node missing resource/operation")
+                  elif t.endswith(tuple(PUBLISH)):
+                      p = n.get("parameters", {})
+                      if "accountId" not in p or "publishMode" not in p:
+                          errors.append(f"{base}: publish node '{n['name']}' missing accountId/publishMode")
+                      if t.endswith("socialRobotBluesky") and "medias" in p:
+                          errors.append(f"{base}: Bluesky is text-only but has medias")
+                      if t.endswith("socialRobotInstagram") and p.get("mediaUrl") == "":
+                          errors.append(f"{base}: Instagram has empty mediaUrl")
+                      if t.endswith("socialRobotInstagram") and "medias" in p:
+                          errors.append(f"{base}: Instagram must use flat media fields")
+                  elif not t.startswith(KNOWN_BASE):
+                      errors.append(f"{base}: unknown node type {t}")
+
+          if errors:
+              for e in errors:
+                  print(f"::error::{e}")
+              sys.exit(1)
+          print(f"All {len(glob.glob('workflows/*.json'))} templates valid.")
+          EOF
+
+      - name: Check every JSON parses
+        run: for f in workflows/*.json; do python3 -m json.tool "$f" > /dev/null || exit 1; done; echo "JSON OK"

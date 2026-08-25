@@ -1,0 +1,90 @@
+{
+  "name": "List connected social media accounts",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## List connected social media accounts\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Lists your connected SocialRobot accounts.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Optionally set the status, platform, and date filters.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 674
+      },
+      "id": "ff3b5006-7ef5-4baf-bb27-2260a9449917",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Manage posts\n\nReads, deletes, or reschedules posts through the SocialRobot API.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "f998d745-b4c4-4f8e-bafc-6cbfef677a30",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ce7e3a3a-55f2-495e-bfe3-2ec33e47f696",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "account",
+        "operation": "getAll"
+      },
+      "id": "e6be5223-6a3c-4948-b238-cecdefe26616",
+      "name": "List Accounts",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "List Accounts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "ff5dc18d-89af-409f-9998-97d8b6220d39",
+  "meta": {
+    "instanceId": "820ca57a-8063-4262-890d-442412591aec",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

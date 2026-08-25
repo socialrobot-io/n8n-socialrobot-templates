@@ -1,0 +1,94 @@
+{
+  "name": "List scheduled social media posts",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## List scheduled social media posts\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Lists posts from SocialRobot.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Optionally set the status, platform, and date filters.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 674
+      },
+      "id": "e73f23c9-1103-4423-92ca-31b8cfba564e",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## List posts\n\nLists posts from SocialRobot with optional filters.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "50e235ce-dce6-4fcd-8ff4-dcfd259d8e42",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "18e6b1af-55b3-4464-b37f-5df30c32eaa0",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "status": "SCHEDULED"
+        }
+      },
+      "id": "c39314a7-a3e6-4e14-abc7-81f301102682",
+      "name": "List Scheduled Posts",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "List Scheduled Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "d2299f37-d3f0-4d01-a4ca-81748ee7896b",
+  "meta": {
+    "instanceId": "f5f978e0-90c0-4e2b-a2e3-3939c5b358a1",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

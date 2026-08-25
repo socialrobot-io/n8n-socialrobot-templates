@@ -1,0 +1,102 @@
+{
+  "name": "Post a video to TikTok",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post a video to TikTok\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to TikTok.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to TikTok via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for TikTok.\n",
+        "width": 480,
+        "height": 696
+      },
+      "id": "b64da0cf-6396-4734-bc7d-0cd7b2a6a733",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to TikTok\n\nPublishes the content to TikTok.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "3fb757df-0a70-4465-9069-affbac4c1739",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a20e045c-aa12-475b-82b8-873ce63637bc",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "POV: your social media posts publish themselves #automation",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "VIDEO",
+            "mediaUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+          }
+        ]
+      },
+      "id": "dda6d467-d449-4267-b498-a2dbc8b06fd2",
+      "name": "Publish to TikTok",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to TikTok",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "a2407027-c2fe-4f0b-a753-1d2ad231ba86",
+  "meta": {
+    "instanceId": "061e5ca8-7828-4493-b35d-3ad298323873",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

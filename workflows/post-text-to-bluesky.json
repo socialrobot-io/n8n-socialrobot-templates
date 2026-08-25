@@ -1,0 +1,95 @@
+{
+  "name": "Post text to Bluesky",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post text to Bluesky\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Bluesky.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Bluesky via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 674
+      },
+      "id": "ebc77f1e-08bd-4b0b-b8b8-7fd3b6c4faa6",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Bluesky\n\nPublishes the content to Bluesky.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "3ac9d7ae-c1e8-4ffe-8604-90fa400c38d9",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "d058a4c3-4388-46b4-a416-9e5a45a17c9f",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Small automation win today: my posts now publish themselves across the fediverse."
+      },
+      "id": "7b50056b-fc29-49c9-8f9f-2b50a0633d6d",
+      "name": "Publish to Bluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to Bluesky",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "38a99194-ccc1-4d8c-8985-cc083ccf08f9",
+  "meta": {
+    "instanceId": "40cc3436-03c8-49c4-a087-95d8243163c0",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

@@ -1,0 +1,98 @@
+{
+  "name": "Post a video to Instagram",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post a video to Instagram\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Instagram.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Instagram via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Instagram.\n",
+        "width": 480,
+        "height": 696
+      },
+      "id": "2595f198-0205-4898-8443-4841c353fbe6",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "f27616c8-cecf-47b0-af6d-464d96fb64e0",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "51a18598-9950-4e70-8377-8b16e2109897",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "60 seconds on how to automate your posting.",
+        "mediaSource": "url",
+        "mediaType": "VIDEO",
+        "mediaUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      "id": "6c5d77f5-4a2c-4dd5-8eb2-5705cda0bb4b",
+      "name": "Publish to Instagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "e4ebad58-7d88-40ea-b1ea-e23832b2984b",
+  "meta": {
+    "instanceId": "6408c3f0-cce2-4040-b32f-77258d373867",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

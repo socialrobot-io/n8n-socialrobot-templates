@@ -1,0 +1,95 @@
+{
+  "name": "Post text to X (Twitter)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post text to X (Twitter)\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to X (Twitter).\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to X (Twitter) via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 674
+      },
+      "id": "465ae20d-f5b6-41f6-9dbb-016cc7ce2718",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to X (Twitter)\n\nPublishes the content to X (Twitter).",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "ce3c8d0d-4e04-42af-b865-902f44b27ba7",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "4c5dcc4e-0182-414e-9ded-e042b30388af",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Automation is not about doing less. It is about doing the boring parts automatically so you can focus on the work that matters."
+      },
+      "id": "a2687256-5f0e-4e85-b91a-7264256c2ae0",
+      "name": "Publish to X (Twitter)",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to X (Twitter)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "3ba566d3-b72c-4ea4-9751-bccdb41402fc",
+  "meta": {
+    "instanceId": "4820cdeb-8a26-4748-bb0e-33e76fb3b7c1",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

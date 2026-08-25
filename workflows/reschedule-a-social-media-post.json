@@ -1,0 +1,92 @@
+{
+  "name": "Reschedule a social media post",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Reschedule a social media post\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reschedules a post to a new date.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Provide the Post ID, mapped from an upstream node or typed directly.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "width": 480,
+        "height": 674
+      },
+      "id": "61068b8e-bfed-4011-a924-03e942fa9f85",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Manage posts\n\nReads, deletes, or reschedules posts through the SocialRobot API.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "1239d01a-2366-4425-a34c-5467dbb3289f",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "343e6c4a-97b4-43c8-862e-f537227ad6e9",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "reschedule",
+        "postId": "={{ $json.id }}",
+        "scheduleDate": "={{ $json.newDate }}"
+      },
+      "id": "13628f2f-0489-4759-86ef-d9954b778cd4",
+      "name": "Reschedule Post",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Reschedule Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "79305c96-e48e-4df1-a667-bb5592f5cf60",
+  "meta": {
+    "instanceId": "13dc9040-0930-4313-8cde-26d4eab37ab6",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

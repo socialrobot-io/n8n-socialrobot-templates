@@ -1,0 +1,102 @@
+{
+  "name": "Post to a Facebook Page",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Post to a Facebook Page\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Facebook.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Facebook via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Facebook.\n",
+        "width": 480,
+        "height": 696
+      },
+      "id": "1f4625de-42b1-4ee9-8217-d15dbbe01eaa",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Facebook\n\nPublishes the content to Facebook.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "7a44adbc-96ff-4803-a0c6-4bb58ff59cee",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "74d7c7be-3aed-4aef-865b-a0b8c94a0d94",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "New post from our automation pipeline. Have a great week everyone!",
+        "medias": [
+          {
+            "mediaSource": "url",
+            "mediaType": "IMAGE",
+            "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
+          }
+        ]
+      },
+      "id": "825403fe-9446-4fd2-b6e1-6531a60b83b8",
+      "name": "Publish to Facebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Publish to Facebook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "3ce28096-d98f-417e-a250-1a19ceb1580e",
+  "meta": {
+    "instanceId": "958c8e58-673a-4760-b645-6ff9e42522e8",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

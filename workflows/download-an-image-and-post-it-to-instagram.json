@@ -1,0 +1,141 @@
+{
+  "name": "Download an image and post it to Instagram",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Download an image and post it to Instagram\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Instagram.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Downloads the media file from a URL into binary data.\n3. Publishes a post to Instagram via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Set the media URL in the Download node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Make sure an upstream node provides the image as binary data (for example an HTTP Request node).\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An upstream node that provides the image as binary data (for example an HTTP Request node).\n",
+        "width": 480,
+        "height": 806
+      },
+      "id": "d58aba83-b8b1-43fd-8a02-c37ab866070a",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Fetch media\n\nDownloads the image from a URL into binary data for the post.",
+        "width": 360,
+        "height": 220,
+        "color": 7
+      },
+      "id": "93dca7d8-2067-48fd-815f-396f004a7043",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
+        "width": 360,
+        "height": 198,
+        "color": 7
+      },
+      "id": "d8ffe59a-df96-4cd0-96e8-502b9c9cad7c",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        102
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "d840c593-f719-421c-897c-ce8487612356",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image",
+        "responseFormat": "file",
+        "options": {}
+      },
+      "id": "4cc60134-d42b-4936-98bc-1ff526c76e33",
+      "name": "Download image",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "publishMode": "NOW",
+        "caption": "Posted straight from binary data, no upload URL step needed.",
+        "mediaSource": "binary",
+        "mediaType": "IMAGE",
+        "binaryPropertyName": "data"
+      },
+      "id": "fdcc4eec-1448-4e93-95b3-17c71a492ffe",
+      "name": "Publish to Instagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        360
+      ],
+      "credentials": {
+        "socialRobotApi": {
+          "id": "",
+          "name": "SocialRobot API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download image": {
+      "main": [
+        [
+          {
+            "node": "Publish to Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "versionId": "eb41c03f-a1e1-4aa9-9063-a65b982e6896",
+  "meta": {
+    "instanceId": "44663c68-ff61-4874-878a-52aaaae24e83",
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}
