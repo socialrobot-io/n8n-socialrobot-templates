@@ -7,7 +7,7 @@
         "width": 480,
         "height": 916
       },
-      "id": "592f4eb0-cad5-47c4-b4a6-9e5eba59fc41",
+      "id": "c7defe1a-bdb6-49ec-bd13-4f5b92a37fc3",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "eec434b6-e656-490e-93c6-b873c19d7c1c",
+      "id": "36b6bddf-27ff-4cd9-a39e-990f4e7b0360",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "3b7635c5-f665-4c4e-bacf-2a971315904c",
+      "id": "e60679dd-2f13-4f09-9d29-6d0fb8f6f837",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "5b242067-b446-4009-a6c9-19609882e70a",
+      "id": "2384eeea-394a-41be-b340-1417d4561958",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -71,7 +71,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "ee1603ae-185e-4639-b08a-04cfbd6bdb20",
+      "id": "2d225b7d-d911-4170-b5d6-9fefe98e125a",
       "name": "Sticky Note4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -91,7 +91,7 @@
           ]
         }
       },
-      "id": "d10adade-ab1a-4495-97f2-9ff4e3a4a718",
+      "id": "36e6d24d-7676-43e1-a908-0570a97be41f",
       "name": "Every Hour",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -104,7 +104,7 @@
       "parameters": {
         "url": "https://example.com/feed.xml"
       },
-      "id": "c027425c-cd4a-44fa-9cc6-fa6a2a8c14f4",
+      "id": "2e8ca735-ea67-49b8-9c48-fde7a972765d",
       "name": "Fetch RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
@@ -122,7 +122,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "7f0fae09-7768-4228-9d83-c75100499bc1",
+      "id": "e82fef82-f81b-4b19-9035-4f561370ebba",
       "name": "AI Summary Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -144,7 +144,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "c216acc7-1328-409d-b8dd-6b7b03a7b8ef",
+      "id": "2dbef00d-14b3-4d1b-ad8e-c9a4745057f3",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -164,7 +164,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"summary\": {\n      \"type\": \"string\"\n    },\n    \"hashtags\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "8cd026d0-33ef-45f7-98e3-1993a14ea450",
+      "id": "89653ce5-17f7-4e26-bf67-5f6caa129169",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -175,6 +175,8 @@
     },
     {
       "parameters": {
+        "resource": "bluesky",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -183,9 +185,9 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.summary }} {{ $json.link }} {{ $json.output.hashtags }}"
       },
-      "id": "105fb4ca-69ba-44ea-8ae3-f96601716d99",
+      "id": "203f8437-f8a9-4c09-aeaf-f1e0b847dbf2",
       "name": "Publish to Bluesky",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -200,6 +202,8 @@
     },
     {
       "parameters": {
+        "resource": "mastodon",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -208,9 +212,9 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.summary }} {{ $json.link }} {{ $json.output.hashtags }}"
       },
-      "id": "7af41672-1f6e-4158-9356-620ebbc785e1",
+      "id": "deaa356e-a14c-4040-a99e-dc47a67d1f8c",
       "name": "Publish to Mastodon",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -225,6 +229,8 @@
     },
     {
       "parameters": {
+        "resource": "threads",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -233,9 +239,9 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.summary }} {{ $json.link }} {{ $json.output.hashtags }}"
       },
-      "id": "4a2b8d6a-c9f9-41c5-82ac-ecf531c2750e",
+      "id": "9bd602cc-1b33-4ab4-817a-5561568f0dae",
       "name": "Publish to Threads",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -320,9 +326,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "e0182b79-9837-491a-bf6d-b85d9fce0178",
+  "versionId": "9848ebcd-45b7-4384-aefd-967369a37068",
   "meta": {
-    "instanceId": "351d0808-5fc4-4441-90df-d39fd12f1f27",
+    "instanceId": "bd163670-7279-47d3-a521-e41c41538176",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -7,7 +7,7 @@
         "width": 480,
         "height": 784
       },
-      "id": "6cd6b1ef-3766-4319-a4eb-8944b046282e",
+      "id": "093fbf4f-81ef-4d9a-98a6-b7feb03bd7cc",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "ebf68966-4cf4-44c8-abe2-d5f9fcc9b314",
+      "id": "76828616-29f8-49c4-8669-fa63ef3de3f0",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "bd17930c-7923-4871-8d2a-dcceedf923f3",
+      "id": "4f2c5f0e-2a23-4093-a389-8f94a9bbad9a",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "80249a5d-b184-4a9a-8f73-4f3a574ce0e8",
+      "id": "c790f68f-84a2-4846-9e31-4ce0f91f8420",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -71,7 +71,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "4f60911e-6a87-4e63-9d6d-bf02c14a2066",
+      "id": "e46211b5-b9ea-4442-b287-88de8972d153",
       "name": "Sticky Note4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -91,7 +91,7 @@
           ]
         }
       },
-      "id": "677b7a6f-7bfc-4cef-9274-1845711ccf78",
+      "id": "3774365b-f6cd-4708-aabf-fb06a06bba52",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -104,7 +104,7 @@
       "parameters": {
         "url": "https://example.com/blog/feed.xml"
       },
-      "id": "5106d56a-0d7a-4c62-8995-c5d6e639ec05",
+      "id": "85a4c8d3-ddc5-44ae-9218-fb715a5d531b",
       "name": "Fetch Blog Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
@@ -115,6 +115,8 @@
     },
     {
       "parameters": {
+        "resource": "x",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -123,9 +125,9 @@
         "publishMode": "NOW",
         "caption": "New on the blog: {{ $json.title }} {{ $json.link }}"
       },
-      "id": "faa5878b-ef31-4d74-b3db-136875c9d28b",
+      "id": "e10d0934-dba0-45a8-a196-c893a6208f69",
       "name": "Publish to X (Twitter)",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -140,6 +142,8 @@
     },
     {
       "parameters": {
+        "resource": "linkedin",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -148,9 +152,9 @@
         "publishMode": "NOW",
         "caption": "New on the blog: {{ $json.title }} {{ $json.link }}"
       },
-      "id": "368f850f-345e-465d-8a5b-fa85b2cb3470",
+      "id": "6e5a8eda-48eb-4b50-a9d4-89c26db2ea9b",
       "name": "Publish to LinkedIn",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -165,6 +169,8 @@
     },
     {
       "parameters": {
+        "resource": "facebook",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -173,9 +179,9 @@
         "publishMode": "NOW",
         "caption": "New on the blog: {{ $json.title }} {{ $json.link }}"
       },
-      "id": "3865ec6d-0fec-492f-862d-8199af1ad5b3",
+      "id": "56e99cda-4447-47f8-8564-4e18aaae0b28",
       "name": "Publish to Facebook",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -216,9 +222,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "3e788a4f-a671-4173-815b-4c5e403f9fca",
+  "versionId": "04484e85-0460-486f-b490-483c99213c59",
   "meta": {
-    "instanceId": "773b2670-6812-4db8-8582-915cd10e3b3b",
+    "instanceId": "01fe9867-cfde-408b-a248-118e9498eccb",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -7,7 +7,7 @@
         "width": 480,
         "height": 1048
       },
-      "id": "de1d9673-26a4-4727-9690-17c3adb6c768",
+      "id": "42ebb68a-1f77-47f6-9928-c601a6333846",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "e1f37be2-c83a-4480-8acf-2ce17b5e3a03",
+      "id": "e6061210-2151-4191-8d6c-5ef39bf3339b",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 242,
         "color": 7
       },
-      "id": "ddfc1a2d-e3d9-42b5-a54f-416a05291a3b",
+      "id": "b134456f-e702-4093-aec0-588a6854f8c4",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "c1006ce5-235c-402d-866c-91fe615d48a9",
+      "id": "9c99e321-4eed-43d2-83e3-fa7cb76f074b",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -74,7 +74,7 @@
           "value": ""
         }
       },
-      "id": "ef7a4578-5a1f-422a-a044-af96333a7518",
+      "id": "87b56dcf-04bd-4717-902b-5aad4b4b1fd6",
       "name": "Read Content Calendar",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
@@ -98,7 +98,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "66d599a0-5ece-45ee-b025-8ebcdaf7628a",
+      "id": "11d07da6-0e94-4c16-964d-f6cf1e2e97aa",
       "name": "AI Caption Rewriter",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -120,7 +120,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "127dfd77-dceb-4270-bd3b-b1b0b6eeec34",
+      "id": "c38df174-6b5d-416a-87e3-ffe6b47e49f2",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -140,7 +140,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"caption\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "6185dde3-2eda-4000-b82e-f241aac2e7ee",
+      "id": "a837fa1e-9065-484e-9119-f761db472b2b",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -151,6 +151,8 @@
     },
     {
       "parameters": {
+        "resource": "x",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -160,9 +162,9 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "c1918448-39c6-4a8a-b8e5-0bbac6480c01",
+      "id": "17bae636-df56-4960-9cc9-55f732873b33",
       "name": "Publish to X (Twitter)",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -177,6 +179,8 @@
     },
     {
       "parameters": {
+        "resource": "bluesky",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -186,9 +190,9 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "3620491f-3d77-4c9e-9e9f-190562aa4213",
+      "id": "398df552-69a4-4b21-bd45-bbe8dc72c4d5",
       "name": "Publish to Bluesky",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -203,6 +207,8 @@
     },
     {
       "parameters": {
+        "resource": "mastodon",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -212,9 +218,9 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "99107d0c-9108-40ec-ab05-f97af0b29ad2",
+      "id": "d3fc19e0-d447-4e27-9903-b47bb6a97110",
       "name": "Publish to Mastodon",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -229,6 +235,8 @@
     },
     {
       "parameters": {
+        "resource": "threads",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -238,9 +246,9 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "8662955b-baff-4e68-a72b-9ecef49a4e5f",
+      "id": "8677a049-aa5a-48aa-91d9-2222bacb06f0",
       "name": "Publish to Threads",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -255,6 +263,8 @@
     },
     {
       "parameters": {
+        "resource": "linkedin",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -264,9 +274,9 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "3acbf684-1812-4b70-a959-eea5e4031086",
+      "id": "f1fc88fe-3dda-4005-ad35-1ecf6670639c",
       "name": "Publish to LinkedIn",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -361,9 +371,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "693877e2-e7a0-4eb0-9f89-9b8cbc65b7ae",
+  "versionId": "97f1d5bf-527e-4138-a322-ff2a8be13d55",
   "meta": {
-    "instanceId": "1899d303-56e5-4e5c-89a0-f2bf81b8832f",
+    "instanceId": "d8846c7f-49ca-43dc-b5cd-906cf2e6d254",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -7,7 +7,7 @@
         "width": 480,
         "height": 674
       },
-      "id": "4171e46b-3b90-4f8d-bfaa-ac8384779a13",
+      "id": "bcd8e678-0229-4524-91c2-7e3147f17e8a",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "cdc54ca3-0d7f-4467-8882-57a12210dad6",
+      "id": "bdb80324-26ac-4a4f-bf18-1a92226b627c",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "d06863d8-58f6-484a-a047-ded2a12128c1",
+      "id": "1ab1674c-17a7-46f0-99b4-3094050af424",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -45,6 +45,8 @@
     },
     {
       "parameters": {
+        "resource": "bluesky",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -53,9 +55,9 @@
         "publishMode": "NOW",
         "caption": "Small automation win today: my posts now publish themselves across the fediverse."
       },
-      "id": "0186add8-5bd8-401a-a3a6-afdc3aba6b5b",
+      "id": "bd5896be-d2ff-4209-a8e7-6a1e5092e100",
       "name": "Publish to Bluesky",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -86,9 +88,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "006e43d2-8f9b-47ed-b870-9f8d528521fc",
+  "versionId": "e98bf66e-4fd6-4538-ab4f-b03e8cb6eed1",
   "meta": {
-    "instanceId": "bd0c02f5-01ff-4ff6-8d8f-0411dc4dde6e",
+    "instanceId": "7729edce-f483-4b9a-a1ce-4d45cb1f20d0",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

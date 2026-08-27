@@ -7,7 +7,7 @@
         "width": 480,
         "height": 696
       },
-      "id": "2cf88078-60b9-4926-bb54-91193bf62458",
+      "id": "429820a6-386b-4f8a-82c6-b89335fcf29f",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "a85c0975-b75d-4cd6-bf93-7cbe874abb1c",
+      "id": "d045b88f-a01b-4532-ab88-0426a3aec373",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "779aadab-035e-4692-aee7-c50dd0d40f36",
+      "id": "94c54b16-6baa-4818-a566-7712fb2e4c3c",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -45,6 +45,8 @@
     },
     {
       "parameters": {
+        "resource": "facebook",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -60,9 +62,9 @@
           }
         ]
       },
-      "id": "2e465cf5-df2d-47db-b5d4-7b67b38fb53d",
+      "id": "d856ea70-48d6-4b1b-8267-f26f4ab461f8",
       "name": "Publish to Facebook",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -93,9 +95,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "9c863344-fc7c-48be-be21-ce76d4125ea3",
+  "versionId": "993fa22e-fd99-4465-9992-9dfed9f578ef",
   "meta": {
-    "instanceId": "94cf4b61-14c1-4bb2-a8dc-6928b093bb53",
+    "instanceId": "5cf36995-d866-420e-9f19-d2de4fcdd263",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

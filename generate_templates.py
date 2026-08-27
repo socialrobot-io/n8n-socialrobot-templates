@@ -27,18 +27,12 @@ from annotate_templates import annotate
 NODE_TYPE = "@socialrobot-io/n8n-nodes-socialrobot.socialRobot"
 CRED_TYPE = "socialRobotApi"
 
-# per-platform publish node types (2.0.0 split)
-PUBLISH_TYPES = {
-    "instagram": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
-    "x": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
-    "linkedin": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
-    "tiktok": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
-    "facebook": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
-    "pinterest": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
-    "bluesky": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
-    "mastodon": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
-    "threads": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
-}
+# 3.0.0: one SocialRobot node; each platform is a Resource. The platform is set
+# on the `resource` parameter, so every publish node shares the same type.
+PUBLISH_RESOURCES = (
+    "instagram", "x", "linkedin", "tiktok", "facebook",
+    "pinterest", "bluesky", "mastodon", "threads",
+)
 
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "workflows")
 
@@ -89,8 +83,11 @@ def _sr_node(parameters, name, node_type=NODE_TYPE):
 def publish_node(platform, name, caption="", medias=None, board_id="", publish_mode="NOW",
                  schedule_date="", media_source="url", media_type="IMAGE", media_url="",
                  binary_property="data", alt_text=""):
-    """One per-platform publish node. Field set matches publishFields.ts."""
-    params = {"accountId": rloc(), "publishMode": publish_mode}
+    """One SocialRobot node set to a platform Resource (Create operation).
+    Field set matches publishFields.ts. The platform lives in the `resource`
+    parameter so a single node type covers all nine platforms."""
+    params = {"resource": platform, "operation": "create",
+              "accountId": rloc(), "publishMode": publish_mode}
     if publish_mode == "SCHEDULE":
         params["scheduleDate"] = schedule_date
     params["caption"] = caption
@@ -109,7 +106,7 @@ def publish_node(platform, name, caption="", medias=None, board_id="", publish_m
             params["mediaUrl"] = media_url
     elif medias:
         params["medias"] = medias
-    return _sr_node(params, name, PUBLISH_TYPES[platform])
+    return _sr_node(params, name)
 
 
 def sr_get_all(name="SocialRobot", return_all=True, filters=None):
@@ -1043,7 +1040,7 @@ ig_pin_publish = _publish_ai(["instagram", "pinterest"],
 # (Instagram: flat fields; Pinterest: medias collection)
 for n in ig_pin_publish:
     p = n["parameters"]
-    if n["type"] == PUBLISH_TYPES["instagram"]:
+    if p.get("resource") == "instagram":
         p.pop("mediaUrl", None)
         p["mediaSource"] = "binary"
         p["mediaType"] = "IMAGE"

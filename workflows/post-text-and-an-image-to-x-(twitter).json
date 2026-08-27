@@ -7,7 +7,7 @@
         "width": 480,
         "height": 696
       },
-      "id": "367ae1e2-e85b-44d7-a193-6d9dff623abf",
+      "id": "1e9001d4-8fb3-409f-917f-e2fc43a1a5de",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "805d4fd1-8c44-48db-8e20-21f043d2fd53",
+      "id": "f80b99ef-fc89-4f49-ab1f-8a74d42be39d",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "89e6bcbb-68b5-4835-b935-1210f572e529",
+      "id": "cab8aded-b419-422f-bc6b-c6cde4fb74f9",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -45,6 +45,8 @@
     },
     {
       "parameters": {
+        "resource": "x",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -60,9 +62,9 @@
           }
         ]
       },
-      "id": "b228b3ee-30ff-46af-a9fa-b1b921e96f02",
+      "id": "e1f0b596-dbb6-4439-a722-8e99ea6d50cb",
       "name": "Publish to X (Twitter)",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -93,9 +95,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "f8126b62-d4f2-4621-a516-4738d0711f3a",
+  "versionId": "9128b696-94ee-453e-aed5-87be41fbc13f",
   "meta": {
-    "instanceId": "e41f97da-ea0f-47ee-ba09-8b0a42b6a779",
+    "instanceId": "3b983d53-4080-47ae-8ce0-7f399ad2a065",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -7,7 +7,7 @@
         "width": 480,
         "height": 1070
       },
-      "id": "07fb4edb-72ad-470f-8b4d-c6bae8fb167b",
+      "id": "a24fec04-1c9d-456e-826c-8f2a3d8df1ac",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 242,
         "color": 7
       },
-      "id": "a847c837-dfb0-47bc-ac1f-61171e4eb634",
+      "id": "e761c500-ec2b-4e19-9a6e-29efe1ab6bbe",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "e75638af-9b8b-40b4-a8d9-5468786fbf8b",
+      "id": "497920ef-031d-4af4-b966-d5e0b76d67c0",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -45,6 +45,8 @@
     },
     {
       "parameters": {
+        "resource": "instagram",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -56,9 +58,9 @@
         "mediaType": "IMAGE",
         "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
       },
-      "id": "6732e48e-fa7a-49ac-8e0b-64af26565bf9",
+      "id": "e7cbb2c1-4234-4e96-87bb-02b067cad887",
       "name": "Publish to Instagram",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -73,6 +75,8 @@
     },
     {
       "parameters": {
+        "resource": "x",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -88,9 +92,9 @@
           }
         ]
       },
-      "id": "7cfc6923-e0db-49fe-88dd-34b5786a96bb",
+      "id": "a7d5e16b-a90e-4750-b7c5-7abb182ff4db",
       "name": "Publish to X (Twitter)",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -105,6 +109,8 @@
     },
     {
       "parameters": {
+        "resource": "linkedin",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -120,9 +126,9 @@
           }
         ]
       },
-      "id": "bdc5c21e-18cf-4b66-a816-bb381283ddb4",
+      "id": "e4102b10-ef3c-4946-af0b-74ac7ae0c916",
       "name": "Publish to LinkedIn",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -137,6 +143,8 @@
     },
     {
       "parameters": {
+        "resource": "tiktok",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -152,9 +160,9 @@
           }
         ]
       },
-      "id": "6d8117bc-8525-451b-b9c6-9ae5f56925be",
+      "id": "33786739-46ff-4edc-a5fa-4ba739798f70",
       "name": "Publish to TikTok",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -169,6 +177,8 @@
     },
     {
       "parameters": {
+        "resource": "facebook",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -184,9 +194,9 @@
           }
         ]
       },
-      "id": "5c9283a3-086c-4950-a2b4-b7d163aa1eb3",
+      "id": "d5095dac-4a8c-49e9-a15f-c7ea58f740cb",
       "name": "Publish to Facebook",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -201,6 +211,8 @@
     },
     {
       "parameters": {
+        "resource": "pinterest",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -217,9 +229,9 @@
           }
         ]
       },
-      "id": "3df86808-941a-4716-a89f-3a8adf7355a6",
+      "id": "2e23889e-e292-4830-ac9f-acf0ce355a14",
       "name": "Publish to Pinterest",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -234,6 +246,8 @@
     },
     {
       "parameters": {
+        "resource": "bluesky",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -242,9 +256,9 @@
         "publishMode": "NOW",
         "caption": "Post everywhere caption"
       },
-      "id": "d7c522f1-6ff7-445c-8e9d-3c32e91d2d5a",
+      "id": "1ba84803-9a49-4df6-a8e6-0cac1006d701",
       "name": "Publish to Bluesky",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -259,6 +273,8 @@
     },
     {
       "parameters": {
+        "resource": "mastodon",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -274,9 +290,9 @@
           }
         ]
       },
-      "id": "d4d9ff4d-3192-45ba-940b-a3a2f580d36d",
+      "id": "ef6c49ea-acb3-4f41-a117-f63ed9c2045e",
       "name": "Publish to Mastodon",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -291,6 +307,8 @@
     },
     {
       "parameters": {
+        "resource": "threads",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -306,9 +324,9 @@
           }
         ]
       },
-      "id": "2c65163e-3330-4fd8-a3e9-22a8c690adc7",
+      "id": "0026ac5b-62b1-43b5-80fb-8d41e9e80938",
       "name": "Publish to Threads",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -379,9 +397,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "4766d578-1302-443e-907d-1a020db2691f",
+  "versionId": "22483abe-2198-4e00-9f8e-c8841f04c584",
   "meta": {
-    "instanceId": "1d99e0a7-76a2-4ad3-851b-e5cdf4f324b1",
+    "instanceId": "fd37bf4e-1fa4-4ca9-bf06-28ec6d6a6229",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

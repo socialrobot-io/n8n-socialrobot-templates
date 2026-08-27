@@ -7,7 +7,7 @@
         "width": 480,
         "height": 850
       },
-      "id": "3e7fa48c-0ba7-4c72-b617-b26b957e3add",
+      "id": "9e97500a-020a-4da6-bf60-b9401a3fb4b2",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "78df12f5-b4cd-468f-b5f3-768a1314843d",
+      "id": "ad4bc02f-a4c5-471d-800f-cf9b3e550cac",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "e452731a-ec7b-4646-b801-ade8e56387a1",
+      "id": "082c82bf-b206-4e8c-af9e-81903e94b93e",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "3e75081b-c596-41ab-9fbb-a205647eab5a",
+      "id": "141e26b4-6e55-44f9-b9f6-94fd2256c41e",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -66,7 +66,7 @@
         "responseFormat": "file",
         "options": {}
       },
-      "id": "762b9724-1099-44a8-a651-e16029e8ba1d",
+      "id": "3d67b0e5-72a4-4d03-8847-08dd34d51d98",
       "name": "Download image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -77,6 +77,8 @@
     },
     {
       "parameters": {
+        "resource": "instagram",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -88,9 +90,9 @@
         "mediaType": "IMAGE",
         "binaryPropertyName": "data"
       },
-      "id": "9d3070ff-697f-4738-a036-17983f355f81",
+      "id": "a10fec28-1905-462c-9133-2a6aebcf5d60",
       "name": "Publish to Instagram",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1460,
@@ -132,9 +134,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "77c474af-dbe8-43c9-ba34-9aafcf42fe43",
+  "versionId": "83a0f455-1e24-4328-b127-c40b428f98bb",
   "meta": {
-    "instanceId": "08de5f4e-9544-4b9d-aa88-9e84b986d410",
+    "instanceId": "90843cbd-606c-466f-abdf-306e1c895fae",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

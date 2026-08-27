@@ -7,7 +7,7 @@
         "width": 480,
         "height": 740
       },
-      "id": "76a60172-a222-4bbd-b2a3-dabfd059923a",
+      "id": "89be2d6e-93d6-4c6a-a008-72113be37d8a",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "ccbdaefc-e6c8-4b0d-90e7-e5a7031ef4dc",
+      "id": "ca7f7bf9-529f-454c-b9ac-86ef4bf2e3e9",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "fd8e185e-6e51-4192-818e-06ef84005656",
+      "id": "816e1b09-52d7-4433-96c0-939dc5ddc574",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "1ebb1133-c0d0-47a9-ab1e-38eb19aad7ba",
+      "id": "fc44dc81-c946-465a-ac63-1f56b30e4ea3",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -61,6 +61,8 @@
     },
     {
       "parameters": {
+        "resource": "x",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -70,9 +72,9 @@
         "scheduleDate": "2026-08-20T09:00:00-03:00",
         "caption": "Scheduled ahead of time: this post went out without touching a button."
       },
-      "id": "5b47bd21-eb4f-4eed-a9b7-ff4c97392596",
+      "id": "4732bf22-4ab3-43a3-bd20-902f52070258",
       "name": "Publish to X (Twitter)",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -87,6 +89,8 @@
     },
     {
       "parameters": {
+        "resource": "linkedin",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -96,9 +100,9 @@
         "scheduleDate": "2026-08-20T09:00:00-03:00",
         "caption": "Scheduled ahead of time: this post went out without touching a button."
       },
-      "id": "6487e9d0-b923-44c2-b874-e17196fb2767",
+      "id": "5146360c-143a-4967-9afe-948f2b28e24a",
       "name": "Publish to LinkedIn",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -134,9 +138,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "cd3337f3-7895-4449-9667-2aefda6bb3dc",
+  "versionId": "045211f7-09e8-4b32-9ae3-065a38cb22ed",
   "meta": {
-    "instanceId": "a059513e-1c03-48be-9801-f87962e86e2b",
+    "instanceId": "559c1e48-6d05-4cb8-87a0-cc9f268cb5b5",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

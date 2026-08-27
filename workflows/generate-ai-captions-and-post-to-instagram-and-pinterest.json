@@ -7,7 +7,7 @@
         "width": 480,
         "height": 1004
       },
-      "id": "7ee65732-6594-43e2-81b8-8e34fe8af94a",
+      "id": "889f11ce-9b7e-46be-b645-abbc4e6f7b1e",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "6d595d0e-081f-461e-9da2-30c2b6ac3720",
+      "id": "f0dcff51-6453-4e79-b80b-15ee2f54e860",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "1811e456-be29-4215-883a-fd60cdf7720f",
+      "id": "a8c483a8-eb84-44b4-96bf-0ddb4710508c",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "11b13834-efdc-4f61-8eb5-da14ad5eee17",
+      "id": "5796f9cd-2273-4813-8b5d-b1313f78fedf",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -66,7 +66,7 @@
     },
     {
       "parameters": {},
-      "id": "5f8e53ee-2b7d-4ece-8041-d2b492d2c838",
+      "id": "39ce5d0f-a72e-4f18-90ff-777e597c15fe",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -81,7 +81,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "7459acc9-e39d-429f-b6f1-e42423a4c7c5",
+              "id": "861ece6e-e02d-4326-9ad5-f6abb891e20b",
               "name": "topic",
               "type": "string",
               "value": "Automate your social media with one workflow"
@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "bbd2886c-f5d1-4f14-87ce-7ecb2c137313",
+      "id": "2cfe1c36-f3b8-4cba-a186-09bb4fabd6bc",
       "name": "Set post topic",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -107,7 +107,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "59565d5b-5c1e-48df-9a99-b1a9e30c0ff4",
+      "id": "dc1562b6-4922-41b9-9feb-ea2288f5b1af",
       "name": "AI Caption Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -129,7 +129,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "6cca02d2-12aa-4385-80e9-3d0675452b82",
+      "id": "10d87f18-37e4-4c84-92ef-f4dc5827321d",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -149,7 +149,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"instagram\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_title\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_description\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "5af61230-194d-44b1-af56-571063d0e07d",
+      "id": "273dc163-2ba6-4cd5-a8a7-e67d81ef415f",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -160,6 +160,8 @@
     },
     {
       "parameters": {
+        "resource": "instagram",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -171,9 +173,9 @@
         "mediaType": "IMAGE",
         "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
       },
-      "id": "a1ec4140-dd2c-49e3-85b0-d5fbf62acc50",
+      "id": "e306eda9-960e-4552-b8bb-6518ce3ebeab",
       "name": "Publish to Instagram",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -188,6 +190,8 @@
     },
     {
       "parameters": {
+        "resource": "pinterest",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -204,9 +208,9 @@
           }
         ]
       },
-      "id": "b4ce5c99-020e-4f00-a2b4-fcd231aa2436",
+      "id": "3a6bbea2-ed19-4c20-aede-740af094c2dd",
       "name": "Publish to Pinterest",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -286,9 +290,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "09d1d9dc-7299-491a-b9a8-554ca754e72b",
+  "versionId": "b5646305-acf6-4a22-8871-a6ba123cd010",
   "meta": {
-    "instanceId": "9e2be23d-0db6-4904-9a82-04d927dd0f58",
+    "instanceId": "8e6dd2ed-aec4-4a05-974a-d021cb7e8afc",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -15,10 +15,11 @@ import re
 from annotate_templates import (
     build_overview,
     describe_action,
+    is_publish,
     NODE_TYPE,
     AI_CONFIG_TYPES,
-    PLATFORM_BY_TYPE,
     PLATFORM_LABELS,
+    platform_of,
 )
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -31,9 +32,8 @@ def split_nodes(wf):
     non_sticky = [n for n in nodes if n.get("type") != "n8n-nodes-base.stickyNote"]
     trigger = next((n for n in non_sticky if n.get("type", "").endswith(("Trigger", "trigger", "webhook"))), None)
     sources = [n for n in non_sticky if n is not trigger and n.get("type") != NODE_TYPE
-               and n.get("type") not in PLATFORM_BY_TYPE
                and not any(t in n.get("type", "") for t in AI_CONFIG_TYPES)]
-    actions = [n for n in non_sticky if n.get("type") in PLATFORM_BY_TYPE or n.get("type") == NODE_TYPE]
+    actions = [n for n in non_sticky if n.get("type") == NODE_TYPE]
     return non_sticky, trigger, sources, actions
 
 
@@ -43,7 +43,7 @@ def how_items(how_text):
 
 def benefit(sources, action):
     actions = action if isinstance(action, list) else ([action] if action else [])
-    publish_nodes = [n for n in actions if n.get("type") in PLATFORM_BY_TYPE]
+    publish_nodes = [n for n in actions if is_publish(n)]
     if not publish_nodes:
         return ""
     if any("rssFeedRead" in s.get("type", "") for s in sources):
@@ -59,8 +59,8 @@ def benefit(sources, action):
 
 def customization_hint(sources, trigger, action):
     actions = action if isinstance(action, list) else ([action] if action else [])
-    publish_nodes = [n for n in actions if n.get("type") in PLATFORM_BY_TYPE]
-    management_nodes = [n for n in actions if n.get("type") == NODE_TYPE]
+    publish_nodes = [n for n in actions if is_publish(n)]
+    management_nodes = [n for n in actions if n.get("type") == NODE_TYPE and not is_publish(n)]
 
     if management_nodes:
         op = management_nodes[0].get("parameters", {}).get("operation")
@@ -82,7 +82,7 @@ def customization_hint(sources, trigger, action):
     elif publish_nodes and publish_nodes[0].get("parameters", {}).get("publishMode") in ("NOW", "DRAFT"):
         hints.append("Switch the publish mode to Schedule to queue the post for a future date, or to Draft to review it first.")
     if publish_nodes:
-        labels = [PLATFORM_LABELS[PLATFORM_BY_TYPE[n.get("type")]] for n in publish_nodes]
+        labels = [PLATFORM_LABELS[platform_of(n)] for n in publish_nodes]
         hints.append(f"Add or remove Publish nodes ({', '.join(labels)}) and edit each node's caption and media fields to fit your brand voice.")
     return " ".join(hints)
 

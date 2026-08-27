@@ -7,7 +7,7 @@
         "width": 480,
         "height": 1290
       },
-      "id": "c1e7cf51-8f6f-4131-b22e-35b03b2b0115",
+      "id": "427840f2-8372-44cc-b584-708651fdace5",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "37022010-09ed-4cdd-a84b-95ac5efeacfd",
+      "id": "a9ddc3d9-3a37-485a-95ff-aa70be950951",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 242,
         "color": 7
       },
-      "id": "c98add20-de3c-412d-9013-4b00e46aff8e",
+      "id": "bd28025c-a905-4b91-88f3-79471d9377fa",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "a1155c88-3cad-490f-8e3d-d54012b20e69",
+      "id": "fd14fde0-a012-441c-8b1d-0acab9b27e42",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -65,13 +65,13 @@
         "assignments": {
           "assignments": [
             {
-              "id": "7547ba9b-09e6-4ec7-83d0-b68d2fd00276",
+              "id": "0b0cb4c0-f43d-447e-829e-c760fe00c6aa",
               "name": "topic",
               "type": "string",
               "value": "How small teams can automate their social media posting"
             },
             {
-              "id": "55c6f7c3-d28b-49a4-b434-8f127ff428ae",
+              "id": "95986711-a47a-4f7e-a37d-1e27292e9f9d",
               "name": "tone",
               "type": "string",
               "value": "friendly and expert"
@@ -79,7 +79,7 @@
           ]
         }
       },
-      "id": "05306b8b-0f30-43b2-8d78-e2f641c7f511",
+      "id": "a3d8c011-f2fb-4f2f-b258-4aed201840f6",
       "name": "Set post topic",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -97,7 +97,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "5952cc34-f201-4874-a2aa-cf8ffa8618d6",
+      "id": "a86795a1-9751-4007-8fa9-1c984406bffa",
       "name": "AI Content Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -119,7 +119,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "9145b409-9acb-4051-b665-644bfad70e33",
+      "id": "2af05ab5-cb79-4ed7-921b-4e5bdf7a3af4",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -139,7 +139,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"instagram\": {\n      \"type\": \"string\"\n    },\n    \"twitter\": {\n      \"type\": \"string\"\n    },\n    \"linkedin\": {\n      \"type\": \"string\"\n    },\n    \"tiktok\": {\n      \"type\": \"string\"\n    },\n    \"facebook\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_title\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_description\": {\n      \"type\": \"string\"\n    },\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    },\n    \"threads\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "6f3a9c50-395f-46d6-a25d-5f311bfba049",
+      "id": "4c71f10a-1a21-49f1-aed9-72b1e41b6bf8",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -150,6 +150,8 @@
     },
     {
       "parameters": {
+        "resource": "instagram",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -161,9 +163,9 @@
         "mediaType": "IMAGE",
         "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
       },
-      "id": "ed0c3b61-c65e-46ef-b05d-a05c674cbcc1",
+      "id": "561db046-d5a6-476d-b411-4c1aaf8c503d",
       "name": "Publish to Instagram",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -178,6 +180,8 @@
     },
     {
       "parameters": {
+        "resource": "x",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -193,9 +197,9 @@
           }
         ]
       },
-      "id": "df81bc66-4c30-43ef-af8f-43223961ac90",
+      "id": "a0b5e378-62ae-4e1d-83a2-6d57be0daecf",
       "name": "Publish to X (Twitter)",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -210,6 +214,8 @@
     },
     {
       "parameters": {
+        "resource": "linkedin",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -225,9 +231,9 @@
           }
         ]
       },
-      "id": "abfb190c-87df-46e8-b7df-9e71a671c152",
+      "id": "cbb20722-e609-4b8c-8798-1aa78213a672",
       "name": "Publish to LinkedIn",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -242,6 +248,8 @@
     },
     {
       "parameters": {
+        "resource": "tiktok",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -257,9 +265,9 @@
           }
         ]
       },
-      "id": "d35cec74-4787-4350-8c35-abb5c67eb4c9",
+      "id": "0106052e-c7f0-4734-a7b1-02e48105432c",
       "name": "Publish to TikTok",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -274,6 +282,8 @@
     },
     {
       "parameters": {
+        "resource": "facebook",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -289,9 +299,9 @@
           }
         ]
       },
-      "id": "4986856e-8d71-4d18-916c-0838e668dd5d",
+      "id": "4fdd85b8-4741-416f-b3cb-b64ab848e035",
       "name": "Publish to Facebook",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -306,6 +316,8 @@
     },
     {
       "parameters": {
+        "resource": "pinterest",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -322,9 +334,9 @@
           }
         ]
       },
-      "id": "b63c8a89-3d02-4c9d-a418-94553f081b5f",
+      "id": "b94a99d7-c761-458e-a398-888694d9e444",
       "name": "Publish to Pinterest",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -339,6 +351,8 @@
     },
     {
       "parameters": {
+        "resource": "bluesky",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -347,9 +361,9 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.bluesky }}"
       },
-      "id": "9905ee66-94be-434e-b395-fc3917f94777",
+      "id": "0a326128-aee8-4dd1-a240-e625f44f18d5",
       "name": "Publish to Bluesky",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -364,6 +378,8 @@
     },
     {
       "parameters": {
+        "resource": "mastodon",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -379,9 +395,9 @@
           }
         ]
       },
-      "id": "e59c6a0c-3663-4183-9935-7eb5f27c66a1",
+      "id": "c5487227-db19-433f-8438-53a59470d2f5",
       "name": "Publish to Mastodon",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -396,6 +412,8 @@
     },
     {
       "parameters": {
+        "resource": "threads",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -411,9 +429,9 @@
           }
         ]
       },
-      "id": "edc81914-65e6-4733-8be1-5b86ca927ccf",
+      "id": "01df1bc1-e0fc-47a6-b7d6-3ac306501563",
       "name": "Publish to Threads",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
@@ -528,9 +546,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "06e4dea1-e877-4774-bf98-dc47df7bcdc9",
+  "versionId": "51853069-efdd-4df8-85a9-62c17848db09",
   "meta": {
-    "instanceId": "d43d9fd5-d266-46b6-bda4-17e93d5c2b9d",
+    "instanceId": "042d7bd8-8a15-4828-bccc-6f91fb7573de",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

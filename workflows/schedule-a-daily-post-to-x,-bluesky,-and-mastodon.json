@@ -7,7 +7,7 @@
         "width": 480,
         "height": 718
       },
-      "id": "089548bf-f748-4825-844d-d286d90b7854",
+      "id": "9869007c-be74-4227-a7f2-cbf7fadc47cc",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "f821537f-9c6c-4210-a91d-bf78f0a802bb",
+      "id": "72e33979-e3b4-4013-b27f-b48f0cbbb1a2",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "168755ff-de33-4974-ab4e-bc66531a8bbd",
+      "id": "6484f8ae-3a2c-4495-96ea-36a21eff7af9",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "a823f537-f144-4d18-bf81-b8aebe0bd58c",
+      "id": "bf2b2857-ac8c-44cf-b424-74013d83a477",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "3a85982b-9c59-4a15-86a3-6852e72c6c68",
+      "id": "7f915e2f-d17b-4731-9af6-7514081d1f2a",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -86,6 +86,8 @@
     },
     {
       "parameters": {
+        "resource": "x",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -94,9 +96,9 @@
         "publishMode": "NOW",
         "caption": "Your daily post"
       },
-      "id": "dd6aac75-863a-40e4-ae28-f3f83eaf8e0e",
+      "id": "82ab2bf7-1869-41c0-8d7b-16656d93d12b",
       "name": "Publish to X (Twitter)",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -111,6 +113,8 @@
     },
     {
       "parameters": {
+        "resource": "bluesky",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -119,9 +123,9 @@
         "publishMode": "NOW",
         "caption": "Your daily post"
       },
-      "id": "480e9d1b-a047-4522-84e2-d1a97affd681",
+      "id": "3fd871a3-86e6-4b07-9231-5552981d0399",
       "name": "Publish to Bluesky",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -136,6 +140,8 @@
     },
     {
       "parameters": {
+        "resource": "mastodon",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -144,9 +150,9 @@
         "publishMode": "NOW",
         "caption": "Your daily post"
       },
-      "id": "d7b110e4-6b1f-4c83-8a21-fbc96d7d3bff",
+      "id": "e9d2a359-3bf7-4524-bff6-fadf4f933253",
       "name": "Publish to Mastodon",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -187,9 +193,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "45aaec69-b3f9-48b3-9470-081621886884",
+  "versionId": "ed5a5de7-89a6-4ac3-8b1e-139d342850b5",
   "meta": {
-    "instanceId": "296d329f-7631-4795-b39d-9ec609c0dc5a",
+    "instanceId": "6a9f7ac5-f5e7-4621-ba73-35a51705352f",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

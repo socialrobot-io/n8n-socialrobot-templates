@@ -7,7 +7,7 @@
         "width": 480,
         "height": 1202
       },
-      "id": "9d9f62e2-8668-4ac1-86af-939095353648",
+      "id": "a648d808-0c04-4ed9-be47-a93921cbd26a",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "d5fed562-6cea-43cf-9e53-3fc4bd2f350c",
+      "id": "2fc21f30-52f3-4192-839b-9fd2ea518b20",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "18efb992-9bd5-4ca0-939b-0312d2db33ba",
+      "id": "78641dcd-2c3b-43c1-a470-3b3b3bc30958",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "3bbc4cb8-ca87-47c6-80bf-e9a893eca318",
+      "id": "629c71ba-b338-4b2a-8fa9-3a40aeb89f11",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -66,7 +66,7 @@
     },
     {
       "parameters": {},
-      "id": "ebe870b9-2dc5-401b-8464-a3f2c33df5be",
+      "id": "706320ba-10da-4eda-8531-0cb477bde9be",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -81,7 +81,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "280e263a-2065-4130-b12f-3adbaa0edced",
+              "id": "3e21dcbd-cb8c-4c35-a790-a47e7224560d",
               "name": "imagePrompt",
               "type": "string",
               "value": "A minimalist flat-lay of a laptop, coffee, and notebook in soft violet morning light"
@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "82ce2b5b-436e-43a9-9e17-7f200f1128e1",
+      "id": "73bea525-d38a-4c37-a98f-2703de6b6dab",
       "name": "Set image idea",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -115,7 +115,7 @@
           }
         }
       },
-      "id": "27f90319-af43-4837-9d59-f01c3d64ff4b",
+      "id": "9d5e9ffb-32fb-45f6-9565-cbe6f953ba1e",
       "name": "Generate Image (gpt-image-2)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -136,7 +136,7 @@
         "language": "javaScript",
         "jsCode": "const items = [];\nfor (const item of $input.all()) {\n  const b64 = item.json.data[0]?.b64_json;\n  if (!b64) throw new Error('No image data in response');\n  items.push({\n    json: { ...item.json },\n    binary: {\n      data: await this.helpers.prepareBinaryData(\n        Buffer.from(b64, 'base64'), 'generated.png', 'image/png'),\n    },\n  });\n}\nreturn items;"
       },
-      "id": "5c9e3bb3-4351-42cc-8199-ae398197d0b8",
+      "id": "4a2ccf2a-4c63-41a8-859a-40985249a696",
       "name": "Extract Image Binary",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -154,7 +154,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "ef827a71-777c-41ad-aca5-89453dde2c1a",
+      "id": "bedbbb8f-7e5e-45c7-8c48-40970f4e28fc",
       "name": "AI Caption Writer",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -176,7 +176,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "8c1872ee-9536-4acd-b43f-27090004bd0e",
+      "id": "241055b0-81bc-4749-b748-5a21387bde65",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -196,7 +196,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"instagram\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_title\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_description\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "abd80681-7f96-4472-8f89-625f788e9279",
+      "id": "a1274080-ff2e-4568-aa97-29a526a57102",
       "name": "Caption Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -207,6 +207,8 @@
     },
     {
       "parameters": {
+        "resource": "instagram",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -218,9 +220,9 @@
         "mediaType": "IMAGE",
         "binaryPropertyName": "data"
       },
-      "id": "368d566d-50b0-492a-adef-720010cd134f",
+      "id": "0a78150c-4cd8-423c-9bd3-a86e877d1dc5",
       "name": "Publish to Instagram",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -235,6 +237,8 @@
     },
     {
       "parameters": {
+        "resource": "pinterest",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -251,9 +255,9 @@
           }
         ]
       },
-      "id": "710bc8db-ac6b-4f0a-b453-9ac5690eb060",
+      "id": "b5a9ccd9-f7f9-4c47-87f6-4a8b5660f24f",
       "name": "Publish to Pinterest",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -360,9 +364,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "10e59298-7ba3-433f-bdca-1c748b6d805a",
+  "versionId": "93f9d37f-1e3c-4899-b84e-0f63bff7a255",
   "meta": {
-    "instanceId": "42d84bf2-6626-4cc9-88a4-36e5e084e593",
+    "instanceId": "83c4f392-ed27-440c-b9bc-ef555158b7ca",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

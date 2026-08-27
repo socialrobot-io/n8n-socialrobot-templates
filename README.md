@@ -18,16 +18,17 @@ Then import any JSON from [`workflows/`](workflows/) via **Workflows -> Import f
 
 ## Node types used
 
-- Management node: `@socialrobot-io/n8n-nodes-socialrobot.socialRobot`
-  (get, get many, delete, reschedule posts; list accounts)
-- One Publish node per platform:
-  `...socialRobotInstagram`, `...socialRobotX`, `...socialRobotLinkedin`,
-  `...socialRobotTiktok`, `...socialRobotFacebook`, `...socialRobotPinterest`,
-  `...socialRobotBluesky`, `...socialRobotMastodon`, `...socialRobotThreads`
+One node: `@socialrobot-io/n8n-nodes-socialrobot.socialRobot`.
+
+- Publishing: set **Resource** to one of Instagram, X (Twitter), LinkedIn,
+  TikTok, Facebook, Pinterest, Bluesky, Mastodon, or Threads (each a **Create**
+  operation).
+- Management: **Resource** = Post (get, get many, delete, reschedule) or
+  Account (get many).
 - Credential: `socialRobotApi`
 
-Multi-platform templates use one Publish node per platform, fanned out from the
-source, so each node shows only the fields that platform supports.
+Multi-platform templates use one SocialRobot node per platform, fanned out from
+the source, so each node shows only the fields that platform supports.
 
 ## The templates (36)
 

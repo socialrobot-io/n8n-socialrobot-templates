@@ -49,10 +49,10 @@ jobs:
           python3 - <<'EOF'
           import json, glob, os, sys
 
-          PUBLISH = {f"socialRobot{p}" for p in (
-              "Instagram", "X", "Linkedin", "Tiktok", "Facebook",
-              "Pinterest", "Bluesky", "Mastodon", "Threads")}
-          MANAGE = "@socialrobot-io/n8n-nodes-socialrobot.socialRobot"
+          NODE = "@socialrobot-io/n8n-nodes-socialrobot.socialRobot"
+          PUBLISH_RESOURCES = {
+              "instagram", "x", "linkedin", "tiktok", "facebook",
+              "pinterest", "bluesky", "mastodon", "threads"}
           KNOWN_BASE = ("n8n-nodes-base.", "@n8n/n8n-nodes-langchain.")
           errors = []
 
@@ -72,20 +72,25 @@ jobs:
               # SocialRobot nodes must be well-formed
               for n in wf["nodes"]:
                   t = n.get("type", "")
-                  if t == MANAGE:
+                  if t == NODE:
                       p = n.get("parameters", {})
-                      if "resource" not in p or "operation" not in p:
-                          errors.append(f"{base}: management node missing resource/operation")
-                  elif t.endswith(tuple(PUBLISH)):
-                      p = n.get("parameters", {})
-                      if "accountId" not in p or "publishMode" not in p:
-                          errors.append(f"{base}: publish node '{n['name']}' missing accountId/publishMode")
-                      if t.endswith("socialRobotBluesky") and "medias" in p:
-                          errors.append(f"{base}: Bluesky is text-only but has medias")
-                      if t.endswith("socialRobotInstagram") and p.get("mediaUrl") == "":
-                          errors.append(f"{base}: Instagram has empty mediaUrl")
-                      if t.endswith("socialRobotInstagram") and "medias" in p:
-                          errors.append(f"{base}: Instagram must use flat media fields")
+                      resource = p.get("resource")
+                      if resource in PUBLISH_RESOURCES:
+                          if "accountId" not in p or "publishMode" not in p:
+                              errors.append(f"{base}: publish node '{n['name']}' missing accountId/publishMode")
+                          if p.get("operation") != "create":
+                              errors.append(f"{base}: publish node '{n['name']}' operation != create")
+                          if resource == "bluesky" and "medias" in p:
+                              errors.append(f"{base}: Bluesky is text-only but has medias")
+                          if resource == "instagram" and p.get("mediaUrl") == "":
+                              errors.append(f"{base}: Instagram has empty mediaUrl")
+                          if resource == "instagram" and "medias" in p:
+                              errors.append(f"{base}: Instagram must use flat media fields")
+                      elif resource in ("post", "account"):
+                          if "operation" not in p:
+                              errors.append(f"{base}: management node '{n['name']}' missing operation")
+                      else:
+                          errors.append(f"{base}: SocialRobot node '{n['name']}' missing resource")
                   elif not t.startswith(KNOWN_BASE):
                       errors.append(f"{base}: unknown node type {t}")
 

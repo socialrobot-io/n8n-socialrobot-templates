@@ -7,7 +7,7 @@
         "width": 480,
         "height": 1070
       },
-      "id": "f2a61731-4c8c-43f7-ab0a-de0d511500b5",
+      "id": "5e414db4-9767-41a9-b8d9-ab5b41895399",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "ee50d457-9d1e-4fe6-822d-a95a2c2b86d6",
+      "id": "1d8ae658-c784-4cba-98e1-39118505e9a6",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "f9b6d3d2-cee7-4682-bb84-87eb26e2386b",
+      "id": "a76405dc-0fba-49d2-8aa0-30e3505a70ea",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "822a767a-83c3-4b94-ba9e-eb8ab982e023",
+      "id": "0c05346d-9dd8-4df9-a21e-4bd9385ed66b",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -65,7 +65,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "00f57d45-adc3-4e03-a5c4-093fd8b17ee4",
+              "id": "c4c11675-409a-4312-910d-8bee70b91da5",
               "name": "topic",
               "type": "string",
               "value": "A cozy desk setup at golden hour while code compiles"
@@ -73,7 +73,7 @@
           ]
         }
       },
-      "id": "0b839eb0-2b89-4976-83af-38ff9932f147",
+      "id": "f2d87a20-9bd8-454d-b051-5c80b1ae0d8d",
       "name": "Set video topic",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -90,7 +90,7 @@
         },
         "promptType": "define"
       },
-      "id": "b256dd79-8361-4b39-a138-cb625b3e5110",
+      "id": "27b096c7-43bb-4951-a78a-5be6c2e44e3e",
       "name": "AI Video Prompt Writer",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -112,7 +112,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "be365f59-bec0-4b27-922e-3aee8fd10263",
+      "id": "df801945-b89b-4854-a6c0-8644d8d29972",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -138,7 +138,7 @@
         "jsonBody": "={{ JSON.stringify({ input: { prompt: $(\"AI Video Prompt Writer\").item.json.output || $(\"Set video topic\").item.json.topic, duration: 5, resolution: \"720p\", aspect_ratio: \"16:9\" } }) }}",
         "options": {}
       },
-      "id": "39e3bec2-da8a-46af-89d9-412e2556e64f",
+      "id": "927f8e60-5034-40c7-a4d0-aeae008b2792",
       "name": "Generate Video (Seedance)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -161,7 +161,7 @@
         "genericAuthType": "httpHeaderAuth",
         "options": {}
       },
-      "id": "aac70593-90b1-454c-bfe0-b89d5aab23c9",
+      "id": "ee96b4e7-1715-4955-872b-dd3000828e7c",
       "name": "Check Status",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -186,7 +186,7 @@
           },
           "conditions": [
             {
-              "id": "83d612e2-099e-40e3-9f5a-64d5b0f28ec7",
+              "id": "e4dd7e42-0550-4094-a7e1-eebaa12568d0",
               "leftValue": "={{ $json.status }}",
               "rightValue": "succeeded",
               "operator": {
@@ -199,7 +199,7 @@
         },
         "options": {}
       },
-      "id": "5f6847e1-9205-4567-b741-e7674e12491b",
+      "id": "338be908-9005-43ff-8043-b7d780e80536",
       "name": "Video Ready?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -212,7 +212,7 @@
       "parameters": {
         "amount": 30
       },
-      "id": "de7aa7d2-c652-42da-a2d9-56def0f6bf23",
+      "id": "b8a93927-8193-4520-b444-2294f25fb2d5",
       "name": "Wait 30 Seconds",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -220,7 +220,7 @@
         3140,
         430
       ],
-      "webhookId": "ae61b2ff-9ede-4b7e-9b8b-0be20653f20a"
+      "webhookId": "a75d6e7e-7d8a-410d-8adf-05fc3b51aedb"
     },
     {
       "parameters": {
@@ -229,7 +229,7 @@
         "responseFormat": "file",
         "options": {}
       },
-      "id": "f56e9cb3-ef77-4234-ac82-8365e74e9163",
+      "id": "e9d31a32-96d3-4c65-9f98-e1ecc12ef0a1",
       "name": "Download Video",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -240,6 +240,8 @@
     },
     {
       "parameters": {
+        "resource": "tiktok",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -255,9 +257,9 @@
           }
         ]
       },
-      "id": "b950416e-cb3c-47cf-b74b-83321f56fb51",
+      "id": "183fcb14-4612-4428-b9af-6deaacdff73b",
       "name": "Publish to TikTok",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         3560,
@@ -383,9 +385,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "996cf99e-9b6d-4f43-8fde-c842151b4c8f",
+  "versionId": "36eb63b5-77ca-4eb9-88c3-3036293648df",
   "meta": {
-    "instanceId": "bce2171c-dbf0-4fc4-97e6-5628ca685135",
+    "instanceId": "e22d4c16-0c49-4611-a7c8-db3b93684d0c",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

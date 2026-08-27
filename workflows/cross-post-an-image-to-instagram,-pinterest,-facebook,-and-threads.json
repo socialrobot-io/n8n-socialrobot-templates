@@ -7,7 +7,7 @@
         "width": 480,
         "height": 960
       },
-      "id": "fe244d0f-4f9b-41b1-a071-005b9fb3b50e",
+      "id": "6fe39cbc-8d84-4155-95db-2753fc0ff7b2",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "2c8f4baa-f88f-464b-8a79-a9a4dde21ccb",
+      "id": "be800e62-4837-4dec-9372-f297b49a1806",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "c0048741-2646-44ad-a3c7-de3d361f70fa",
+      "id": "8c18f43d-5cfb-4a38-901a-aae9e43b930e",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "a2c5877b-d95a-41ab-8772-302d35b44f69",
+      "id": "6206542a-e3f3-4b84-b7f3-850152b69ada",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -71,7 +71,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "324e69c3-44a4-49f3-b293-89081fe88972",
+      "id": "59eedbab-273b-4523-a836-7c648071a6f0",
       "name": "Sticky Note4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -87,7 +87,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "52484f39-235f-498b-b29f-cc726f99bbc2",
+      "id": "ff9bb275-fca9-460c-9d7b-3b2791ea0d62",
       "name": "Sticky Note5",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -98,7 +98,7 @@
     },
     {
       "parameters": {},
-      "id": "1376d90d-a7a5-42a2-a38c-14c70c8e9dbe",
+      "id": "20a359ea-f70b-469c-ab72-a1ea6a54b82e",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -113,13 +113,13 @@
         "assignments": {
           "assignments": [
             {
-              "id": "81c0f405-c14c-4cc9-84b0-ed601729bc9a",
+              "id": "9745a772-f171-42de-a5ff-1b06cd20802b",
               "name": "caption",
               "type": "string",
               "value": "A caption that works across visual platforms."
             },
             {
-              "id": "2a9d3c84-63ee-4bc3-98bc-75eb346571e7",
+              "id": "43cf6b3a-cff5-4d76-9474-37d602cf0430",
               "name": "imageUrl",
               "type": "string",
               "value": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
@@ -127,7 +127,7 @@
           ]
         }
       },
-      "id": "9f889224-ad61-40de-b3c1-ba541cf7282d",
+      "id": "973640e4-395c-4c9f-9e62-0efec747620d",
       "name": "Set post image",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -138,6 +138,8 @@
     },
     {
       "parameters": {
+        "resource": "instagram",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -149,9 +151,9 @@
         "mediaType": "IMAGE",
         "mediaUrl": "={{ $json.imageUrl }}"
       },
-      "id": "a82a9b3b-000e-4a83-8880-0b506b1634c6",
+      "id": "6991edaa-0002-46cd-a930-75d000d13c11",
       "name": "Publish to Instagram",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -166,6 +168,8 @@
     },
     {
       "parameters": {
+        "resource": "pinterest",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -182,9 +186,9 @@
           }
         ]
       },
-      "id": "a61c0fae-30c4-48c6-83ee-e3ff5667e085",
+      "id": "77149a9f-67ba-4ec5-a493-3f0415528f98",
       "name": "Publish to Pinterest",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -199,6 +203,8 @@
     },
     {
       "parameters": {
+        "resource": "facebook",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -214,9 +220,9 @@
           }
         ]
       },
-      "id": "f65787e9-5454-4c32-b2a7-d0d107360875",
+      "id": "68330f7b-dd12-420b-8937-907d77942a4a",
       "name": "Publish to Facebook",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -231,6 +237,8 @@
     },
     {
       "parameters": {
+        "resource": "threads",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -246,9 +254,9 @@
           }
         ]
       },
-      "id": "86034bdd-d66a-46bd-81fd-21e4b4d9a98e",
+      "id": "d6cc0e6f-9a3d-429f-ba44-645b8fc7b945",
       "name": "Publish to Threads",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -294,9 +302,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "292f46fc-eba3-4a42-b423-2078c95319ea",
+  "versionId": "132f1e3c-d6a4-4940-8b04-908faab7816c",
   "meta": {
-    "instanceId": "50e83c7c-8bd4-4cde-a5de-f9ff33dc5b0d",
+    "instanceId": "612b65ac-3753-453d-b31e-52f156f3fa6b",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

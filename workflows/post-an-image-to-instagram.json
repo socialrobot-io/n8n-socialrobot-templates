@@ -7,7 +7,7 @@
         "width": 480,
         "height": 696
       },
-      "id": "b57af5ae-8158-4e25-87a1-d3a7e42150f0",
+      "id": "6617c6fd-09a0-4244-b23f-bc49dbc9dea0",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "27e1e790-c2ec-42ac-ae44-b779fd5eae3a",
+      "id": "d1c63d5c-70b4-498d-b863-59e7f7b38345",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "e3cbd4e9-55e0-4d75-97d9-864e0dbfd4eb",
+      "id": "aa48c253-441a-46e4-8f29-30083c89f49e",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -45,6 +45,8 @@
     },
     {
       "parameters": {
+        "resource": "instagram",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -56,9 +58,9 @@
         "mediaType": "IMAGE",
         "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
       },
-      "id": "4653f287-5349-4726-8db6-5d641c2aa010",
+      "id": "f13b3e8c-1797-4bde-be39-ead1819eea12",
       "name": "Publish to Instagram",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -89,9 +91,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "a1828bdb-2303-42e6-825f-83d8561762e0",
+  "versionId": "0595293e-7bdb-4f8e-ad65-f1c85a2c746d",
   "meta": {
-    "instanceId": "b8456423-a085-453c-871d-61f1729c9f6b",
+    "instanceId": "38298680-59f8-4fef-9893-df01a9ac98cd",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

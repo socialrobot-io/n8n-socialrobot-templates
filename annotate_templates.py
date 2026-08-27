@@ -31,24 +31,33 @@ SECTION_WIDTH = 360
 # not content sources in their own right, so they are excluded from the source list.
 AI_CONFIG_TYPES = ("lmChatOpenAi", "outputParserStructured", "toolSerpApi", "memoryBufferWindow")
 
-# per-platform publish node types (2.0.0 split)
-PUBLISH_TYPES = {
-    "instagram": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotInstagram",
-    "x": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotX",
-    "linkedin": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotLinkedin",
-    "tiktok": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotTiktok",
-    "facebook": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotFacebook",
-    "pinterest": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotPinterest",
-    "bluesky": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
-    "mastodon": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
-    "threads": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotThreads",
-}
-PLATFORM_BY_TYPE = {v: k for k, v in PUBLISH_TYPES.items()}
+# 3.0.0: one SocialRobot node; the platform lives on the `resource` parameter.
+PUBLISH_RESOURCES = (
+    "instagram", "x", "linkedin", "tiktok", "facebook",
+    "pinterest", "bluesky", "mastodon", "threads",
+)
 PLATFORM_LABELS = {
     "instagram": "Instagram", "x": "X (Twitter)", "linkedin": "LinkedIn",
     "tiktok": "TikTok", "facebook": "Facebook", "pinterest": "Pinterest",
     "bluesky": "Bluesky", "mastodon": "Mastodon", "threads": "Threads",
 }
+
+
+def platform_of(node):
+    """Return the platform a SocialRobot node publishes to, or None if it is a
+    management node or not a SocialRobot node at all."""
+    if node.get("type") != NODE_TYPE:
+        return None
+    resource = (node.get("parameters") or {}).get("resource")
+    return resource if resource in PUBLISH_RESOURCES else None
+
+
+def is_publish(node):
+    return platform_of(node) is not None
+
+
+def is_management(node):
+    return node.get("type") == NODE_TYPE and not is_publish(node)
 
 INTERVAL_UNITS = {
     "seconds": "second", "minutes": "minute", "hours": "hour",
@@ -102,8 +111,9 @@ def rename_node(node):
         return "Fetch Blog Feed" if "blog" in url.lower() else "Fetch RSS Feed"
     if t == "n8n-nodes-base.googleSheets":
         return "Read Content Calendar"
-    if t in PLATFORM_BY_TYPE:
-        return f"Publish to {PLATFORM_LABELS[PLATFORM_BY_TYPE[t]]}"
+    platform = platform_of(node)
+    if platform:
+        return f"Publish to {PLATFORM_LABELS[platform]}"
     if t == NODE_TYPE:
         return rename_socialrobot(params)
     return node.get("name", "Node")
@@ -238,8 +248,7 @@ def describe_source(node):
 
 def publish_node_platforms(node):
     """Platform keys for one publish node."""
-    t = node.get("type", "")
-    platform = PLATFORM_BY_TYPE.get(t)
+    platform = platform_of(node)
     return [platform] if platform else []
 
 
@@ -251,8 +260,8 @@ def describe_action(action):
     for node in action or []:
         t = node.get("type", "")
         params = node.get("parameters", {})
-        if t in PLATFORM_BY_TYPE:
-            label = PLATFORM_LABELS[PLATFORM_BY_TYPE[t]]
+        if is_publish(node):
+            label = PLATFORM_LABELS[platform_of(node)]
             mode = params.get("publishMode", "NOW")
             if mode == "SCHEDULE":
                 descs.append(f"Schedules a post to {label} at the given date and time.")
@@ -314,14 +323,14 @@ def build_overview(wf, nodes, trigger, sources, action):
             steps.append("[ ] Connect your OpenAI account in the OpenAI Chat Model node.")
 
     actions = action if isinstance(action, list) else ([action] if action else [])
-    publish_nodes = [n for n in actions if n.get("type") in PLATFORM_BY_TYPE]
-    management_nodes = [n for n in actions if n.get("type") == NODE_TYPE]
+    publish_nodes = [n for n in actions if is_publish(n)]
+    management_nodes = [n for n in actions if is_management(n)]
 
     if publish_nodes:
         steps.append("[ ] Select your connected account in each Publish node.")
     seen_publish_steps = set()
     for n in publish_nodes:
-        platform = PLATFORM_BY_TYPE[n.get("type")]
+        platform = platform_of(n)
         params = n.get("parameters", {})
         if platform == "pinterest" and "pin" not in seen_publish_steps:
             seen_publish_steps.add("pin")
@@ -352,8 +361,8 @@ def build_overview(wf, nodes, trigger, sources, action):
 
 def _who_is_it_for(sources, action):
     actions = action if isinstance(action, list) else ([action] if action else [])
-    publish_nodes = [n for n in actions if n.get("type") in PLATFORM_BY_TYPE]
-    management_nodes = [n for n in actions if n.get("type") == NODE_TYPE]
+    publish_nodes = [n for n in actions if is_publish(n)]
+    management_nodes = [n for n in actions if is_management(n)]
     if management_nodes:
         return "Teams that manage SocialRobot posts programmatically."
     if any("rssFeedRead" in s.get("type", "") for s in sources):
@@ -362,7 +371,7 @@ def _who_is_it_for(sources, action):
         return "Social media teams that plan content in a spreadsheet and want it published on schedule."
     if any("langchain.agent" in s.get("type", "") for s in sources):
         return "Creators and marketers who want AI written posts published automatically."
-    platforms = [PLATFORM_LABELS[PLATFORM_BY_TYPE[n.get("type")]] for n in publish_nodes]
+    platforms = [PLATFORM_LABELS[platform_of(n)] for n in publish_nodes]
     if len(platforms) > 1:
         return "Marketers and creators who post to multiple social platforms and want to write once, publish everywhere."
     if platforms:
@@ -388,9 +397,9 @@ def _requirements(sources, action):
     actions = action if isinstance(action, list) else ([action] if action else [])
     seen_platform_reqs = set()
     for n in actions:
-        if n.get("type") not in PLATFORM_BY_TYPE:
+        platform = platform_of(n)
+        if platform is None:
             continue
-        platform = PLATFORM_BY_TYPE[n.get("type")]
         params = n.get("parameters", {})
         if platform == "pinterest" and "pin" not in seen_platform_reqs:
             seen_platform_reqs.add("pin")
@@ -424,11 +433,11 @@ def build_group_stickies(nodes, trigger, sources, actions):
             groups.append(("Prepare content", "Gathers and prepares the content to publish.", sources[0]["name"]))
 
     actions = actions if isinstance(actions, list) else ([actions] if actions else [])
-    publish_nodes = [n for n in actions if n.get("type") in PLATFORM_BY_TYPE]
-    management_nodes = [n for n in actions if n.get("type") == NODE_TYPE]
+    publish_nodes = [n for n in actions if is_publish(n)]
+    management_nodes = [n for n in actions if is_management(n)]
 
     if publish_nodes:
-        platforms = [PLATFORM_LABELS[PLATFORM_BY_TYPE[n.get("type")]] for n in publish_nodes]
+        platforms = [PLATFORM_LABELS[platform_of(n)] for n in publish_nodes]
         if len(publish_nodes) > 4:
             params = publish_nodes[0].get("parameters", {})
             mode = params.get("publishMode", "NOW")
@@ -440,7 +449,7 @@ def build_group_stickies(nodes, trigger, sources, actions):
                 groups.append(("Publish", f"Publishes the content to {join_names(platforms)}.", publish_nodes[0]["name"]))
         else:
             for n in publish_nodes:
-                label = PLATFORM_LABELS[PLATFORM_BY_TYPE[n.get("type")]]
+                label = PLATFORM_LABELS[platform_of(n)]
                 mode = n.get("parameters", {}).get("publishMode", "NOW")
                 if mode == "SCHEDULE":
                     groups.append((f"Schedule {label}", f"Schedules the content to {label} at the given date.", n["name"]))
@@ -495,9 +504,8 @@ def annotate(wf):
     non_sticky = [n for n in nodes if n.get("type") != STICKY_TYPE]
     trigger = next((n for n in non_sticky if n.get("type", "").endswith(("Trigger", "trigger", "webhook"))), None)
     sources = [n for n in non_sticky if n is not trigger and n.get("type") != NODE_TYPE
-               and n.get("type") not in PLATFORM_BY_TYPE
                and not any(t in n.get("type", "") for t in AI_CONFIG_TYPES)]
-    actions = [n for n in non_sticky if n.get("type") in PLATFORM_BY_TYPE or n.get("type") == NODE_TYPE]
+    actions = [n for n in non_sticky if n.get("type") == NODE_TYPE]
 
     # rename nodes (and rewrite connections/expressions)
     apply_renames(wf)
@@ -506,9 +514,8 @@ def annotate(wf):
     non_sticky = [n for n in nodes if n.get("type") != STICKY_TYPE]
     trigger = next((n for n in non_sticky if n.get("type", "").endswith(("Trigger", "trigger", "webhook"))), None)
     sources = [n for n in non_sticky if n is not trigger and n.get("type") != NODE_TYPE
-               and n.get("type") not in PLATFORM_BY_TYPE
                and not any(t in n.get("type", "") for t in AI_CONFIG_TYPES)]
-    actions = [n for n in non_sticky if n.get("type") in PLATFORM_BY_TYPE or n.get("type") == NODE_TYPE]
+    actions = [n for n in non_sticky if n.get("type") == NODE_TYPE]
 
     name, who_for, how_text, steps, requirements, customization = build_overview(wf, non_sticky, trigger, sources, actions)
 

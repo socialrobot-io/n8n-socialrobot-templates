@@ -7,7 +7,7 @@
         "width": 480,
         "height": 762
       },
-      "id": "46ad3474-0a7c-4dbf-a974-4e2b8c935e1f",
+      "id": "89b18f16-3dff-45a2-b0b9-16cf4c837a9a",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 220,
         "color": 7
       },
-      "id": "26d9bc04-ecf7-42ab-9514-e5230274bfb6",
+      "id": "be5e9b44-6baa-43c2-857e-0e73ef835081",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "c135aced-43ab-44d4-8428-9235f51b485b",
+      "id": "83ecfe29-f976-4f32-b6e2-b03e01d30a0c",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 198,
         "color": 7
       },
-      "id": "124ad716-f4c1-4e3a-9e4b-f2ef0aa422e5",
+      "id": "36d0689b-ad4a-4687-a33d-eff24af56fa4",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "8f390b68-7d4c-40f4-b300-8d8969efc66d",
+      "id": "531eed9d-6bec-4715-9df4-5127e63bb980",
       "name": "Every Hour",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -88,7 +88,7 @@
       "parameters": {
         "url": "https://example.com/feed.xml"
       },
-      "id": "da09aea8-269d-483e-82df-1e07a0b10ec1",
+      "id": "b4c29eda-cead-44ad-95ed-f5b694f52df0",
       "name": "Fetch RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
@@ -99,6 +99,8 @@
     },
     {
       "parameters": {
+        "resource": "bluesky",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -107,9 +109,9 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "3bee2d2e-934a-4598-8256-9fdee5e2b185",
+      "id": "28cba723-eb22-4dc5-9fba-de3a3276d00f",
       "name": "Publish to Bluesky",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotBluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -124,6 +126,8 @@
     },
     {
       "parameters": {
+        "resource": "mastodon",
+        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
@@ -132,9 +136,9 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "98addb0e-1572-49e8-a213-67d972d61e60",
+      "id": "1f0adbfb-f8e6-46d1-aa77-9b60041c7ca3",
       "name": "Publish to Mastodon",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobotMastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
@@ -170,9 +174,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "f7f833c5-69ec-4044-bac7-b3fc7dbec196",
+  "versionId": "476f1d8e-38d4-4a9d-9fde-f28c1e25ee0b",
   "meta": {
-    "instanceId": "38d24cad-57c8-4556-92f0-18e4a6839ba7",
+    "instanceId": "7027b2da-0e19-43ac-aa73-1e05a72b9732",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}
