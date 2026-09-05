@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## List scheduled social media posts\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Lists posts from SocialRobot.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Optionally set the status, platform, and date filters.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## List scheduled social media posts\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Lists posts from SocialRobot with optional filters.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Optionally set the status, platform, and date filters.\n\n### Customization\n\nAdjust the filters to list exactly the posts you care about. Run it any time to post, or connect a Schedule Trigger to automate it. Everything runs inside your own n8n workspace, so you can change any step after import. Run it once with a test post to confirm every node behaves as expected before you rely on it. You can duplicate the workflow to try variations without touching the original.",
         "width": 480,
-        "height": 674
+        "height": 522
       },
-      "id": "33bda5af-fd35-44e0-9be4-501c34cfc7b4",
+      "id": "57056753-2e28-4f11-8064-68d1cb81c7fb",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## List posts\n\nLists posts from SocialRobot with optional filters.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "7483d108-79db-4774-9213-e9cc2f2b1bc3",
+      "id": "7444976e-8d20-42b5-bfa6-b967d1eeb357",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        80
+        148
       ]
     },
     {
       "parameters": {},
-      "id": "d7412de3-6d21-427c-aefa-194e06973dff",
+      "id": "8cad4fbc-2e8b-498e-b3d6-2a1335f2d4c5",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -52,7 +52,7 @@
           "status": "SCHEDULED"
         }
       },
-      "id": "af6922a7-d29b-44de-9fe3-6524eeca6851",
+      "id": "eccc8231-4759-45b9-b71d-030d09f3783b",
       "name": "List Scheduled Posts",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -85,9 +85,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "b16cc2b4-4ff4-48d2-a613-aed8043b661c",
+  "versionId": "24843c95-c226-4676-8a4d-0679c960c1bb",
   "meta": {
-    "instanceId": "c1f1a56c-3868-45e1-9742-54b8b46c02bf",
+    "instanceId": "e60549ff-61de-4d10-bcd1-05d4a433f6a7",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

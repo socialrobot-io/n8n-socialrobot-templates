@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Auto-post RSS feed items to Bluesky and Mastodon\n\n### Who's it for\n\nPublishers and bloggers who want new content shared to social media automatically.\n\n### How it works\n\n1. Runs automatically every hour.\n2. Fetches the latest items from the configured RSS feed.\n3. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Set the RSS feed URL to your own feed.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public RSS feed URL.\n",
+        "content": "## Auto-post RSS feed items to Bluesky and Mastodon\n\n### How it works\n\n1. Runs automatically every hour.\n2. Fetches the latest items from the RSS feed.\n3. Publishes posts to Bluesky and Mastodon via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Set the RSS feed URL to your own feed.\n- [ ] Select your connected SocialRobot account in each Publish node.\n\n### Customization\n\nPoint the RSS node at a different feed to reuse the workflow for another blog or channel. Remove the Publish nodes you do not need to target fewer platforms. Adjust the trigger interval to control exactly how often the workflow runs. The RSS node can point at any feed, so the workflow adapts to a new source in seconds.",
         "width": 480,
-        "height": 762
+        "height": 586
       },
-      "id": "89b18f16-3dff-45a2-b0b9-16cf4c837a9a",
+      "id": "05e17313-b68a-4985-ae52-065a2500011c",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,48 +20,48 @@
       "parameters": {
         "content": "## Fetch content\n\nReads new items from the RSS feed to turn them into posts.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "be5e9b44-6baa-43c2-857e-0e73ef835081",
+      "id": "971133d6-74b7-4e69-a2cf-d9567bc4b84e",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        620,
-        40
+        1040,
+        148
       ]
     },
     {
       "parameters": {
         "content": "## Publish to Bluesky\n\nPublishes the content to Bluesky.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "83ecfe29-f976-4f32-b6e2-b03e01d30a0c",
+      "id": "2214d956-54d8-4629-b6f4-f7a49b69edad",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        40
+        1460,
+        100
       ]
     },
     {
       "parameters": {
         "content": "## Publish to Mastodon\n\nPublishes the content to Mastodon.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "36d0689b-ad4a-4687-a33d-eff24af56fa4",
+      "id": "625d222a-65e4-4b12-b9c2-bf7f0440b083",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        172
+        1460,
+        410
       ]
     },
     {
@@ -75,26 +75,26 @@
           ]
         }
       },
-      "id": "531eed9d-6bec-4715-9df4-5127e63bb980",
+      "id": "2f420d4a-2891-4249-b28f-8d5b57a7ccb2",
       "name": "Every Hour",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
         620,
-        430
+        360
       ]
     },
     {
       "parameters": {
         "url": "https://example.com/feed.xml"
       },
-      "id": "b4c29eda-cead-44ad-95ed-f5b694f52df0",
+      "id": "daed43cd-b161-42f3-b98d-7b1d272e51f7",
       "name": "Fetch RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        620,
-        290
+        1040,
+        360
       ]
     },
     {
@@ -109,12 +109,12 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "28cba723-eb22-4dc5-9fba-de3a3276d00f",
+      "id": "bcb73077-9b66-43e0-b67a-231d984fadda",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
+        1460,
         290
       ],
       "credentials": {
@@ -136,13 +136,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "1f0adbfb-f8e6-46d1-aa77-9b60041c7ca3",
+      "id": "c5980254-3b1b-45fc-a338-d593a2c8a9a2",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        430
+        1460,
+        600
       ],
       "credentials": {
         "socialRobotApi": {
@@ -168,15 +168,26 @@
           }
         ]
       ]
+    },
+    "Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Fetch RSS Feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "476f1d8e-38d4-4a9d-9fde-f28c1e25ee0b",
+  "versionId": "31d75ec2-58ab-45f9-bc7e-0927f19614a6",
   "meta": {
-    "instanceId": "7027b2da-0e19-43ac-aa73-1e05a72b9732",
+    "instanceId": "6b261e2c-12f3-4278-a75e-bd9fc4cc013d",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

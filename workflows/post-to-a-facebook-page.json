@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post to a Facebook Page\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Facebook.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Facebook via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Facebook.\n",
+        "content": "## Post to a Facebook Page\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Facebook via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your Facebook account in the Publish to Facebook node.\n- [ ] Replace the sample media URL with your own public image or video URL.\n- [ ] Replace the example caption in the Publish to Facebook node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it. Swap the sample media for your own images or videos.",
         "width": 480,
-        "height": 696
+        "height": 568
       },
-      "id": "429820a6-386b-4f8a-82c6-b89335fcf29f",
+      "id": "23a59106-65ed-4df5-b2ce-48abbf46e77f",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to Facebook\n\nPublishes the content to Facebook.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "d045b88f-a01b-4532-ab88-0426a3aec373",
+      "id": "06ab6c7c-4a15-44e6-8219-a2399c984fbe",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "94c54b16-6baa-4818-a566-7712fb2e4c3c",
+      "id": "306d58aa-e157-45a8-94bf-7503b32ff77c",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
           }
         ]
       },
-      "id": "d856ea70-48d6-4b1b-8267-f26f4ab461f8",
+      "id": "e65b8d92-2b84-49ea-952b-a8f1c980fe3b",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -95,9 +95,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "993fa22e-fd99-4465-9992-9dfed9f578ef",
+  "versionId": "6cbaf598-fbba-46cc-b916-7adf61ea7882",
   "meta": {
-    "instanceId": "5cf36995-d866-420e-9f19-d2de4fcdd263",
+    "instanceId": "77797c94-4a2d-4dd0-8a50-e21fda14aa68",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

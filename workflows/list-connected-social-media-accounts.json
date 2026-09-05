@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## List connected social media accounts\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Lists your connected SocialRobot accounts.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Optionally set the status, platform, and date filters.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## List connected social media accounts\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Lists your connected SocialRobot accounts.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n\n### Customization\n\nThe list covers every account connected to SocialRobot, ready to feed into other nodes. Run it any time to post, or connect a Schedule Trigger to automate it. Everything runs inside your own n8n workspace, so you can change any step after import. Run it once with a test post to confirm every node behaves as expected before you rely on it. You can duplicate the workflow to try variations without touching the original.",
         "width": 480,
-        "height": 674
+        "height": 502
       },
-      "id": "4510c579-9a84-4cb1-8a56-b8473c5c9ef2",
+      "id": "fe66ef36-4280-48a9-a7f0-453a46f1c86e",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,23 +18,23 @@
     },
     {
       "parameters": {
-        "content": "## Manage posts\n\nReads, deletes, or reschedules posts through the SocialRobot API.",
+        "content": "## List accounts\n\nLists your connected SocialRobot accounts.",
         "width": 360,
-        "height": 220,
+        "height": 130,
         "color": 7
       },
-      "id": "6fbde952-94f4-460f-8492-cac71d7f3687",
+      "id": "4b994dec-21a3-44a2-a087-dc3f80dd3baa",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        80
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "22560827-3902-43bb-b2a4-de6a38c8e2fd",
+      "id": "67a43e5c-6ad8-4e33-b863-a1c5f5cd8c1a",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -48,7 +48,7 @@
         "resource": "account",
         "operation": "getAll"
       },
-      "id": "9b03964b-ada1-4846-8c40-7458280093b6",
+      "id": "1f186ecb-88ca-41fe-9b29-717b58292d46",
       "name": "List Accounts",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -81,9 +81,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "bf24872c-7129-487c-a95d-0da3fe9abf3d",
+  "versionId": "02ab6f11-8165-46ff-bd74-402a2ca59695",
   "meta": {
-    "instanceId": "721a9fbc-8ec8-4060-ace6-31196cb9fd29",
+    "instanceId": "657cdea2-f92f-4ac6-bef6-7d7c48f6de3e",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

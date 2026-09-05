@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Cross-post text to X, Bluesky, Mastodon, Threads, and LinkedIn\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API. Publishes a post to Threads via the SocialRobot API. Publishes a post to LinkedIn via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## Cross-post text to X, Bluesky, Mastodon, Threads, and LinkedIn\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the caption used to build the post.\n3. Publishes posts to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] In the Set post text node, set the caption to your own content.\n- [ ] Select your connected SocialRobot account in each Publish node.\n\n### Customization\n\nChange the caption in the Set post text node to publish different content. Run it any time to post, or connect a Schedule Trigger to automate it. Remove the Publish nodes you do not need to target fewer platforms.",
         "width": 480,
-        "height": 850
+        "height": 568
       },
-      "id": "86f99987-69cf-4888-8b51-e0b88b40b779",
+      "id": "438b753e-bf32-48d4-ba42-a0a0b38d1799",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,45 +18,45 @@
     },
     {
       "parameters": {
-        "content": "## Set input\n\nHolds the topic, text, or image used to build the post.",
+        "content": "## Set input\n\nSets the caption used to build the post.",
         "width": 360,
-        "height": 220,
+        "height": 130,
         "color": 7
       },
-      "id": "367695be-d72d-4664-b694-4f70a253c5b9",
+      "id": "358ebfd4-7489-4290-9cf6-9d3f6bfccadb",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        620,
-        40
+        1040,
+        170
       ]
     },
     {
       "parameters": {
         "content": "## Publish\n\nPublishes the content to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "d6571525-8757-46cd-a7e1-6d8d3133218f",
+      "id": "4ff2250e-ecb1-43c2-883a-0ab25cfa8f1e",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        360
+        1460,
+        40
       ]
     },
     {
       "parameters": {},
-      "id": "bef9807f-777a-4ebe-a645-43388bbf1720",
+      "id": "229fa73d-5db4-4301-b1d9-275982f0e6b1",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
         620,
-        430
+        360
       ]
     },
     {
@@ -65,7 +65,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "9b09de3f-7366-49c4-8d50-2d917c8f24d7",
+              "id": "c51ab15f-15d9-4689-97b0-c0e9c6df4868",
               "name": "caption",
               "type": "string",
               "value": "One post, every network. Type your text here."
@@ -73,13 +73,13 @@
           ]
         }
       },
-      "id": "964e5000-5cc7-4979-b832-421ecb5dfb6e",
+      "id": "a3108e19-e28a-471a-8c0c-a77c694ca315",
       "name": "Set post text",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        620,
-        290
+        1040,
+        360
       ]
     },
     {
@@ -94,13 +94,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "db5f43a2-ebb4-44d7-a311-3d1455b6eb8b",
+      "id": "8e2304bb-5510-4c91-87fc-74af75409d92",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        640
+        1460,
+        812
       ],
       "credentials": {
         "socialRobotApi": {
@@ -121,13 +121,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "f23daa55-0ed3-48e7-8999-f84b6983e9e6",
+      "id": "cdd0c470-b18f-418c-804a-c6eb6f251060",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        80
+        1460,
+        252
       ],
       "credentials": {
         "socialRobotApi": {
@@ -148,13 +148,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "f846048e-21ae-44c0-8e58-49c71edfe6df",
+      "id": "6b76f75b-53e0-4f8f-a490-79cb4f6580cc",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        360
+        1460,
+        532
       ],
       "credentials": {
         "socialRobotApi": {
@@ -175,13 +175,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "3ba48a33-33fc-4900-8b51-a3cfa41bd579",
+      "id": "14b126a6-e133-4eda-9b9d-88ed7ec89a75",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        500
+        1460,
+        672
       ],
       "credentials": {
         "socialRobotApi": {
@@ -202,13 +202,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "3b92efe8-4f40-4011-92de-0ddc2d7052ed",
+      "id": "dc09275c-e730-43eb-b57a-ba921134564b",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        220
+        1460,
+        392
       ],
       "credentials": {
         "socialRobotApi": {
@@ -249,15 +249,26 @@
           }
         ]
       ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set post text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "0688f7cb-80f4-4891-a3d3-0ebed936f9fc",
+  "versionId": "78580610-fc52-4304-892b-eab08599e6ba",
   "meta": {
-    "instanceId": "5f145208-210f-4d63-9543-62e0a77cb947",
+    "instanceId": "d68d641d-ef21-4336-82a1-334e1ab8c176",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

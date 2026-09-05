@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Create AI post drafts for review before publishing\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs automatically every day.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Saves a draft post to Instagram in SocialRobot for review. Saves a draft post to X (Twitter) in SocialRobot for review. Saves a draft post to LinkedIn in SocialRobot for review. Saves a draft post to TikTok in SocialRobot for review. Saves a draft post to Facebook in SocialRobot for review. Saves a draft post to Pinterest in SocialRobot for review. Saves a draft post to Bluesky in SocialRobot for review. Saves a draft post to Mastodon in SocialRobot for review. Saves a draft post to Threads in SocialRobot for review.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n- A Pinterest board ID.\n",
+        "content": "## Create AI post drafts for review before publishing\n\n### How it works\n\n1. Runs automatically every day.\n2. Sets the post theme that guide the AI-written content.\n3. Uses OpenAI to write the post copy and parses it into per-platform fields.\n4. Saves draft posts to Instagram, X (Twitter), LinkedIn, TikTok, Facebook, Pinterest, Bluesky, Mastodon, and Threads in SocialRobot for review.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] In the Set post theme node, set the post theme to your own content.\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Set your Pinterest board ID in the Publish to Pinterest node.\n\n### Customization\n\nEdit the prompt in the AI Draft Generator node, or change the OpenAI model, to tune the tone of the copy.",
         "width": 480,
-        "height": 1136
+        "height": 632
       },
-      "id": "28610bb3-07e5-4e74-a7b1-6b3cfcb6a1ec",
+      "id": "f2cdea4c-2eff-41a0-88b2-ce9d21905630",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,28 +18,28 @@
     },
     {
       "parameters": {
-        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "content": "## Generate content\n\nUses OpenAI to write and structure the post copy.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "50b5b9ea-ced0-4f7c-9269-884cc8727fc9",
+      "id": "a2344b84-16cb-4960-9db5-d4ebee0bd091",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1460,
-        80
+        148
       ]
     },
     {
       "parameters": {
         "content": "## Create drafts\n\nSaves draft posts to Instagram, X (Twitter), LinkedIn, TikTok, Facebook, Pinterest, Bluesky, Mastodon, and Threads in SocialRobot for review.",
         "width": 360,
-        "height": 264,
+        "height": 192,
         "color": 7
       },
-      "id": "2be816f7-13eb-44a2-b199-56a179b7bd0d",
+      "id": "59f7f331-df02-4c41-825f-cd574be5610d",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -59,7 +59,7 @@
           ]
         }
       },
-      "id": "397bb4e9-aaf1-4fc0-9196-26e129b81082",
+      "id": "cf82ba7d-9d8d-4b21-979a-69ea05780cb2",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -74,7 +74,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "e55fe5ee-07ba-4303-9dda-bc4f67b4c03a",
+              "id": "2c5a23b4-c9c7-43b4-8ae8-dfa2554be39c",
               "name": "theme",
               "type": "string",
               "value": "indie hacking and automation"
@@ -82,7 +82,7 @@
           ]
         }
       },
-      "id": "976d52ca-a9ac-4f5e-8912-361a4e29f1bd",
+      "id": "8aa0565c-d89a-4020-af01-0eb9a555e842",
       "name": "Set post theme",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -100,7 +100,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "f742c9cf-7d6c-4b07-8d5e-1df133122b58",
+      "id": "98a8926a-d6b1-4b32-88c5-a03bcd912a1f",
       "name": "AI Draft Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -122,7 +122,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "312eb5a2-1b2f-4399-aca7-720adb92d16e",
+      "id": "c189975a-d9b1-4943-8161-fef5952bf7d8",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -142,7 +142,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"instagram\": {\n      \"type\": \"string\"\n    },\n    \"twitter\": {\n      \"type\": \"string\"\n    },\n    \"linkedin\": {\n      \"type\": \"string\"\n    },\n    \"tiktok\": {\n      \"type\": \"string\"\n    },\n    \"facebook\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_title\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_description\": {\n      \"type\": \"string\"\n    },\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    },\n    \"threads\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "3e78f0f7-fe11-48e2-aa5a-f335795e4580",
+      "id": "a592ab94-1adb-4706-a28b-0d71277d889c",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -163,13 +163,13 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.instagram }}"
       },
-      "id": "74f5cf69-4462-4f7f-aa77-5b7cc6d6bb98",
+      "id": "c9b0f989-9a0e-4a1f-ad70-f84313023d8c",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        80
+        572
       ],
       "credentials": {
         "socialRobotApi": {
@@ -190,13 +190,13 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.twitter }}"
       },
-      "id": "9432186d-8e8b-41bb-9193-83be73dbd7df",
+      "id": "d69baa52-a616-448c-b55a-f062017a3da9",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        920
+        1412
       ],
       "credentials": {
         "socialRobotApi": {
@@ -217,13 +217,13 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.linkedin }}"
       },
-      "id": "1598bbdb-ab89-40e1-bcdd-bcb51c0c7b30",
+      "id": "18e1412d-1a82-4b37-a28c-98d74b127ce3",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        220
+        712
       ],
       "credentials": {
         "socialRobotApi": {
@@ -244,13 +244,13 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.tiktok }}"
       },
-      "id": "719c572d-ce44-458f-93f2-7834b37cf66f",
+      "id": "b03ddc4b-a56c-416a-a31d-5d04822c3fd1",
       "name": "Publish to TikTok",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        780
+        1272
       ],
       "credentials": {
         "socialRobotApi": {
@@ -271,13 +271,13 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.facebook }}"
       },
-      "id": "34baaa76-2dbf-4b77-8418-59290ec881f9",
+      "id": "6da10873-0f92-4b01-a0cb-1387899d2da5",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        -60
+        432
       ],
       "credentials": {
         "socialRobotApi": {
@@ -299,13 +299,13 @@
         "caption": "={{ $json.output.pinterest_description }}",
         "boardId": "your-board-id"
       },
-      "id": "09f4a737-b587-40fc-a692-7e3aca3ef17c",
+      "id": "a00b1590-86e3-4abf-bb81-85c6d460ebe7",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        500
+        992
       ],
       "credentials": {
         "socialRobotApi": {
@@ -326,13 +326,13 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.bluesky }}"
       },
-      "id": "b27b6903-9e06-4833-ae26-124aaf9005a7",
+      "id": "ce9fe16e-b2f2-4861-9e40-6115bb48cac5",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        -200
+        292
       ],
       "credentials": {
         "socialRobotApi": {
@@ -353,13 +353,13 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.mastodon }}"
       },
-      "id": "0e9a3d3c-88b3-4f52-8b6c-69b7751cb41c",
+      "id": "4e3a7a94-c6e2-4621-b09e-4de0b58e29bf",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        360
+        852
       ],
       "credentials": {
         "socialRobotApi": {
@@ -380,13 +380,13 @@
         "publishMode": "DRAFT",
         "caption": "={{ $json.output.threads }}"
       },
-      "id": "377ae684-2e50-4d68-8fd5-dcad76ba50c7",
+      "id": "1fc5ee87-1b43-4395-80a0-bef657ef30d5",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        640
+        1132
       ],
       "credentials": {
         "socialRobotApi": {
@@ -497,9 +497,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "0e24175f-ec8d-4804-b7c4-f8d2d9336588",
+  "versionId": "bf6e40b1-2d06-4ca6-9063-fc5a1eb5c929",
   "meta": {
-    "instanceId": "bef524bf-88c2-4f1f-a1e3-ea26385e5bb6",
+    "instanceId": "1ac226d6-45e1-401a-bc5f-75cbe73702b0",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

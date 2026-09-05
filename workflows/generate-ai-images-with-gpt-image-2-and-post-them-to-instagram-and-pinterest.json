@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Generate AI images with gpt-image-2 and post them to Instagram and Pinterest\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Calls an external API over HTTP (media generation, status polling, or download).\n4. Converts the generated image into binary data for upload.\n5. Generates platform-optimized post text with the OpenAI model.\n6. Publishes a post to Instagram via the SocialRobot API. Publishes a post to Pinterest via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your Replicate account in the HTTP Request nodes (media generation, status checks, and download).\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Make sure an upstream node provides the image as binary data (for example an HTTP Request node).\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n- An upstream node that provides the image as binary data (for example an HTTP Request node).\n- A Pinterest board ID.\n",
+        "content": "## Generate AI images with gpt-image-2 and post them to Instagram and Pinterest\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the imagePrompt used to build the post.\n3. Generates the image with OpenAI (gpt-image-2).\n4. Publishes posts to Instagram and Pinterest via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Connect your OpenAI account in the Generate Image (gpt-image-2) node.\n- [ ] In the Set image idea node, set the imagePrompt to your own content.\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Set your Pinterest board ID in the Publish to Pinterest node.\n- [ ] Make sure an upstream node provides the image as binary data for Instagram.\n\n### Customization\n\nChange the imagePrompt in the Set image idea node to publish different content.",
         "width": 480,
-        "height": 1202
+        "height": 674
       },
-      "id": "a648d808-0c04-4ed9-be47-a93921cbd26a",
+      "id": "681c33ff-0559-43c8-8e19-0ebd0c137d9d",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,61 +18,61 @@
     },
     {
       "parameters": {
-        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "content": "## Prepare content\n\nGathers and prepares the content to publish.",
         "width": 360,
-        "height": 220,
+        "height": 130,
         "color": 7
       },
-      "id": "2fc21f30-52f3-4192-839b-9fd2ea518b20",
+      "id": "b9fdeae2-11cd-4d23-8f70-6b4d335f3188",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        620,
-        40
+        1040,
+        170
       ]
     },
     {
       "parameters": {
         "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "78641dcd-2c3b-43c1-a470-3b3b3bc30958",
+      "id": "8aa10d36-fe96-485c-9c4f-1d84ab94a2c8",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        40
+        2300,
+        100
       ]
     },
     {
       "parameters": {
         "content": "## Publish to Pinterest\n\nPublishes the content to Pinterest.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "629c71ba-b338-4b2a-8fa9-3a40aeb89f11",
+      "id": "017ff402-54cb-441e-b54d-472fce707bb6",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        102
+        2300,
+        410
       ]
     },
     {
       "parameters": {},
-      "id": "706320ba-10da-4eda-8531-0cb477bde9be",
+      "id": "bbe736aa-b5a5-49d3-a8a1-6e2de6f657ce",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
         620,
-        430
+        360
       ]
     },
     {
@@ -81,7 +81,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "3e21dcbd-cb8c-4c35-a790-a47e7224560d",
+              "id": "7a2b997d-6bcb-487d-a03b-2a769bd645bd",
               "name": "imagePrompt",
               "type": "string",
               "value": "A minimalist flat-lay of a laptop, coffee, and notebook in soft violet morning light"
@@ -89,13 +89,13 @@
           ]
         }
       },
-      "id": "73bea525-d38a-4c37-a98f-2703de6b6dab",
+      "id": "6e628074-4488-4c8d-9016-ce3568eccf1d",
       "name": "Set image idea",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
         1040,
-        500
+        360
       ]
     },
     {
@@ -115,7 +115,7 @@
           }
         }
       },
-      "id": "9d5e9ffb-32fb-45f6-9565-cbe6f953ba1e",
+      "id": "466344c0-f8dd-4916-baf7-5e9635be7ef1",
       "name": "Generate Image (gpt-image-2)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -134,75 +134,15 @@
       "parameters": {
         "mode": "runOnceForAllItems",
         "language": "javaScript",
-        "jsCode": "const items = [];\nfor (const item of $input.all()) {\n  const b64 = item.json.data[0]?.b64_json;\n  if (!b64) throw new Error('No image data in response');\n  items.push({\n    json: { ...item.json },\n    binary: {\n      data: await this.helpers.prepareBinaryData(\n        Buffer.from(b64, 'base64'), 'generated.png', 'image/png'),\n    },\n  });\n}\nreturn items;"
+        "jsCode": "const items = [];\nfor (const item of $input.all()) {\n  const b64 = item.json.data?.[0]?.b64_json;\n  if (!b64) throw new Error('No image data in response');\n  const prompt = $('Set image idea').first().json.imagePrompt || 'AI-generated artwork';\n  const caption = `${prompt}.\n\nWhat do you think? #aiart #designinspo #smallbusiness`;\n  const ptitle = prompt.length > 95 ? prompt.slice(0, 95).trimEnd() : prompt;\n  const pdesc = `${prompt}. Created with gpt-image-2 and published with SocialRobot. Follow for more visual ideas.`;\n  items.push({\n    json: { instagram: caption, pinterest_title: ptitle, pinterest_description: pdesc },\n    binary: { data: await this.helpers.prepareBinaryData(\n      Buffer.from(b64, 'base64'), 'generated.png', 'image/png') },\n  });\n}\nreturn items;"
       },
-      "id": "4a2ccf2a-4c63-41a8-859a-40985249a696",
+      "id": "2a30d042-4522-495e-bef3-c5a4ab037877",
       "name": "Extract Image Binary",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         1880,
         360
-      ]
-    },
-    {
-      "parameters": {
-        "text": "=You are a social media copywriter. Write an Instagram caption and a\nPinterest title and description for the image described below.\n\nImage description: {{ $json.imagePrompt }}\n\nGuidelines:\n- Instagram: catchy caption with emojis and 3-5 hashtags.\n- Pinterest title: under 100 characters, keyword-rich.\n- Pinterest description: 2-3 sentences with keywords.\n\nReturn plain text with no markdown.",
-        "options": {
-          "systemMessage": "=You always follow the output schema exactly."
-        },
-        "promptType": "define",
-        "hasOutputParser": true
-      },
-      "id": "bedbbb8f-7e5e-45c7-8c48-40970f4e28fc",
-      "name": "AI Caption Writer",
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1.7,
-      "position": [
-        620,
-        290
-      ],
-      "retryOnFail": true
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "mode": "list",
-          "value": "gpt-4o-mini",
-          "cachedResultName": "gpt-4o-mini"
-        },
-        "options": {
-          "responseFormat": "text"
-        }
-      },
-      "id": "241055b0-81bc-4749-b748-5a21387bde65",
-      "name": "OpenAI Chat Model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        620,
-        510
-      ],
-      "credentials": {
-        "openAiApi": {
-          "id": "",
-          "name": "OpenAI account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "schemaType": "manual",
-        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"instagram\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_title\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_description\": {\n      \"type\": \"string\"\n    }\n  }\n}"
-      },
-      "id": "a1274080-ff2e-4568-aa97-29a526a57102",
-      "name": "Caption Schema",
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-      "typeVersion": 1.2,
-      "position": [
-        620,
-        730
       ]
     },
     {
@@ -215,18 +155,18 @@
           "value": ""
         },
         "publishMode": "NOW",
-        "caption": "={{ $json.output.instagram }}",
+        "caption": "={{ $json.instagram }}",
         "mediaSource": "binary",
         "mediaType": "IMAGE",
         "binaryPropertyName": "data"
       },
-      "id": "0a78150c-4cd8-423c-9bd3-a86e877d1dc5",
+      "id": "c206a66e-a272-4824-a006-273589ae3534",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        220
+        2300,
+        290
       ],
       "credentials": {
         "socialRobotApi": {
@@ -245,7 +185,7 @@
           "value": ""
         },
         "publishMode": "NOW",
-        "caption": "={{ $json.output.pinterest_description }}",
+        "caption": "={{ $json.pinterest_description }}",
         "boardId": "your-board-id",
         "medias": [
           {
@@ -255,13 +195,13 @@
           }
         ]
       },
-      "id": "b5a9ccd9-f7f9-4c47-87f6-4a8b5660f24f",
+      "id": "e1303e22-c827-4985-9a72-843a3765e5ac",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        360
+        2300,
+        600
       ],
       "credentials": {
         "socialRobotApi": {
@@ -320,53 +260,15 @@
           }
         ]
       ]
-    },
-    "OpenAI Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Caption Writer",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Caption Schema": {
-      "ai_outputParser": [
-        [
-          {
-            "node": "AI Caption Writer",
-            "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Caption Writer": {
-      "main": [
-        [
-          {
-            "node": "Publish to Instagram",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Publish to Pinterest",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
   "settings": {
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "93f9d37f-1e3c-4899-b84e-0f63bff7a255",
+  "versionId": "4ffa49bf-fba9-4a58-8812-169baeaf07b0",
   "meta": {
-    "instanceId": "83c4f392-ed27-440c-b9bc-ef555158b7ca",
+    "instanceId": "6479666e-2cbb-46e8-a7db-32319349ec5d",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

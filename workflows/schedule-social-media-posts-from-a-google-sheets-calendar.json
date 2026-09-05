@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Schedule social media posts from a Google Sheets calendar\n\n### Who's it for\n\nSocial media teams that plan content in a spreadsheet and want it published on schedule.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reads the rows of your content calendar spreadsheet.\n3. Schedules a post to X (Twitter) at the given date and time. Schedules a post to Bluesky at the given date and time. Schedules a post to Mastodon at the given date and time. Schedules a post to Threads at the given date and time. Schedules a post to LinkedIn at the given date and time.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Connect Google Sheets and pick your spreadsheet and sheet.\n- [ ] Select your connected account in each Publish node.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A Google account and a Google Sheet with date and caption columns.\n",
+        "content": "## Schedule social media posts from a Google Sheets calendar\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reads the scheduled posts from your content calendar spreadsheet.\n3. Schedules posts to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn for the date and time you set.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Connect Google Sheets and select your spreadsheet and sheet.\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Confirm the schedule date in each Publish node, or map it from an upstream field.\n\n### Customization\n\nAdd rows to the spreadsheet to queue more posts, or edit columns to change the content. Run it any time to post, or connect a Schedule Trigger to automate it.",
         "width": 480,
-        "height": 916
+        "height": 612
       },
-      "id": "8e82219f-6ca0-472c-89aa-148a9cc5bb2a",
+      "id": "a8e13124-cbad-4314-999f-4cac04d6c694",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,43 +20,43 @@
       "parameters": {
         "content": "## Read the calendar\n\nLoads scheduled posts from your Google Sheets content calendar.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "0b5683a5-82b0-4a2b-8078-78e642d8dc56",
+      "id": "2acbc493-dc7c-4cf5-95a8-8034a8fb5bc5",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        620,
-        40
+        1040,
+        148
       ]
     },
     {
       "parameters": {
         "content": "## Schedule posts\n\nSchedules the content to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn at each node's date.",
         "width": 360,
-        "height": 242,
+        "height": 172,
         "color": 7
       },
-      "id": "19004f79-f253-4e73-ae90-471b0a503ff3",
+      "id": "6ce15c2c-1188-4ad7-b4f3-823763eafced",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        338
+        1460,
+        40
       ]
     },
     {
       "parameters": {},
-      "id": "e470d4e4-8d70-4826-a791-cf87770fe530",
+      "id": "de1cb9f6-4b49-4780-9162-52da9503bb82",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
         620,
-        430
+        360
       ]
     },
     {
@@ -74,13 +74,13 @@
           "value": ""
         }
       },
-      "id": "99cdf617-105a-4b9d-b146-586f5e605f5f",
+      "id": "414b0a6e-3d55-4216-bf93-75b9e0b25839",
       "name": "Read Content Calendar",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        620,
-        290
+        1040,
+        360
       ],
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -102,13 +102,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "51f91867-2423-4a92-b015-ec4991a48fda",
+      "id": "07106163-f1da-4835-9fb1-2bb47a340858",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        640
+        1460,
+        832
       ],
       "credentials": {
         "socialRobotApi": {
@@ -130,13 +130,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "34613f98-c9bc-411c-8578-cab344b5a7ab",
+      "id": "026e59c7-064d-465c-aecc-e84a128e81bd",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        80
+        1460,
+        272
       ],
       "credentials": {
         "socialRobotApi": {
@@ -158,13 +158,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "36dfc3de-f571-47da-96e4-6b5e17e2d514",
+      "id": "b65bd52d-0720-4745-a0a1-83bd7f9f2307",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        360
+        1460,
+        552
       ],
       "credentials": {
         "socialRobotApi": {
@@ -186,13 +186,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "6dcc799b-46d0-4f58-b03e-eadb76ae54e4",
+      "id": "c35380c9-65a2-4aea-8ec0-5c0742c5b75e",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        500
+        1460,
+        692
       ],
       "credentials": {
         "socialRobotApi": {
@@ -214,13 +214,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "c489f2c7-b182-445a-b560-04b1259ddadd",
+      "id": "fabaff15-7ebe-4e87-aa47-f8f418f5d44b",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        220
+        1460,
+        412
       ],
       "credentials": {
         "socialRobotApi": {
@@ -261,15 +261,26 @@
           }
         ]
       ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Content Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "edbc52ca-3909-4d8f-83a7-b8bdff613c49",
+  "versionId": "3dc76ab0-e61a-4098-91bd-0ce70b8da66a",
   "meta": {
-    "instanceId": "6051fe19-6f3e-4b94-ab69-9d542b34ea16",
+    "instanceId": "7b9636c7-d3c6-4017-be32-b07da3397ee4",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

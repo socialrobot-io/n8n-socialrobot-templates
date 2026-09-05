@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post a video to TikTok\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to TikTok.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to TikTok via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for TikTok.\n",
+        "content": "## Post a video to TikTok\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to TikTok via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your TikTok account in the Publish to TikTok node.\n- [ ] Replace the example caption in the Publish to TikTok node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it. Swap the sample media for your own images or videos. Everything runs inside your own n8n workspace, so you can change any step after import.",
         "width": 480,
-        "height": 696
+        "height": 546
       },
-      "id": "bd826411-c177-4318-926c-2d46193f228e",
+      "id": "cb5211cf-d439-40f2-93c4-5fd01fd8f870",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to TikTok\n\nPublishes the content to TikTok.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "713fbc3a-e686-44e4-ae27-e7f2ee8627eb",
+      "id": "cd679898-676d-4f97-ab82-38a2e3d8db1e",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "448c18a7-f692-4bdd-b684-c923201cd2b8",
+      "id": "c330c229-432f-4bf6-bfc1-019408835faa",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
           }
         ]
       },
-      "id": "224eb583-7715-4f89-9a55-0fc6db356568",
+      "id": "98400f76-cdea-4f06-813f-d8bb5b5ecba7",
       "name": "Publish to TikTok",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -95,9 +95,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "f5526fa2-fe42-4969-ba54-0c72aafce075",
+  "versionId": "b41f9263-338a-4d63-805c-dcd26a0c975f",
   "meta": {
-    "instanceId": "cd3dc9f4-e3c3-48ad-8589-096ef6ba1d3e",
+    "instanceId": "54582a50-dbfc-45c2-903f-07b89b4d8d4b",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -293,6 +293,38 @@ def tidy(wf):
     by_name = {n["name"]: n for n in nodes}
     conns = wf.get("connections", {})
 
+    def is_trigger_type(n):
+        t = (n.get("type") or "").lower()
+        return "trigger" in t or "webhook" in t
+
+    # --- repair orphaned triggers -------------------------------------------
+    # A real trigger (Manual/Schedule/Webhook) with NO outgoing connection means
+    # the template's flow starts at a later node instead. Connect it to the
+    # single node that has no incoming main edge (the intended entry point).
+    incoming_main_pre = set()
+    for src, conn_def in conns.items():
+        for ctype, outputs in conn_def.items():
+            for arr in outputs:
+                for c in arr:
+                    if isinstance(c, dict) and c.get("node") and ctype == "main":
+                        incoming_main_pre.add(c["node"])
+    for t in nodes:
+        if not is_trigger_type(t):
+            continue
+        outgoing = conns.get(t["name"], {})
+        has_main_out = any(ct == "main" for ct in outgoing)
+        if has_main_out:
+            continue
+        candidates = [
+            n["name"] for n in nodes
+            if not is_trigger_type(n)
+            and n["name"] not in incoming_main_pre
+        ]
+        if len(candidates) == 1:
+            conns.setdefault(t["name"], {})["main"] = [
+                [{"node": candidates[0], "type": "main", "index": 0}]
+            ]
+
     incoming_main = set()
     attached = {}            # agent name -> [source names feeding it via ai_*]
     attached_sources = set()
@@ -1016,27 +1048,31 @@ _t["connections"]["OpenAI Chat Model"] = {
     "ai_languageModel": [[{"node": "AI Video Prompt Writer", "type": "ai_languageModel", "index": 0}]]}
 
 # 2) gpt-image-2 -> Instagram + Pinterest
-image_caption_agent = agent_node(
-    "AI Caption Writer",
-    """You are a social media copywriter. Write an Instagram caption and a
-Pinterest title and description for the image described below.
-
-Image description: {{ $json.imagePrompt }}
-
-Guidelines:
-- Instagram: catchy caption with emojis and 3-5 hashtags.
-- Pinterest title: under 100 characters, keyword-rich.
-- Pinterest description: 2-3 sentences with keywords.
-
-Return plain text with no markdown.""",
+extract_js = (
+    "const items = [];\n"
+    "for (const item of $input.all()) {\n"
+    "  const b64 = item.json.data?.[0]?.b64_json;\n"
+    "  if (!b64) throw new Error('No image data in response');\n"
+    "  const prompt = $('Set image idea').first().json.imagePrompt || 'AI-generated artwork';\n"
+    "  const caption = `${prompt}.\n\nWhat do you think? #aiart #designinspo #smallbusiness`;\n"
+    "  const ptitle = prompt.length > 95 ? prompt.slice(0, 95).trimEnd() : prompt;\n"
+    "  const pdesc = `${prompt}. Created with gpt-image-2 and published with SocialRobot. Follow for more visual ideas.`;\n"
+    "  items.push({\n"
+    "    json: { instagram: caption, pinterest_title: ptitle, pinterest_description: pdesc },\n"
+    "    binary: { data: await this.helpers.prepareBinaryData(\n"
+    "      Buffer.from(b64, 'base64'), 'generated.png', 'image/png') },\n"
+    "  });\n"
+    "}\n"
+    "return items;"
 )
-icm_model = openai_model_node("OpenAI Chat Model")
-icm_parser = parser_node("Caption Schema", caption_schema(["instagram", "pinterest_title", "pinterest_description"]))
-ig_pin_publish = _publish_ai(["instagram", "pinterest"],
-                             {"instagram": "={{ $json.output.instagram }}",
-                              "pinterest": "={{ $json.output.pinterest_description }}"},
-                             image_url=SAMPLE_IMAGE)
-# both nodes take the GENERATED image from binary property 'data'
+image_extract = code_extract_b64_node(name="Extract Image Binary")
+image_extract["parameters"]["jsCode"] = extract_js
+ig_pin_publish = _publish_ai(
+    ["instagram", "pinterest"],
+    {"instagram": "={{ $json.instagram }}",
+     "pinterest": "={{ $json.pinterest_description }}"},
+    image_url=SAMPLE_IMAGE)
+# both publish nodes take the GENERATED image from binary property 'data'
 # (Instagram: flat fields; Pinterest: medias collection)
 for n in ig_pin_publish:
     p = n["parameters"]
@@ -1054,24 +1090,17 @@ templates.append(workflow(
      set_node("Set image idea", [{"name": "imagePrompt",
         "value": "A minimalist flat-lay of a laptop, coffee, and notebook in soft violet morning light"}]),
      openai_image_node(name="Generate Image (gpt-image-2)"),
-     code_extract_b64_node(name="Extract Image Binary"),
-     image_caption_agent, icm_model, icm_parser]
+     image_extract]
     + ig_pin_publish,
     {},
     ))
 _t = templates[-1]
 for a, b in [("When clicking 'Execute workflow'", "Set image idea"),
              ("Set image idea", "Generate Image (gpt-image-2)"),
-             ("Generate Image (gpt-image-2)", "Extract Image Binary"),
-             ("Extract Image Binary", "AI Caption Writer")]:
+             ("Generate Image (gpt-image-2)", "Extract Image Binary")]:
     _t["connections"].update(link(a, b))
-_t["connections"]["OpenAI Chat Model"] = {
-    "ai_languageModel": [[{"node": "AI Caption Writer", "type": "ai_languageModel", "index": 0}]]}
-_t["connections"]["Caption Schema"] = {
-    "ai_outputParser": [[{"node": "AI Caption Writer", "type": "ai_outputParser", "index": 0}]]}
 _pub_names = [n["name"] for n in ig_pin_publish]
 _t["connections"]["Extract Image Binary"] = {"main": [[{"node": nm, "type": "main", "index": 0} for nm in _pub_names]]}
-_t["connections"]["AI Caption Writer"] = {"main": [[{"node": nm, "type": "main", "index": 0} for nm in _pub_names]]}
 
 # --- F. management ---
 templates.append(workflow(

@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Download an image and post it to Instagram\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Instagram.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Calls an external API over HTTP (media generation, status polling, or download).\n3. Publishes a post to Instagram via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Connect your Replicate account in the HTTP Request nodes (media generation, status checks, and download).\n- [ ] Select your connected account in each Publish node.\n- [ ] Make sure an upstream node provides the image as binary data (for example an HTTP Request node).\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An upstream node that provides the image as binary data (for example an HTTP Request node).\n",
+        "content": "## Download an image and post it to Instagram\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Downloads the image from the given URL into binary data.\n3. Publishes a post to Instagram via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your Instagram account in the Publish to Instagram node.\n- [ ] Make sure an upstream node provides the image as binary data for Instagram.\n- [ ] Replace the example caption in the Publish to Instagram node with your own text.\n- [ ] Point the Download image node at your own image URL.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post.",
         "width": 480,
-        "height": 850
+        "height": 568
       },
-      "id": "9e97500a-020a-4da6-bf60-b9401a3fb4b2",
+      "id": "bcbf4d2f-31cd-4d96-bf11-6d779db7d53d",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,37 +20,37 @@
       "parameters": {
         "content": "## Fetch media\n\nDownloads the image from a URL into binary data for the post.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "ad4bc02f-a4c5-471d-800f-cf9b3e550cac",
+      "id": "07dee560-9e08-4304-83f8-886edb1cb7f5",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        80
+        148
       ]
     },
     {
       "parameters": {
         "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "082c82bf-b206-4e8c-af9e-81903e94b93e",
+      "id": "35804d19-4507-48f6-b084-0faccfe3464f",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1460,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "141e26b4-6e55-44f9-b9f6-94fd2256c41e",
+      "id": "5df6096b-9f8d-4125-b0a4-9d17edbc5406",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -66,7 +66,7 @@
         "responseFormat": "file",
         "options": {}
       },
-      "id": "3d67b0e5-72a4-4d03-8847-08dd34d51d98",
+      "id": "bcaec6ec-58ac-462b-b920-d8d5206b76ed",
       "name": "Download image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -90,7 +90,7 @@
         "mediaType": "IMAGE",
         "binaryPropertyName": "data"
       },
-      "id": "a10fec28-1905-462c-9133-2a6aebcf5d60",
+      "id": "8dbf8868-ea19-4fa5-8300-e8d8dbd31d0a",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -134,9 +134,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "83a0f455-1e24-4328-b127-c40b428f98bb",
+  "versionId": "fd5da2ed-51e2-45bc-9ac4-7519c0880800",
   "meta": {
-    "instanceId": "90843cbd-606c-466f-abdf-306e1c895fae",
+    "instanceId": "ceaad66e-1aac-41e6-bd67-beedd1232178",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

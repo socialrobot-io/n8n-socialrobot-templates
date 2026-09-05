@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Schedule a social media post for a future date\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Schedules a post to X (Twitter) at the given date and time. Schedules a post to LinkedIn at the given date and time.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## Schedule a social media post for a future date\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Schedules posts to X (Twitter) and LinkedIn for the date and time you set.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Replace the example captions in the Publish nodes with your own text.\n- [ ] Confirm the schedule date in each Publish node, or map it from an upstream field.\n\n### Customization\n\nReplace the example content, then run the workflow to post everywhere at once. Run it any time to post, or connect a Schedule Trigger to automate it.",
         "width": 480,
-        "height": 740
+        "height": 570
       },
-      "id": "89be2d6e-93d6-4c6a-a008-72113be37d8a",
+      "id": "e3227ef8-5356-46ce-83d2-db735f2b609b",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,39 +18,39 @@
     },
     {
       "parameters": {
-        "content": "## Schedule X (Twitter)\n\nSchedules the content to X (Twitter) at the given date.",
+        "content": "## Schedule LinkedIn\n\nSchedules the content to LinkedIn at the given date.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "ca7f7bf9-529f-454c-b9ac-86ef4bf2e3e9",
+      "id": "c1cea993-cd53-4259-88e9-bab6e5356f95",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        150
+        78
       ]
     },
     {
       "parameters": {
-        "content": "## Schedule LinkedIn\n\nSchedules the content to LinkedIn at the given date.",
+        "content": "## Schedule X (Twitter)\n\nSchedules the content to X (Twitter) at the given date.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "816e1b09-52d7-4433-96c0-939dc5ddc574",
+      "id": "e5e5093f-d983-4c0b-8432-7549bd2e0942",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        40
+        410
       ]
     },
     {
       "parameters": {},
-      "id": "fc44dc81-c946-465a-ac63-1f56b30e4ea3",
+      "id": "42677631-7d86-4e19-a782-a689267dd2c6",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -72,13 +72,13 @@
         "scheduleDate": "2026-08-20T09:00:00-03:00",
         "caption": "Scheduled ahead of time: this post went out without touching a button."
       },
-      "id": "4732bf22-4ab3-43a3-bd20-902f52070258",
+      "id": "b6ad4536-6a53-45cd-a922-3eada306b5b8",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        430
+        622
       ],
       "credentials": {
         "socialRobotApi": {
@@ -100,7 +100,7 @@
         "scheduleDate": "2026-08-20T09:00:00-03:00",
         "caption": "Scheduled ahead of time: this post went out without touching a button."
       },
-      "id": "5146360c-143a-4967-9afe-948f2b28e24a",
+      "id": "fafa6bde-efc8-48f0-89c7-0e9334cae7ac",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -138,9 +138,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "045211f7-09e8-4b32-9ae3-065a38cb22ed",
+  "versionId": "5a4139a8-47f9-4d27-bc8a-1486a4731d6c",
   "meta": {
-    "instanceId": "559c1e48-6d05-4cb8-87a0-cc9f268cb5b5",
+    "instanceId": "bc421c57-1b79-46eb-b540-ade46b628dc8",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

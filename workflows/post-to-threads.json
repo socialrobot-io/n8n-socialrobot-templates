@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post to Threads\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Threads.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Threads via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Threads.\n",
+        "content": "## Post to Threads\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Threads via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your Threads account in the Publish to Threads node.\n- [ ] Replace the sample media URL with your own public image or video URL.\n- [ ] Replace the example caption in the Publish to Threads node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it. Swap the sample media for your own images or videos.",
         "width": 480,
-        "height": 696
+        "height": 568
       },
-      "id": "6f66f1bd-cd4c-4f5d-aa68-af4c24aec1d8",
+      "id": "2093198e-4849-471c-b036-880198f292d9",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to Threads\n\nPublishes the content to Threads.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "6d27a47a-9d01-4755-893b-3ab478517bdc",
+      "id": "179d6956-1891-4b4f-ab22-0ab60480158a",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "7970d841-aec3-475d-bf14-838360ff2aea",
+      "id": "93653415-28bc-4d3f-81c6-185e87e67e17",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
           }
         ]
       },
-      "id": "a0bca0b3-666a-4650-a07e-a8c7186cf374",
+      "id": "b2ce489f-7adc-43ef-b7a0-061a010fa882",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -95,9 +95,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "192f796e-e750-499c-aa50-7110ba026284",
+  "versionId": "4b488f71-a04b-4457-8689-2e1b1e9e68ba",
   "meta": {
-    "instanceId": "22452602-1e72-4047-867a-81455ec719a7",
+    "instanceId": "24ce5c23-c80f-4341-b731-bcf8f63ebf22",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

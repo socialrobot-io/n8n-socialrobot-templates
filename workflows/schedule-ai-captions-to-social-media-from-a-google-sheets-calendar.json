@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Schedule AI captions to social media from a Google Sheets calendar\n\n### Who's it for\n\nSocial media teams that plan content in a spreadsheet and want it published on schedule.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reads the rows of your content calendar spreadsheet.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Schedules a post to X (Twitter) at the given date and time. Schedules a post to Bluesky at the given date and time. Schedules a post to Mastodon at the given date and time. Schedules a post to Threads at the given date and time. Schedules a post to LinkedIn at the given date and time.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Connect Google Sheets and pick your spreadsheet and sheet.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n- [ ] Confirm the schedule date, or map it from an upstream field.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A Google account and a Google Sheet with date and caption columns.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n",
+        "content": "## Schedule AI captions to social media from a Google Sheets calendar\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reads the scheduled posts from your content calendar spreadsheet.\n3. Uses OpenAI to write the post copy and parses it into per-platform fields.\n4. Schedules posts to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn for the date and time you set.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Connect Google Sheets and select your spreadsheet and sheet.\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Confirm the schedule date in each Publish node, or map it from an upstream field.\n\n### Customization\n\nEdit the prompt in the AI Caption Rewriter node, or change the OpenAI model, to tune the tone of the copy.",
         "width": 480,
-        "height": 1048
+        "height": 634
       },
-      "id": "42ebb68a-1f77-47f6-9928-c601a6333846",
+      "id": "64eefc87-ee7e-4414-8610-572b838ed815",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,39 +18,39 @@
     },
     {
       "parameters": {
-        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "content": "## Generate content\n\nUses OpenAI to write and structure the post copy.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "e6061210-2151-4191-8d6c-5ef39bf3339b",
+      "id": "3e821cff-f54a-4089-bfce-4fa64eb7de82",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1460,
-        80
+        148
       ]
     },
     {
       "parameters": {
         "content": "## Schedule posts\n\nSchedules the content to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn at each node's date.",
         "width": 360,
-        "height": 242,
+        "height": 172,
         "color": 7
       },
-      "id": "b134456f-e702-4093-aec0-588a6854f8c4",
+      "id": "dbadc646-b6c2-4354-94a8-f805c8ee496c",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1880,
-        338
+        40
       ]
     },
     {
       "parameters": {},
-      "id": "9c99e321-4eed-43d2-83e3-fa7cb76f074b",
+      "id": "12f91421-76c9-4f29-8851-74249bffa092",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -74,7 +74,7 @@
           "value": ""
         }
       },
-      "id": "87b56dcf-04bd-4717-902b-5aad4b4b1fd6",
+      "id": "3b3af7a6-bab8-4b3e-90f5-4b38ecc534f9",
       "name": "Read Content Calendar",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
@@ -98,7 +98,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "11d07da6-0e94-4c16-964d-f6cf1e2e97aa",
+      "id": "28e7f158-8d33-4f12-8284-3051dfa4e993",
       "name": "AI Caption Rewriter",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -120,7 +120,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "c38df174-6b5d-416a-87e3-ffe6b47e49f2",
+      "id": "a895a972-3ff2-4ea8-8b3f-e531d5f638be",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -140,7 +140,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"caption\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "a837fa1e-9065-484e-9119-f761db472b2b",
+      "id": "2d480df4-ed29-4db4-98e6-041f6a405bc7",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -162,13 +162,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "17bae636-df56-4960-9cc9-55f732873b33",
+      "id": "6101ce19-d02a-4ec2-bdb6-a6354a6b1632",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        640
+        832
       ],
       "credentials": {
         "socialRobotApi": {
@@ -190,13 +190,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "398df552-69a4-4b21-bd45-bbe8dc72c4d5",
+      "id": "c4d49df1-1ec6-433a-8248-339ae0a731a5",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        80
+        272
       ],
       "credentials": {
         "socialRobotApi": {
@@ -218,13 +218,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "d3fc19e0-d447-4e27-9903-b47bb6a97110",
+      "id": "276c001e-7ec0-4898-97dd-9752eaf8c9fa",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        360
+        552
       ],
       "credentials": {
         "socialRobotApi": {
@@ -246,13 +246,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "8677a049-aa5a-48aa-91d9-2222bacb06f0",
+      "id": "6e47d95b-cef1-4da1-a9e3-72bb20b519ba",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        500
+        692
       ],
       "credentials": {
         "socialRobotApi": {
@@ -274,13 +274,13 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.output.caption }}"
       },
-      "id": "f1fc88fe-3dda-4005-ad35-1ecf6670639c",
+      "id": "5673b98d-1f9c-47ec-bf59-671aa2d9c775",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        220
+        412
       ],
       "credentials": {
         "socialRobotApi": {
@@ -371,9 +371,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "97f1d5bf-527e-4138-a322-ff2a8be13d55",
+  "versionId": "6fa92c2f-5521-46bc-a02d-7348069f58fa",
   "meta": {
-    "instanceId": "d8846c7f-49ca-43dc-b5cd-906cf2e6d254",
+    "instanceId": "980a0066-6dfd-4222-841a-c45bb2275ce2",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

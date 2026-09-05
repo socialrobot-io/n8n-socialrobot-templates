@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post text and an image to X (Twitter)\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to X (Twitter).\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to X (Twitter) via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for X (Twitter).\n",
+        "content": "## Post text and an image to X (Twitter)\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to X (Twitter) via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your X (Twitter) account in the Publish to X (Twitter) node.\n- [ ] Replace the sample media URL with your own public image or video URL.\n- [ ] Replace the example caption in the Publish to X (Twitter) node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it.",
         "width": 480,
-        "height": 696
+        "height": 548
       },
-      "id": "1e9001d4-8fb3-409f-917f-e2fc43a1a5de",
+      "id": "ab37d5d0-54f3-4052-843b-c0b7c5d16ada",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to X (Twitter)\n\nPublishes the content to X (Twitter).",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "f80b99ef-fc89-4f49-ab1f-8a74d42be39d",
+      "id": "fbd27bb6-5007-4a80-bdba-07f504ae7911",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "cab8aded-b419-422f-bc6b-c6cde4fb74f9",
+      "id": "49b7f46f-dcb3-43b1-b824-63bc120ec7fc",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
           }
         ]
       },
-      "id": "e1f0b596-dbb6-4439-a722-8e99ea6d50cb",
+      "id": "4c34b7a8-9894-4933-b980-80c7de6583dc",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -95,9 +95,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "9128b696-94ee-453e-aed5-87be41fbc13f",
+  "versionId": "599c4ff4-50b2-425c-9453-1d49f57eee7e",
   "meta": {
-    "instanceId": "3b983d53-4080-47ae-8ce0-7f399ad2a065",
+    "instanceId": "1cc72e1e-978e-4cf7-a3d7-1f381101d3d1",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

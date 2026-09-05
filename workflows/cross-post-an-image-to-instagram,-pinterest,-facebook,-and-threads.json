@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Cross-post an image to Instagram, Pinterest, Facebook, and Threads\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Publishes a post to Instagram via the SocialRobot API. Publishes a post to Pinterest via the SocialRobot API. Publishes a post to Facebook via the SocialRobot API. Publishes a post to Threads via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Select your connected account in each Publish node.\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Instagram.\n- A Pinterest board ID.\n- A public image or video URL for Facebook.\n- A public image or video URL for Threads.\n",
+        "content": "## Cross-post an image to Instagram, Pinterest, Facebook, and Threads\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the caption and imageUrl used to build the post.\n3. Publishes posts to Instagram, Pinterest, Facebook, and Threads via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] In the Set post image node, set the caption and imageUrl to your own content.\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Set your Pinterest board ID in the Publish to Pinterest node.\n\n### Customization\n\nChange the caption and imageUrl in the Set post image node to publish different content. Run it any time to post, or connect a Schedule Trigger to automate it.",
         "width": 480,
-        "height": 960
+        "height": 590
       },
-      "id": "6fe39cbc-8d84-4155-95db-2753fc0ff7b2",
+      "id": "0ec0f7c8-af5e-4305-954a-42b33b188817",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,17 +18,33 @@
     },
     {
       "parameters": {
-        "content": "## Set input\n\nHolds the topic, text, or image used to build the post.",
+        "content": "## Set input\n\nSets the caption and imageUrl used to build the post.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "be800e62-4837-4dec-9372-f297b49a1806",
+      "id": "ec01f7ac-0d49-418e-a9f0-c865fbc9ade2",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        620,
+        1040,
+        148
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to Facebook\n\nPublishes the content to Facebook.",
+        "width": 360,
+        "height": 130,
+        "color": 7
+      },
+      "id": "fb13d5ae-cdcd-4a67-8dcc-a82f529eb942",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1460,
         40
       ]
     },
@@ -36,75 +52,59 @@
       "parameters": {
         "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "8c18f43d-5cfb-4a38-901a-aae9e43b930e",
-      "name": "Sticky Note2",
+      "id": "3e205627-bfa1-44dc-8744-35fbeede8cbd",
+      "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        40
+        1460,
+        350
       ]
     },
     {
       "parameters": {
         "content": "## Publish to Pinterest\n\nPublishes the content to Pinterest.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "6206542a-e3f3-4b84-b7f3-850152b69ada",
-      "name": "Sticky Note3",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1040,
-        172
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Publish to Facebook\n\nPublishes the content to Facebook.",
-        "width": 360,
-        "height": 198,
-        "color": 7
-      },
-      "id": "59eedbab-273b-4523-a836-7c648071a6f0",
+      "id": "66a78d28-f7c3-4202-aba9-5fc67a1b6e74",
       "name": "Sticky Note4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        40
+        1460,
+        660
       ]
     },
     {
       "parameters": {
         "content": "## Publish to Threads\n\nPublishes the content to Threads.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "ff9bb275-fca9-460c-9d7b-3b2791ea0d62",
+      "id": "36bb3ebf-162a-4930-a6b0-77561729ba67",
       "name": "Sticky Note5",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        312
+        1460,
+        970
       ]
     },
     {
       "parameters": {},
-      "id": "20a359ea-f70b-469c-ab72-a1ea6a54b82e",
+      "id": "3e357eb5-4250-4317-982d-f4f849e63b50",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
         620,
-        430
+        360
       ]
     },
     {
@@ -113,13 +113,13 @@
         "assignments": {
           "assignments": [
             {
-              "id": "9745a772-f171-42de-a5ff-1b06cd20802b",
+              "id": "c7b9b3b3-4f0f-423b-b089-5b654dd4c637",
               "name": "caption",
               "type": "string",
               "value": "A caption that works across visual platforms."
             },
             {
-              "id": "43cf6b3a-cff5-4d76-9474-37d602cf0430",
+              "id": "ccde8595-e9da-43a6-aea9-bb1d7a339d4e",
               "name": "imageUrl",
               "type": "string",
               "value": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
@@ -127,13 +127,13 @@
           ]
         }
       },
-      "id": "973640e4-395c-4c9f-9e62-0efec747620d",
+      "id": "e945b9a6-6c5b-406c-a8aa-63fe171955cb",
       "name": "Set post image",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        620,
-        290
+        1040,
+        360
       ]
     },
     {
@@ -151,13 +151,13 @@
         "mediaType": "IMAGE",
         "mediaUrl": "={{ $json.imageUrl }}"
       },
-      "id": "6991edaa-0002-46cd-a930-75d000d13c11",
+      "id": "59bdf730-d083-4f0e-91c5-7d9c7855ef4e",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        290
+        1460,
+        540
       ],
       "credentials": {
         "socialRobotApi": {
@@ -186,13 +186,13 @@
           }
         ]
       },
-      "id": "77149a9f-67ba-4ec5-a493-3f0415528f98",
+      "id": "1b69c6fc-600d-426f-b24d-c7f0f8d53be3",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        430
+        1460,
+        850
       ],
       "credentials": {
         "socialRobotApi": {
@@ -220,13 +220,13 @@
           }
         ]
       },
-      "id": "68330f7b-dd12-420b-8937-907d77942a4a",
+      "id": "45cc49f1-7b9b-45ff-bba1-a5eb908989a9",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        150
+        1460,
+        230
       ],
       "credentials": {
         "socialRobotApi": {
@@ -254,13 +254,13 @@
           }
         ]
       },
-      "id": "d6cc0e6f-9a3d-429f-ba44-645b8fc7b945",
+      "id": "577525ef-f3ac-4507-a87e-83a75f343fd6",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        570
+        1460,
+        1160
       ],
       "credentials": {
         "socialRobotApi": {
@@ -296,15 +296,26 @@
           }
         ]
       ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set post image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "132f1e3c-d6a4-4940-8b04-908faab7816c",
+  "versionId": "1a25a6a2-863c-4009-a857-08a42a7f0524",
   "meta": {
-    "instanceId": "612b65ac-3753-453d-b31e-52f156f3fa6b",
+    "instanceId": "09819f93-ecec-4efe-b065-9a183eb6b988",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

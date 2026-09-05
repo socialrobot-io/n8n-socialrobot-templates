@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post text to X (Twitter)\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to X (Twitter).\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to X (Twitter) via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## Post text to X (Twitter)\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to X (Twitter) via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your X (Twitter) account in the Publish to X (Twitter) node.\n- [ ] Replace the example caption in the Publish to X (Twitter) node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it. Everything runs inside your own n8n workspace, so you can change any step after import.",
         "width": 480,
-        "height": 674
+        "height": 526
       },
-      "id": "8d843699-d1b1-4af9-bdb3-bbccb92a3410",
+      "id": "19f18627-295a-4df9-8061-ef12e34a1917",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to X (Twitter)\n\nPublishes the content to X (Twitter).",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "0f031bf6-0920-44b7-b092-f495356faf1a",
+      "id": "128c4d93-5890-4613-8501-e98d005a463b",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "dc27b715-0aa8-4875-98ac-6e294f3678d2",
+      "id": "caca2077-0395-44d8-961c-17984176154c",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "publishMode": "NOW",
         "caption": "Automation is not about doing less. It is about doing the boring parts automatically so you can focus on the work that matters."
       },
-      "id": "333b44c7-406d-4aff-bdaf-8820b077a716",
+      "id": "a855fd8a-8b27-4fb9-b5ae-3f658a59fbb5",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -88,9 +88,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "0cfa93cf-a4e2-4166-b6d7-5a8bc270f8e9",
+  "versionId": "fb5b9840-c686-4950-9d66-c160e299074f",
   "meta": {
-    "instanceId": "0b03cd13-f1a9-4308-ad91-e349ed3a56bb",
+    "instanceId": "a7a9e09c-ad7d-4ac3-a19d-e2b416cce866",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

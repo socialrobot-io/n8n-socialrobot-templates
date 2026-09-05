@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Pin an image to Pinterest\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Pinterest.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Pinterest via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A Pinterest board ID.\n",
+        "content": "## Pin an image to Pinterest\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Pinterest via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your Pinterest account in the Publish to Pinterest node.\n- [ ] Set your Pinterest board ID in the Publish to Pinterest node.\n- [ ] Replace the sample media URL with your own public image or video URL.\n- [ ] Replace the example caption in the Publish to Pinterest node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it.",
         "width": 480,
-        "height": 740
+        "height": 590
       },
-      "id": "ce5cb0a0-e40d-4d46-811e-907d374146c7",
+      "id": "d808363a-5541-4e9d-9750-cc17103087ea",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to Pinterest\n\nPublishes the content to Pinterest.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "b24fcc0d-f8a4-4f8a-a071-cfc0f0f3e5b7",
+      "id": "399270f7-71de-436a-b0b7-42a797c80e18",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "1f810545-c727-419c-90a6-106cb0679353",
+      "id": "86ee2b52-8e72-481f-afd6-bb0f4c23dbb3",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -63,7 +63,7 @@
           }
         ]
       },
-      "id": "aa70448b-5efb-4645-b9e7-6ccae55299ab",
+      "id": "3588dcd0-bef0-4d71-9f44-e1b80e27b3ff",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -96,9 +96,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "0d07fa14-69c8-48b6-a32c-b4d2690337c9",
+  "versionId": "2a452e28-d64d-4516-b41d-e5691d3f78e7",
   "meta": {
-    "instanceId": "9c90ba4f-e1fa-4586-9081-17c97266bf26",
+    "instanceId": "a1f3deb0-8117-46f7-b0a7-3492bf06df03",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

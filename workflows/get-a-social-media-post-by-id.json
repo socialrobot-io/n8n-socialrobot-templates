@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Get a social media post by ID\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Fetches a single post by ID.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Provide the Post ID, mapped from an upstream node or typed directly.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## Get a social media post by ID\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Fetches a single post by its ID.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Provide the ID of the post you want to act on.\n\n### Customization\n\nMap the post ID from an upstream workflow to operate on the right post. Run it any time to post, or connect a Schedule Trigger to automate it. Everything runs inside your own n8n workspace, so you can change any step after import. Run it once with a test post to confirm every node behaves as expected before you rely on it.",
         "width": 480,
-        "height": 674
+        "height": 502
       },
-      "id": "7a85551c-7a39-4277-ad9f-dd08cb9991ff",
+      "id": "3dbd0d4c-db90-400b-8ed4-1a459c44e9f0",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,23 +18,23 @@
     },
     {
       "parameters": {
-        "content": "## Manage posts\n\nReads, deletes, or reschedules posts through the SocialRobot API.",
+        "content": "## Get post\n\nFetches a single post by its ID.",
         "width": 360,
-        "height": 220,
+        "height": 130,
         "color": 7
       },
-      "id": "88bdac02-9300-4d80-b04c-18b852e972d0",
+      "id": "c56cd80a-e098-44f6-9e1a-df455af050b1",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        80
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "146f418c-6c08-4b6b-bbf6-e30f235de317",
+      "id": "a201326f-866b-4c16-9ee4-41d5dcfb5bd9",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -49,7 +49,7 @@
         "operation": "get",
         "postId": "={{ $json.postId }}"
       },
-      "id": "c8cea3e4-3e64-44ca-ac95-e2a18b243d03",
+      "id": "bb325e29-68f8-47c3-8d2e-db575c871d64",
       "name": "Get Post",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -82,9 +82,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "5e41a4b0-6cce-4308-8a69-12cf9f39f3a2",
+  "versionId": "aa0948bc-0e92-478e-96ad-b1de8c5b6ea7",
   "meta": {
-    "instanceId": "04444bd6-55bb-40e0-8eaf-40bd87d52e7e",
+    "instanceId": "0b53861a-d645-4989-9d79-770da7c14994",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

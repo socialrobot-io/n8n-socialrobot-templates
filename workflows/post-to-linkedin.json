@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post to LinkedIn\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to LinkedIn.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to LinkedIn via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## Post to LinkedIn\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to LinkedIn via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your LinkedIn account in the Publish to LinkedIn node.\n- [ ] Replace the example caption in the Publish to LinkedIn node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it. Everything runs inside your own n8n workspace, so you can change any step after import. Run it once with a test post to confirm every node behaves as expected before you rely on it.",
         "width": 480,
-        "height": 674
+        "height": 566
       },
-      "id": "36af121d-a05e-43f7-96f7-87d2d9a894bb",
+      "id": "8cdd124d-2eb6-4e97-a1ca-88ec4772f543",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to LinkedIn\n\nPublishes the content to LinkedIn.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "2c7a2ca6-15b9-4ad9-8102-99b3816486d9",
+      "id": "9e9bf24f-a2c0-4047-be0f-f27ad7655264",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "7dfbf4b0-b276-4ca0-9fc1-c351e5d35004",
+      "id": "73b41fbe-247f-49d4-9a08-e150d3f9fece",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "publishMode": "NOW",
         "caption": "We just automated our social media publishing end to end. What used to take an hour a day now takes one workflow. How much time do you spend scheduling posts?"
       },
-      "id": "9d3a2716-1f48-4db1-9ff6-1e85b9bc586c",
+      "id": "eab1017b-54f0-42f8-bdae-8cc57b73ee7c",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -88,9 +88,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "a3277b15-e949-4c19-a392-6d1731de4f08",
+  "versionId": "478db704-97d0-4945-b097-5848e393ed21",
   "meta": {
-    "instanceId": "b7589dbe-e30a-4c8e-a670-d8ee62d4ea1a",
+    "instanceId": "5df65d20-3643-474f-b22b-cb86b64ace77",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

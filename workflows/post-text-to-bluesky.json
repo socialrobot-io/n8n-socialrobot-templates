@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post text to Bluesky\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Bluesky.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Bluesky via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## Post text to Bluesky\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Bluesky via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your Bluesky account in the Publish to Bluesky node.\n- [ ] Replace the example caption in the Publish to Bluesky node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it. Everything runs inside your own n8n workspace, so you can change any step after import. Run it once with a test post to confirm every node behaves as expected before you rely on it.",
         "width": 480,
-        "height": 674
+        "height": 566
       },
-      "id": "bcd8e678-0229-4524-91c2-7e3147f17e8a",
+      "id": "3a8a3022-f274-4984-b17d-057abcf2ef23",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to Bluesky\n\nPublishes the content to Bluesky.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "bdb80324-26ac-4a4f-bf18-1a92226b627c",
+      "id": "87c897c7-1676-45ea-8756-a801b4270b9c",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "1ab1674c-17a7-46f0-99b4-3094050af424",
+      "id": "dcf7a773-550f-4e34-ba61-d01cecaf68e1",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "publishMode": "NOW",
         "caption": "Small automation win today: my posts now publish themselves across the fediverse."
       },
-      "id": "bd5896be-d2ff-4209-a8e7-6a1e5092e100",
+      "id": "f375c33c-0ea4-4ce1-b81e-60a221868ff8",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -88,9 +88,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "e98bf66e-4fd6-4538-ab4f-b03e8cb6eed1",
+  "versionId": "4069d180-41c6-4ba9-aa17-10d60dc87b6c",
   "meta": {
-    "instanceId": "7729edce-f483-4b9a-a1ce-4d45cb1f20d0",
+    "instanceId": "ad9ac077-58c3-4de4-9005-8178051c71a0",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

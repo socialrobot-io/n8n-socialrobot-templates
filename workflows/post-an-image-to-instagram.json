@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post an image to Instagram\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Instagram.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Instagram via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Instagram.\n",
+        "content": "## Post an image to Instagram\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Instagram via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your Instagram account in the Publish to Instagram node.\n- [ ] Replace the sample media URL with your own public image or video URL.\n- [ ] Replace the example caption in the Publish to Instagram node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it. Swap the sample media for your own images or videos.",
         "width": 480,
-        "height": 696
+        "height": 568
       },
-      "id": "6617c6fd-09a0-4244-b23f-bc49dbc9dea0",
+      "id": "7322097a-a3e6-4d39-8351-56341489ceb4",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "d1c63d5c-70b4-498d-b863-59e7f7b38345",
+      "id": "057bfc2e-a6a8-40d5-82eb-a3bf12fc32dd",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "aa48c253-441a-46e4-8f29-30083c89f49e",
+      "id": "b6b83a94-11bc-4f4c-9e92-a524b0d6376f",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -58,7 +58,7 @@
         "mediaType": "IMAGE",
         "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
       },
-      "id": "f13b3e8c-1797-4bde-be39-ead1819eea12",
+      "id": "b12281f6-0f6d-4f8a-8043-2a0074edbab5",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -91,9 +91,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "0595293e-7bdb-4f8e-ad65-f1c85a2c746d",
+  "versionId": "95d10c3b-2811-4eae-8ec6-d8da5b1a5615",
   "meta": {
-    "instanceId": "38298680-59f8-4fef-9893-df01a9ac98cd",
+    "instanceId": "68d44770-1af6-4ad6-b327-85e6dde36f70",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

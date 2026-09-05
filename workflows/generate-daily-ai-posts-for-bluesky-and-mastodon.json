@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Generate daily AI posts for Bluesky and Mastodon\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs automatically every day.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n",
+        "content": "## Generate daily AI posts for Bluesky and Mastodon\n\n### How it works\n\n1. Runs automatically every day.\n2. Sets the post theme that guide the AI-written content.\n3. Uses OpenAI to write the post copy and parses it into per-platform fields.\n4. Publishes posts to Bluesky and Mastodon via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] In the Set post theme node, set the post theme to your own content.\n- [ ] Select your connected SocialRobot account in each Publish node.\n\n### Customization\n\nEdit the prompt in the AI Daily Post Generator node, or change the OpenAI model, to tune the tone of the copy. Try different topics and tones in the Set node to see how the AI adapts the copy per platform.",
         "width": 480,
-        "height": 916
+        "height": 610
       },
-      "id": "df67f7b7-60bc-4884-97bf-9372bc136d03",
+      "id": "3d8f9d63-41c8-47af-922a-10c44060e8e1",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,50 +18,50 @@
     },
     {
       "parameters": {
-        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "content": "## Generate content\n\nUses OpenAI to write and structure the post copy.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "ea42fd93-c8c6-4f02-95ff-4b6b8c765f5b",
+      "id": "b63a0aa6-ad37-41d9-b115-8e9443ff17b3",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1460,
-        80
+        148
       ]
     },
     {
       "parameters": {
         "content": "## Publish to Bluesky\n\nPublishes the content to Bluesky.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "d7508310-d423-4b9b-9811-8e2171f73f36",
+      "id": "78b97503-2ccd-463f-84ac-51720ffa4c68",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1880,
-        40
+        100
       ]
     },
     {
       "parameters": {
         "content": "## Publish to Mastodon\n\nPublishes the content to Mastodon.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "2a5df566-4171-4b40-b75b-7b38316bf82e",
+      "id": "45bcbe1a-7318-4eb5-9fe8-d885deb015f8",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1880,
-        172
+        410
       ]
     },
     {
@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "79ac7fbf-2003-4598-8eca-3923cd87d3bf",
+      "id": "73f90b99-3843-4d9e-9efe-79bb061b576f",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -90,7 +90,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "58038b40-2be3-4a3b-9fc8-63e2775a2368",
+              "id": "43ce9d91-3499-4591-a00f-b08ecfcefc04",
               "name": "theme",
               "type": "string",
               "value": "indie hacking and automation"
@@ -98,7 +98,7 @@
           ]
         }
       },
-      "id": "c4784a4e-d78f-4962-99cc-33919daf3d14",
+      "id": "d3671b05-79f4-46ed-aad3-336cb2b95f00",
       "name": "Set post theme",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -116,7 +116,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "7dc1070e-0ecd-4b5b-865d-2e198bfcc957",
+      "id": "88a0b593-0041-4505-a5e8-3812f55f6de8",
       "name": "AI Daily Post Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -138,7 +138,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "65034638-0f88-4a32-9347-e4ab78f78a82",
+      "id": "df4ffb03-b345-4c0e-9359-fa9e81c1d813",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -158,7 +158,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "32ef544b-2ca7-48a6-a403-c21225fa5f4d",
+      "id": "050e9c07-29b0-49d2-95d4-683827ed03f6",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -179,7 +179,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.bluesky }}"
       },
-      "id": "b15b386a-3d1c-4c15-a960-fec75eb68082",
+      "id": "4510fed5-3749-4369-8854-7fb55e340dd4",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -206,13 +206,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.mastodon }}"
       },
-      "id": "575da36f-a0a4-4254-9315-8e1c49f3abe4",
+      "id": "45bd93ae-d69c-4e34-a701-4c5d7d6192ef",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1880,
-        430
+        600
       ],
       "credentials": {
         "socialRobotApi": {
@@ -288,9 +288,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "0252ca52-be23-4869-81f1-2f51e4d072ef",
+  "versionId": "0a0d442a-ac0b-4ed3-990e-10237f08c9e5",
   "meta": {
-    "instanceId": "65c6a0fd-6593-4158-ab16-925872544cb5",
+    "instanceId": "646c9529-6532-48e4-9532-cb98c468a9ab",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

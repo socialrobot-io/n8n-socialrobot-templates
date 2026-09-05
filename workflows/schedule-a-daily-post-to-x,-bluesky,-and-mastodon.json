@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Schedule a daily post to X, Bluesky, and Mastodon\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs automatically every day.\n2. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## Schedule a daily post to X, Bluesky, and Mastodon\n\n### How it works\n\n1. Runs automatically every day.\n2. Publishes posts to X (Twitter), Bluesky, and Mastodon via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Replace the example captions in the Publish nodes with your own text.\n\n### Customization\n\nChange the schedule interval to control how often the workflow runs. Remove the Publish nodes you do not need to target fewer platforms. Adjust the trigger interval to control exactly how often the workflow runs. Everything runs inside your own n8n workspace, so you can change any step after import.",
         "width": 480,
-        "height": 718
+        "height": 568
       },
-      "id": "9869007c-be74-4227-a7f2-cbf7fadc47cc",
+      "id": "b125d0b6-18b9-4a2d-a483-012e11e9ab50",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,29 +18,13 @@
     },
     {
       "parameters": {
-        "content": "## Publish to X (Twitter)\n\nPublishes the content to X (Twitter).",
-        "width": 360,
-        "height": 198,
-        "color": 7
-      },
-      "id": "72e33979-e3b4-4013-b27f-b48f0cbbb1a2",
-      "name": "Sticky Note1",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1040,
-        242
-      ]
-    },
-    {
-      "parameters": {
         "content": "## Publish to Bluesky\n\nPublishes the content to Bluesky.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "6484f8ae-3a2c-4495-96ea-36a21eff7af9",
-      "name": "Sticky Note2",
+      "id": "edfa38f2-c0c2-40e0-9214-18b4f24fa435",
+      "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
@@ -52,16 +36,32 @@
       "parameters": {
         "content": "## Publish to Mastodon\n\nPublishes the content to Mastodon.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "bf2b2857-ac8c-44cf-b424-74013d83a477",
+      "id": "91855198-93e4-4bb9-ac93-907997463893",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        350
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish to X (Twitter)\n\nPublishes the content to X (Twitter).",
+        "width": 360,
+        "height": 130,
+        "color": 7
+      },
+      "id": "4923cc68-a582-4401-90ec-c4da30de7f02",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        660
       ]
     },
     {
@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "7f915e2f-d17b-4731-9af6-7514081d1f2a",
+      "id": "8131a4ea-b80f-402a-a4dc-d2abfdda7271",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -96,13 +96,13 @@
         "publishMode": "NOW",
         "caption": "Your daily post"
       },
-      "id": "82ab2bf7-1869-41c0-8d7b-16656d93d12b",
+      "id": "ef3a7afa-28e5-47b6-b875-0a7dc950c572",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        500
+        850
       ],
       "credentials": {
         "socialRobotApi": {
@@ -123,13 +123,13 @@
         "publishMode": "NOW",
         "caption": "Your daily post"
       },
-      "id": "3fd871a3-86e6-4b07-9231-5552981d0399",
+      "id": "6e7fdcb5-9f16-4dab-b34e-2a01bbf61260",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        220
+        230
       ],
       "credentials": {
         "socialRobotApi": {
@@ -150,13 +150,13 @@
         "publishMode": "NOW",
         "caption": "Your daily post"
       },
-      "id": "e9d2a359-3bf7-4524-bff6-fadf4f933253",
+      "id": "a5ed6b3d-1eb1-4701-978d-9d3b475a754c",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        360
+        540
       ],
       "credentials": {
         "socialRobotApi": {
@@ -193,9 +193,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "ed5a5de7-89a6-4ac3-8b1e-139d342850b5",
+  "versionId": "8e8cc011-2caa-4dd2-80c8-c0e513aa0525",
   "meta": {
-    "instanceId": "6a9f7ac5-f5e7-4621-ba73-35a51705352f",
+    "instanceId": "d81aa903-74d5-4b57-a699-f8509513e04f",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

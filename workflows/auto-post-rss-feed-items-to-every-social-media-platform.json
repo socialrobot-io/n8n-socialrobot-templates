@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Auto-post RSS feed items to every social media platform\n\n### Who's it for\n\nPublishers and bloggers who want new content shared to social media automatically.\n\n### How it works\n\n1. Runs automatically every 6 hours.\n2. Fetches the latest items from the configured RSS feed.\n3. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API. Publishes a post to Threads via the SocialRobot API. Publishes a post to LinkedIn via the SocialRobot API. Publishes a post to Facebook via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Set the RSS feed URL to your own feed.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public RSS feed URL.\n",
+        "content": "## Auto-post RSS feed items to every social media platform\n\n### How it works\n\n1. Runs automatically every 6 hours.\n2. Fetches the latest items from the RSS feed.\n3. Publishes posts to X (Twitter), Bluesky, Mastodon, Threads, LinkedIn, and Facebook via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Set the RSS feed URL to your own feed.\n- [ ] Select your connected SocialRobot account in each Publish node.\n\n### Customization\n\nPoint the RSS node at a different feed to reuse the workflow for another blog or channel. Remove the Publish nodes you do not need to target fewer platforms. Adjust the trigger interval to control exactly how often the workflow runs.",
         "width": 480,
-        "height": 850
+        "height": 546
       },
-      "id": "1f65bd60-9539-4413-80d0-8eb7f0a9a01f",
+      "id": "0031c785-5f79-4ecd-81d0-04a8f480313d",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,32 +20,32 @@
       "parameters": {
         "content": "## Fetch content\n\nReads new items from the RSS feed to turn them into posts.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "545c68db-dfb5-4c19-a6a7-98cc9e99920d",
+      "id": "234eda4d-943a-4354-8349-b9bae31cfe1b",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        620,
-        40
+        1040,
+        148
       ]
     },
     {
       "parameters": {
         "content": "## Publish\n\nPublishes the content to X (Twitter), Bluesky, Mastodon, Threads, LinkedIn, and Facebook.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "436e8cb1-bb4b-4a25-899a-b8265eee8caf",
+      "id": "62caf692-cb7f-4955-b19f-4ef086383776",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1040,
-        430
+        1460,
+        40
       ]
     },
     {
@@ -59,26 +59,26 @@
           ]
         }
       },
-      "id": "700a0905-13bd-4890-a478-4efea1449a94",
+      "id": "6762df31-aa48-43e1-9e36-d9e059cfd2d4",
       "name": "Every 6 Hours",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
         620,
-        430
+        360
       ]
     },
     {
       "parameters": {
         "url": "https://example.com/feed.xml"
       },
-      "id": "fcc2f866-1664-4a1e-b27c-bb582169aaaa",
+      "id": "b6b049b3-bd38-4472-98a4-511529a2829a",
       "name": "Fetch RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
       "position": [
-        620,
-        290
+        1040,
+        360
       ]
     },
     {
@@ -93,13 +93,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "c7472825-59a5-45e1-9bc5-7e81fb0a414b",
+      "id": "3d9d45c6-92fd-48bb-a29a-cd52a4ea0f26",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        710
+        1460,
+        952
       ],
       "credentials": {
         "socialRobotApi": {
@@ -120,13 +120,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "3c807e96-f767-497a-b1a1-4da511edc855",
+      "id": "c923d266-18d9-41fb-b17f-b12890348476",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        10
+        1460,
+        252
       ],
       "credentials": {
         "socialRobotApi": {
@@ -147,13 +147,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "dcb5ac98-bf9c-4037-9252-fb6b60b6ffe0",
+      "id": "c7aac62a-e275-4fcb-a500-f88b7ae7e5e2",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        430
+        1460,
+        672
       ],
       "credentials": {
         "socialRobotApi": {
@@ -174,13 +174,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "4c15d78e-a5b4-44f3-b4f1-40deff004832",
+      "id": "94295e3e-e6e9-4c6a-a5f8-78854f553441",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        570
+        1460,
+        812
       ],
       "credentials": {
         "socialRobotApi": {
@@ -201,13 +201,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "8de4a412-7ae1-45a7-8894-d6f6e77c667b",
+      "id": "13d64aae-5bcb-4282-b872-c3bce91f1728",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        290
+        1460,
+        532
       ],
       "credentials": {
         "socialRobotApi": {
@@ -228,13 +228,13 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "2e1c49fa-a80d-4320-a280-6e7d5ed7d379",
+      "id": "82bfc953-5ba5-415a-9df5-f8f54cb014de",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
-        1040,
-        150
+        1460,
+        392
       ],
       "credentials": {
         "socialRobotApi": {
@@ -280,15 +280,26 @@
           }
         ]
       ]
+    },
+    "Every 6 Hours": {
+      "main": [
+        [
+          {
+            "node": "Fetch RSS Feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "55b52b0a-d2f6-453a-b4bd-707e0a6e7091",
+  "versionId": "f0f663b7-4c2c-4eaa-9eb3-66c1b88d6467",
   "meta": {
-    "instanceId": "31020300-18ed-4ad8-9baa-7a5fbfdd016e",
+    "instanceId": "3289b296-eb8e-43de-ae0d-6d02c525c5f3",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

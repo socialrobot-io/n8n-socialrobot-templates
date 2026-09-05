@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Reschedule a social media post\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reschedules a post to a new date.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Provide the Post ID, mapped from an upstream node or typed directly.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## Reschedule a social media post\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Reschedules the post to a new date.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Provide the post ID and the new schedule date.\n\n### Customization\n\nMap the post ID from an upstream workflow to operate on the right post. Run it any time to post, or connect a Schedule Trigger to automate it. Everything runs inside your own n8n workspace, so you can change any step after import. Run it once with a test post to confirm every node behaves as expected before you rely on it.",
         "width": 480,
-        "height": 674
+        "height": 502
       },
-      "id": "7d3ba04d-bed7-4785-8ab6-0c3f75d1ece7",
+      "id": "6dd8212d-0923-496f-a96d-761762af7a47",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,23 +18,23 @@
     },
     {
       "parameters": {
-        "content": "## Manage posts\n\nReads, deletes, or reschedules posts through the SocialRobot API.",
+        "content": "## Reschedule post\n\nMoves the post to a new schedule date.",
         "width": 360,
-        "height": 220,
+        "height": 130,
         "color": 7
       },
-      "id": "cae4d663-4d60-45ff-9514-75c7d7164f54",
+      "id": "a8bf8bd8-f0a1-4ef7-84cd-87d1dc17e49e",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        80
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "ac192d73-d020-4a78-a58c-157e51032030",
+      "id": "b5f76116-98fc-45c5-b0d3-68dcb15f1a98",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
         "postId": "={{ $json.id }}",
         "scheduleDate": "={{ $json.newDate }}"
       },
-      "id": "2d077853-2e66-49ab-9874-b309587bc7cb",
+      "id": "2cffb397-c654-4dae-bf02-623578c72020",
       "name": "Reschedule Post",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -83,9 +83,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "53dcb529-4814-4a75-b437-58e817297315",
+  "versionId": "81598b41-f401-4eca-b87d-18bb0f56b3d9",
   "meta": {
-    "instanceId": "4c25974e-f767-4f8e-a028-938deb66debe",
+    "instanceId": "5574e766-d5b1-4f30-b410-efaa9ac66fb5",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

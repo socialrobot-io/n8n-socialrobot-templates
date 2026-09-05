@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## List failed social media posts\n\n### Who's it for\n\nTeams that manage SocialRobot posts programmatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Lists posts from SocialRobot.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Optionally set the status, platform, and date filters.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n",
+        "content": "## List failed social media posts\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Lists posts from SocialRobot with optional filters.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Optionally set the status, platform, and date filters.\n\n### Customization\n\nAdjust the filters to list exactly the posts you care about. Run it any time to post, or connect a Schedule Trigger to automate it. Everything runs inside your own n8n workspace, so you can change any step after import. Run it once with a test post to confirm every node behaves as expected before you rely on it. You can duplicate the workflow to try variations without touching the original.",
         "width": 480,
-        "height": 674
+        "height": 522
       },
-      "id": "e2e46ad2-5d02-434d-88c5-048b0de5601e",
+      "id": "1e2c40e1-370f-4e68-bcbd-0d47a22cf5fc",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## List posts\n\nLists posts from SocialRobot with optional filters.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "79ad21ee-1554-4126-b6a6-f9b43300b20f",
+      "id": "9c684346-da18-4947-b259-5771b58e359c",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        80
+        148
       ]
     },
     {
       "parameters": {},
-      "id": "85baf658-08ba-41bf-ac72-2b0d4a6d303b",
+      "id": "a1149fd7-dc08-4fa3-a414-b7df5cc00e93",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -52,7 +52,7 @@
           "status": "FAILED"
         }
       },
-      "id": "f68c5ff0-9f09-4004-9776-6f69aaeb2218",
+      "id": "9400af34-c62f-4885-b0d1-631c12044521",
       "name": "List Failed Posts",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -85,9 +85,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "24e44d0a-ca13-46ed-9597-f6c968e743b2",
+  "versionId": "7509e5b7-f1c0-4065-acd9-383e1c845c01",
   "meta": {
-    "instanceId": "420b6893-d2b2-4fa3-882d-340fc120909e",
+    "instanceId": "a668ae82-36a8-43c4-a4ef-10e7aed0cd88",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

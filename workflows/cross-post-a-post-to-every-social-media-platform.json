@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Cross-post a post to every social media platform\n\n### Who's it for\n\nMarketers and creators who post to multiple social platforms and want to write once, publish everywhere.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Instagram via the SocialRobot API. Publishes a post to X (Twitter) via the SocialRobot API. Publishes a post to LinkedIn via the SocialRobot API. Publishes a post to TikTok via the SocialRobot API. Publishes a post to Facebook via the SocialRobot API. Publishes a post to Pinterest via the SocialRobot API. Publishes a post to Bluesky via the SocialRobot API. Publishes a post to Mastodon via the SocialRobot API. Publishes a post to Threads via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n- [ ] Set the Pinterest board ID in the Pinterest Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Instagram.\n- A public image or video URL for X (Twitter).\n- A public image or video URL for LinkedIn.\n- A public image or video URL for TikTok.\n- A public image or video URL for Facebook.\n- A Pinterest board ID.\n- A public image or video URL for Mastodon.\n- A public image or video URL for Threads.\n",
+        "content": "## Cross-post a post to every social media platform\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes posts to Instagram, X (Twitter), LinkedIn, TikTok, Facebook, Pinterest, Bluesky, Mastodon, and Threads via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Set your Pinterest board ID in the Publish to Pinterest node.\n- [ ] Replace the sample media URL with your own public image or video URL.\n- [ ] Replace the example captions in the Publish nodes with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow to post everywhere at once. Run it any time to post, or connect a Schedule Trigger to automate it.",
         "width": 480,
-        "height": 1070
+        "height": 632
       },
-      "id": "a24fec04-1c9d-456e-826c-8f2a3d8df1ac",
+      "id": "7808efc2-11d5-4f97-8260-18ee33e8f46f",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,10 +20,10 @@
       "parameters": {
         "content": "## Publish\n\nPublishes the content to Instagram, X (Twitter), LinkedIn, TikTok, Facebook, Pinterest, Bluesky, Mastodon, and Threads.",
         "width": 360,
-        "height": 242,
+        "height": 172,
         "color": 7
       },
-      "id": "e761c500-ec2b-4e19-9a6e-29efe1ab6bbe",
+      "id": "077315b7-106c-4aa7-a0ab-e0d7baf1fb25",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "497920ef-031d-4af4-b966-d5e0b76d67c0",
+      "id": "2d83cc61-c93c-44ac-8a58-b9587b657d9b",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -58,13 +58,13 @@
         "mediaType": "IMAGE",
         "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
       },
-      "id": "e7cbb2c1-4234-4e96-87bb-02b067cad887",
+      "id": "539129ea-472c-4b6f-8a81-b8471094958d",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        80
+        552
       ],
       "credentials": {
         "socialRobotApi": {
@@ -92,13 +92,13 @@
           }
         ]
       },
-      "id": "a7d5e16b-a90e-4750-b7c5-7abb182ff4db",
+      "id": "7eec53fb-a083-4a00-8a53-12a1dbc5293b",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        920
+        1392
       ],
       "credentials": {
         "socialRobotApi": {
@@ -126,13 +126,13 @@
           }
         ]
       },
-      "id": "e4102b10-ef3c-4946-af0b-74ac7ae0c916",
+      "id": "bafed689-5cee-4f95-bb16-d81f14add28e",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        220
+        692
       ],
       "credentials": {
         "socialRobotApi": {
@@ -160,13 +160,13 @@
           }
         ]
       },
-      "id": "33786739-46ff-4edc-a5fa-4ba739798f70",
+      "id": "cf4323c6-7f37-4f24-a9ab-f3d00f50aaa0",
       "name": "Publish to TikTok",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        780
+        1252
       ],
       "credentials": {
         "socialRobotApi": {
@@ -194,13 +194,13 @@
           }
         ]
       },
-      "id": "d5095dac-4a8c-49e9-a15f-c7ea58f740cb",
+      "id": "80a5a3e2-4a14-4364-9023-229ce1d8352e",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        -60
+        412
       ],
       "credentials": {
         "socialRobotApi": {
@@ -229,13 +229,13 @@
           }
         ]
       },
-      "id": "2e23889e-e292-4830-ac9f-acf0ce355a14",
+      "id": "3f87f45c-1c15-414b-861a-725848d4ef60",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        500
+        972
       ],
       "credentials": {
         "socialRobotApi": {
@@ -256,13 +256,13 @@
         "publishMode": "NOW",
         "caption": "Post everywhere caption"
       },
-      "id": "1ba84803-9a49-4df6-a8e6-0cac1006d701",
+      "id": "74e231c2-ba74-4910-aeb3-d58cc4b9d407",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        -200
+        272
       ],
       "credentials": {
         "socialRobotApi": {
@@ -290,13 +290,13 @@
           }
         ]
       },
-      "id": "ef6c49ea-acb3-4f41-a117-f63ed9c2045e",
+      "id": "f0e11df3-cc17-45fe-96f1-6af97f755586",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        360
+        832
       ],
       "credentials": {
         "socialRobotApi": {
@@ -324,13 +324,13 @@
           }
         ]
       },
-      "id": "0026ac5b-62b1-43b5-80fb-8d41e9e80938",
+      "id": "3892f482-a210-4fd2-8712-b3dabbc38027",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
       "position": [
         1040,
-        640
+        1112
       ],
       "credentials": {
         "socialRobotApi": {
@@ -397,9 +397,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "22483abe-2198-4e00-9f8e-c8841f04c584",
+  "versionId": "95e6f893-92c7-480b-8ea4-2c5b463fe3f7",
   "meta": {
-    "instanceId": "fd37bf4e-1fa4-4ca9-bf06-28ec6d6a6229",
+    "instanceId": "9d74c24c-ee65-4baa-8df5-881cb7c41e72",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

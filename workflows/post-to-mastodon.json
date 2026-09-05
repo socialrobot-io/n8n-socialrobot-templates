@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post to Mastodon\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Mastodon.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Mastodon via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Mastodon.\n",
+        "content": "## Post to Mastodon\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Mastodon via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your Mastodon account in the Publish to Mastodon node.\n- [ ] Replace the sample media URL with your own public image or video URL.\n- [ ] Replace the example caption in the Publish to Mastodon node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it. Swap the sample media for your own images or videos.",
         "width": 480,
-        "height": 696
+        "height": 568
       },
-      "id": "1f09204b-52fd-4cc8-ba3a-09095e4b3f03",
+      "id": "9e921a53-4647-4530-b03f-5c094e1135cf",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to Mastodon\n\nPublishes the content to Mastodon.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "073256ce-9897-4f68-ab3d-7c12d4e29e2b",
+      "id": "05416b42-c7f3-40f4-8883-3cdb615d45df",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "b3c60d04-32df-485e-b8da-86f73907aa73",
+      "id": "05e828ac-7492-42c2-9bc1-4ceadb5d45fd",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
           }
         ]
       },
-      "id": "78658086-3568-49ef-89a0-8408a07c3134",
+      "id": "8bf488ed-fded-4d32-9ea7-84009a6f7aec",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -95,9 +95,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "c8fa0b43-b598-4745-9ad2-4383ba38030a",
+  "versionId": "9dc2201e-6186-4047-8b96-abc9d06421af",
   "meta": {
-    "instanceId": "e0cbe773-4a4a-45ec-8299-2a75ce3589a0",
+    "instanceId": "d6ecd1f5-ce99-4eb2-a038-80d4d719944e",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

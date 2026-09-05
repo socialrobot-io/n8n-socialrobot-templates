@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Post a video to Instagram\n\n### Who's it for\n\nAnyone who wants a simple, repeatable way to post to Instagram.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Instagram via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- A public image or video URL for Instagram.\n",
+        "content": "## Post a video to Instagram\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Publishes a post to Instagram via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Select your Instagram account in the Publish to Instagram node.\n- [ ] Replace the example caption in the Publish to Instagram node with your own text.\n\n### Customization\n\nReplace the example content, then run the workflow whenever you want to post. Run it any time to post, or connect a Schedule Trigger to automate it. Swap the sample media for your own images or videos. Everything runs inside your own n8n workspace, so you can change any step after import.",
         "width": 480,
-        "height": 696
+        "height": 546
       },
-      "id": "5996174b-451c-4b72-828d-f66ae206fdb8",
+      "id": "2cad48b8-c470-4562-9e28-39d18c5025c1",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,21 +20,21 @@
       "parameters": {
         "content": "## Publish to Instagram\n\nPublishes the content to Instagram.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "cbaff8e7-46be-415a-aa9e-40b4d76b5597",
+      "id": "3e05241b-3232-48f0-93ee-7a837bb18112",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1040,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "7ff1f14c-fa1f-476c-b109-4a9390273966",
+      "id": "cd32424c-59cf-47a7-99b0-6958d9fbb707",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -58,7 +58,7 @@
         "mediaType": "VIDEO",
         "mediaUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
       },
-      "id": "55c66e40-5fbb-4fb2-80ee-a38b0f2a80a6",
+      "id": "6271516b-9cc5-4bb7-a27b-5ac8d1799e52",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -91,9 +91,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "43517639-2836-44a3-975d-453d8ea6bd6c",
+  "versionId": "910f8374-c03d-4ad0-a9ec-263dfbad14b5",
   "meta": {
-    "instanceId": "faa6affa-08d7-42b6-a6c6-55addcd75d3c",
+    "instanceId": "81a6973e-b7c9-4953-931c-7408adebee6b",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

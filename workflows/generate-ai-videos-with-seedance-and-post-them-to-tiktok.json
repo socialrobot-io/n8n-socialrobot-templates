@@ -3,11 +3,11 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Generate AI videos with Seedance and post them to TikTok\n\n### Who's it for\n\nCreators and marketers who want AI written posts published automatically.\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the topic, text, or other inputs used to build the post.\n3. Generates platform-optimized post text with the OpenAI model.\n4. Calls an external API over HTTP (media generation, status polling, or download).\n5. Checks whether the AI media finished generating; retries until ready.\n6. Pauses between status checks while the AI media renders.\n7. Publishes a post to TikTok via the SocialRobot API.\n\n### How to set up\n\n- [ ] Install the SocialRobot community node, then create an API key at [socialrobot.io](https://socialrobot.io) (Scheduler -> API Keys) and connect your SocialRobot API credential.\n- [ ] Edit the fields in the Set node to set your topic or text.\n- [ ] Connect your OpenAI account in the OpenAI Chat Model node.\n- [ ] Connect your Replicate account in the HTTP Request nodes (media generation, status checks, and download).\n- [ ] Select your connected account in each Publish node.\n\n### Requirements\n\n- A [SocialRobot](https://socialrobot.io) account with connected social channels and an API key.\n- An [OpenAI API key](https://platform.openai.com/api-keys), connected in the OpenAI Chat Model node.\n- A public image or video URL for TikTok.\n",
+        "content": "## Generate AI videos with Seedance and post them to TikTok\n\n### How it works\n\n1. Runs when you click Execute Workflow.\n2. Sets the post topic that guide the AI-written content.\n3. Uses OpenAI to write the post copy and parses it into per-platform fields.\n4. Generates the video with Seedance on Replicate, waits for it to finish, and downloads the file.\n5. Publishes a post to TikTok via the SocialRobot API.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Connect your Replicate account in the Check Status and Generate Video (Seedance) nodes.\n- [ ] In the Set video topic node, set the post topic to your own content.\n- [ ] Select your TikTok account in the Publish to TikTok node.\n\n### Customization\n\nEdit the prompt in the AI Video Prompt Writer node, or change the OpenAI model, to tune the tone of the copy.",
         "width": 480,
-        "height": 1070
+        "height": 632
       },
-      "id": "5e414db4-9767-41a9-b8d9-ab5b41895399",
+      "id": "43a1b50a-6a79-408d-9ddf-5932e51f15f7",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -18,39 +18,39 @@
     },
     {
       "parameters": {
-        "content": "## Generate content\n\nWrites platform-optimized post text with the OpenAI model.",
+        "content": "## Generate content\n\nUses OpenAI to write and structure the post copy.",
         "width": 360,
-        "height": 220,
+        "height": 152,
         "color": 7
       },
-      "id": "1d8ae658-c784-4cba-98e1-39118505e9a6",
+      "id": "acfacbf0-3cd4-4ed3-8b58-5dd03d62faa9",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1460,
-        80
+        148
       ]
     },
     {
       "parameters": {
         "content": "## Publish to TikTok\n\nPublishes the content to TikTok.",
         "width": 360,
-        "height": 198,
+        "height": 130,
         "color": 7
       },
-      "id": "a76405dc-0fba-49d2-8aa0-30e3505a70ea",
+      "id": "739600f0-ae16-47bb-b7f2-f10f2826966d",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         3560,
-        102
+        170
       ]
     },
     {
       "parameters": {},
-      "id": "0c05346d-9dd8-4df9-a21e-4bd9385ed66b",
+      "id": "029cc29e-db26-4125-a18f-47d0ab60a735",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -65,7 +65,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "c4c11675-409a-4312-910d-8bee70b91da5",
+              "id": "f266f969-e878-47d1-a277-6d0a85a047ad",
               "name": "topic",
               "type": "string",
               "value": "A cozy desk setup at golden hour while code compiles"
@@ -73,7 +73,7 @@
           ]
         }
       },
-      "id": "f2d87a20-9bd8-454d-b051-5c80b1ae0d8d",
+      "id": "1cf92603-433d-4d13-a52b-2e6d0a8d7c9a",
       "name": "Set video topic",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -90,7 +90,7 @@
         },
         "promptType": "define"
       },
-      "id": "27b096c7-43bb-4951-a78a-5be6c2e44e3e",
+      "id": "06a91025-07ff-4ae5-b3ca-17d10f3d19ee",
       "name": "AI Video Prompt Writer",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -112,7 +112,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "df801945-b89b-4854-a6c0-8644d8d29972",
+      "id": "8c89c782-fe03-431d-8813-11d8ed3cb97c",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -138,7 +138,7 @@
         "jsonBody": "={{ JSON.stringify({ input: { prompt: $(\"AI Video Prompt Writer\").item.json.output || $(\"Set video topic\").item.json.topic, duration: 5, resolution: \"720p\", aspect_ratio: \"16:9\" } }) }}",
         "options": {}
       },
-      "id": "927f8e60-5034-40c7-a4d0-aeae008b2792",
+      "id": "25e964ab-782a-47e2-b988-07b5b9bccdc5",
       "name": "Generate Video (Seedance)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -161,7 +161,7 @@
         "genericAuthType": "httpHeaderAuth",
         "options": {}
       },
-      "id": "ee96b4e7-1715-4955-872b-dd3000828e7c",
+      "id": "cd73d528-a537-4cd7-9b15-38af00e25598",
       "name": "Check Status",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -186,7 +186,7 @@
           },
           "conditions": [
             {
-              "id": "e4dd7e42-0550-4094-a7e1-eebaa12568d0",
+              "id": "178363e9-55dd-40fa-a7e7-2955d852fcab",
               "leftValue": "={{ $json.status }}",
               "rightValue": "succeeded",
               "operator": {
@@ -199,7 +199,7 @@
         },
         "options": {}
       },
-      "id": "338be908-9005-43ff-8043-b7d780e80536",
+      "id": "1dfdcc4e-e5fd-4de7-a0c9-2c46a0168d4f",
       "name": "Video Ready?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -212,7 +212,7 @@
       "parameters": {
         "amount": 30
       },
-      "id": "b8a93927-8193-4520-b444-2294f25fb2d5",
+      "id": "f3c1f785-4251-4ac4-9704-15de0ea1e432",
       "name": "Wait 30 Seconds",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -220,7 +220,7 @@
         3140,
         430
       ],
-      "webhookId": "a75d6e7e-7d8a-410d-8adf-05fc3b51aedb"
+      "webhookId": "d28c00ff-0966-49c6-bd77-008c65834be8"
     },
     {
       "parameters": {
@@ -229,7 +229,7 @@
         "responseFormat": "file",
         "options": {}
       },
-      "id": "e9d31a32-96d3-4c65-9f98-e1ecc12ef0a1",
+      "id": "e1957606-8cef-41ea-aa6e-746ff04b9986",
       "name": "Download Video",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -257,7 +257,7 @@
           }
         ]
       },
-      "id": "183fcb14-4612-4428-b9af-6deaacdff73b",
+      "id": "51831d36-cd44-4716-9974-36d40b5f1020",
       "name": "Publish to TikTok",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -385,9 +385,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "36eb63b5-77ca-4eb9-88c3-3036293648df",
+  "versionId": "ba4abfe0-adb8-4fe1-8836-953b5e806f35",
   "meta": {
-    "instanceId": "e22d4c16-0c49-4611-a7c8-db3b93684d0c",
+    "instanceId": "577fdbcb-be58-4ba7-abc8-cc1d271d4891",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}
