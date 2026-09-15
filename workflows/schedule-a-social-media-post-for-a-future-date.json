@@ -7,7 +7,7 @@
         "width": 480,
         "height": 570
       },
-      "id": "e3227ef8-5356-46ce-83d2-db735f2b609b",
+      "id": "ea8e81f0-5a0e-4562-8d5e-30931ea87258",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "c1cea993-cd53-4259-88e9-bab6e5356f95",
+      "id": "85c4b6f6-bb24-41bb-9836-f85019d6ca6e",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "e5e5093f-d983-4c0b-8432-7549bd2e0942",
+      "id": "f2b12c4f-d531-4505-83c9-711bfe7981b7",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "42677631-7d86-4e19-a782-a689267dd2c6",
+      "id": "87e62e75-acff-40bf-8d1a-0ef321114028",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -72,7 +72,7 @@
         "scheduleDate": "2026-08-20T09:00:00-03:00",
         "caption": "Scheduled ahead of time: this post went out without touching a button."
       },
-      "id": "b6ad4536-6a53-45cd-a922-3eada306b5b8",
+      "id": "4c1400cf-b9d6-4160-9ce5-fa6279ac2db7",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -100,7 +100,7 @@
         "scheduleDate": "2026-08-20T09:00:00-03:00",
         "caption": "Scheduled ahead of time: this post went out without touching a button."
       },
-      "id": "fafa6bde-efc8-48f0-89c7-0e9334cae7ac",
+      "id": "f6009740-b125-4922-8149-a3031d178537",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -138,9 +138,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "5a4139a8-47f9-4d27-bc8a-1486a4731d6c",
+  "versionId": "67ac3cb9-846b-405b-9ab2-4dd5e0baaa4d",
   "meta": {
-    "instanceId": "bc421c57-1b79-46eb-b540-ade46b628dc8",
+    "instanceId": "2880a604-9259-44aa-9480-39c66a7238ee",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -186,6 +186,31 @@ def google_sheets_read(name="Google Sheets"):
     }
 
 
+def sheets_update_node(name="Update status", key="date"):
+    """Google Sheets 'update': writes item json fields back to the row whose
+    `key` column matches, e.g. set ready=done after scheduling."""
+    return {
+        "parameters": {
+            "resource": "sheet",
+            "operation": "update",
+            "documentId": {"__rl": True, "mode": "list", "value": ""},
+            "sheetName": {"__rl": True, "mode": "list", "value": ""},
+            "key": key,
+        },
+        "id": rid(), "name": name, "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.7,
+        "position": [0, 0],
+        "credentials": {"googleSheetsOAuth2Api": {"id": "", "name": "Google Sheets account"}},
+    }
+
+
+def code_node(name, js, mode="runOnceForAllItems"):
+    return {
+        "parameters": {"mode": mode, "language": "javaScript", "jsCode": js},
+        "id": rid(), "name": name, "type": "n8n-nodes-base.code", "typeVersion": 2,
+        "position": [0, 0],
+    }
+
+
 def set_node(name, assignments):
     """assignments: list of {name, value, type?}. Editable fields the user sets."""
     assign_list = [
@@ -382,6 +407,27 @@ def tidy(wf):
             if src in by_name:
                 by_name[src]["position"] = [tx, ty + 220 * (i + 1)]
 
+    return wf
+
+
+def post_layout(wf):
+    """Per-template layout refinements that generic tidy() can't express.
+    For the Sheets calendar workflow, move the mark-done branch (Set done flag
+    -> Update status) onto its own lane below the publish column instead of
+    mixing it in with the five platform publishes."""
+    if wf.get("name") != "Schedule social media posts from a Google Sheets calendar":
+        return wf
+    by_name = {n["name"]: n for n in wf["nodes"]}
+    pubs = sorted((n for n in wf["nodes"] if n.get("type") == NODE_TYPE), key=lambda n: n["name"])
+    pub_x = 620 + 3 * 420
+    pub_y = 360 - (len(pubs) * 140 - 140) / 2
+    for i, n in enumerate(pubs):
+        n["position"] = [pub_x, int(pub_y + i * 140)]
+    lane_y = int(pub_y + len(pubs) * 140) + 200
+    if "Set done flag" in by_name:
+        by_name["Set done flag"]["position"] = [620 + 2 * 420, lane_y]
+    if "Update status" in by_name:
+        by_name["Update status"]["position"] = [pub_x, lane_y]
     return wf
 
 
@@ -722,14 +768,6 @@ templates.append(workflow(
     fan_out("Schedule Trigger", [n["name"] for n in _publish_all(["x", "bluesky", "mastodon"], "Your daily post")]),
 ))
 
-templates.append(workflow(
-    "Schedule social media posts from a Google Sheets calendar",
-    [manual_node(), google_sheets_read(name="Content calendar")]
-    + _publish_all(microblog5, "={{ $json.caption }}", publish_mode="SCHEDULE", schedule_date="={{ $json.date }}"),
-    fan_out("Content calendar",
-            [n["name"] for n in _publish_all(microblog5, "={{ $json.caption }}", publish_mode="SCHEDULE", schedule_date="={{ $json.date }}")]),
-))
-
 # --- D. content sources ---
 templates.append(workflow(
     "Auto-post RSS feed items to every social media platform",
@@ -908,28 +946,33 @@ templates.append(workflow(
                                                            "threads": "={{ $json.output.summary }} {{ $json.link }} {{ $json.output.hashtags }}"})]),
 ))
 
-sheets_caption_prompt = """You are a social media writer. Rewrite the draft caption below into a polished, publish-ready post.
-
-Draft caption: {{ $json.caption }}
-
-Return only the polished caption as plain text, no markdown, no quotes around it."""
-
-sheetsa_model, sheetsa_parser, sheetsa_agent = (
-    openai_model_node("OpenAI Chat Model"),
-    parser_node("Content Schema", caption_schema(["caption"])),
-    agent_node("AI Caption Rewriter", sheets_caption_prompt),
+pick_ready_js = (
+    "const out = [];\n"
+    "for (const item of $input.all()) {\n"
+    "  const ready = String(item.json.ready || '').toLowerCase();\n"
+    "  const due = item.json.date && new Date(item.json.date).getTime() > Date.now();\n"
+    "  if ((ready === 'yes' || ready === 'true' || ready === 'ready') && due) out.push(item);\n"
+    "}\n"
+    "return out;"
 )
+sheets_publish = _publish_all(microblog5, "={{ $json.caption }}",
+                              publish_mode="SCHEDULE", schedule_date="={{ $json.date }}")
+sheets_pub_names = [n["name"] for n in sheets_publish]
 templates.append(workflow(
-    "Schedule AI captions to social media from a Google Sheets calendar",
-    [manual_node(), google_sheets_read(name="Content calendar"),
-     sheetsa_agent, sheetsa_model, sheetsa_parser]
-    + _publish_ai(microblog5, {p: "={{ $json.output.caption }}" for p in microblog5},
-                  publish_mode="SCHEDULE", schedule_date="={{ $json.date }}"),
-    ai_block_connections("When clicking 'Execute workflow'", "Content calendar", "AI Caption Rewriter",
-                         "OpenAI Chat Model", "Content Schema",
-                         [n["name"] for n in _publish_ai(microblog5, {p: "={{ $json.output.caption }}" for p in microblog5},
-                                                         publish_mode="SCHEDULE", schedule_date="={{ $json.date }}")]),
+    "Schedule social media posts from a Google Sheets calendar",
+    [schedule_node(field="hours", interval=1),
+     google_sheets_read(name="Content calendar"),
+     code_node("Pick ready rows", pick_ready_js),
+     set_node("Set done flag", [{"name": "date", "value": "={{ $json.date }}"},
+                                {"name": "ready", "value": "done"}]),
+     sheets_update_node("Update status", "date")]
+    + sheets_publish,
+    fan_out("Schedule Trigger", ["Content calendar"]),
 ))
+_t = templates[-1]
+_t["connections"].update(link("Content calendar", "Pick ready rows"))
+_t["connections"]["Pick ready rows"] = {"main": [[{"node": nm, "type": "main", "index": 0} for nm in sheets_pub_names + ["Set done flag"]]]}
+_t["connections"].update(link("Set done flag", "Update status"))
 
 repurpose_prompt = """You are a content repurposing expert. Turn the long-form content below into a platform-native post for each platform.
 
@@ -1144,6 +1187,7 @@ def main():
     written = []
     for wf in templates:
         wf = tidy(wf)                 # auto-arrange nodes
+        wf = post_layout(wf)          # per-template layout refinements
         wf = annotate(wf)             # sticky notes + descriptive node names
         fn = slug(wf["name"]) + ".json"
         path = save(wf, fn)

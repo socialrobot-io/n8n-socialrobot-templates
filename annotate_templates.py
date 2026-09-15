@@ -142,7 +142,7 @@ def rename_node(node):
         url = params.get("url", "")
         return "Fetch Blog Feed" if "blog" in url.lower() else "Fetch RSS Feed"
     if t == "n8n-nodes-base.googleSheets":
-        return "Read Content Calendar"
+        return "Update status" if node.get("name") == "Update status" else "Read Content Calendar"
     platform = platform_of(node)
     if platform:
         return f"Publish to {PLATFORM_LABELS[platform]}"
@@ -282,6 +282,13 @@ def describe_source(node, has_agent=False):
     """One short sentence describing what a source node contributes."""
     t = node.get("type", "")
     params = node.get("parameters", {})
+    name = node.get("name", "")
+    if name == "Pick ready rows":
+        return "Keeps only rows marked ready whose date is still in the future."
+    if name == "Set done flag":
+        return ""
+    if name == "Update status":
+        return "Marks each scheduled row as done so it is not picked up again."
     if "rssFeedRead" in t:
         return "Fetches the latest items from the RSS feed."
     if "googleSheets" in t:
@@ -414,6 +421,7 @@ def build_setup_steps(sources, actions):
             add("[ ] Set the RSS feed URL to your own feed.", "rss")
         elif "googleSheets" in t:
             add("[ ] Connect Google Sheets and select your spreadsheet and sheet.", "sheets")
+            add("[ ] Use columns: date (ISO, e.g. 2026-09-16T09:00), caption, ready. Set ready to yes on rows you want picked up; the workflow writes done back after scheduling.", "cols")
 
     # one step per non-SocialRobot credential type, naming every node that uses it
     cred_nodes = {}
@@ -432,7 +440,7 @@ def build_setup_steps(sources, actions):
             add(f"[ ] Connect your {label} account in the {join_names(names)} nodes.", f"cred-{cred}")
 
     for s in sources:
-        if s.get("type") == "n8n-nodes-base.set":
+        if s.get("type") == "n8n-nodes-base.set" and s.get("name") != "Set done flag":
             items = set_items(s)
             if items:
                 add(f"[ ] In the {s['name']} node, set the {items} to your own content.", "set")
@@ -507,7 +515,7 @@ def build_customization(trigger, sources, actions):
     """One short customization sentence for the main sticky."""
     publish_nodes, management_nodes = _source_action_partition(actions)
     has_agent = any("langchain.agent" in s.get("type", "") for s in sources)
-    set_nodes = [s for s in sources if s.get("type") == "n8n-nodes-base.set"]
+    set_nodes = [s for s in sources if s.get("type") == "n8n-nodes-base.set" and s.get("name") != "Set done flag"]
     rss = any("rssFeedRead" in s.get("type", "") for s in sources)
     sheets = any("googleSheets" in s.get("type", "") for s in sources)
     manual = bool(trigger and trigger.get("type", "").endswith("manualTrigger"))
@@ -520,6 +528,10 @@ def build_customization(trigger, sources, actions):
         if op == "getAll":
             return "Adjust the filters to list exactly the posts you care about."
         return "Map the post ID from an upstream workflow to operate on the right post."
+
+    if sheets and has_agent:
+        return ("Delete the AI Caption Rewriter (with its OpenAI model and schema nodes) to publish the "
+                "sheet's caption column as-is, or edit the rewrite prompt to change the tone.")
 
     if has_agent:
         agent = next((s for s in sources if "langchain.agent" in s.get("type", "")), None)
@@ -536,7 +548,9 @@ def build_customization(trigger, sources, actions):
         return "Point the RSS node at a different feed to reuse the workflow for another blog or channel."
 
     if sheets:
-        return "Add rows to the spreadsheet to queue more posts, or edit columns to change the content."
+        return ("Download the [blank calendar CSV](https://raw.githubusercontent.com/socialrobot-io/"
+                "n8n-socialrobot-templates/main/workflows/schedule-social-media-posts-from-a-google-sheets-calendar.csv) "
+                "to start, or add an OpenAI node before the Publish nodes to rewrite captions automatically.")
 
     if publish_nodes:
         labels = [PLATFORM_LABELS[platform_of(n)] for n in publish_nodes]
@@ -554,7 +568,7 @@ def extra_customization_sentences(trigger, sources, actions):
     100-word minimum. Each sentence is accurate for the templates it applies to."""
     publish_nodes, _ = _source_action_partition(actions)
     has_agent = any("langchain.agent" in s.get("type", "") for s in sources)
-    set_nodes = [s for s in sources if s.get("type") == "n8n-nodes-base.set"]
+    set_nodes = [s for s in sources if s.get("type") == "n8n-nodes-base.set" and s.get("name") != "Set done flag"]
     rss = any("rssFeedRead" in s.get("type", "") for s in sources)
     sheets = any("googleSheets" in s.get("type", "") for s in sources)
     manual = bool(trigger and trigger.get("type", "").endswith("manualTrigger"))

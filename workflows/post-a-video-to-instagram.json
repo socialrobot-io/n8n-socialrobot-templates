@@ -7,7 +7,7 @@
         "width": 480,
         "height": 546
       },
-      "id": "2cad48b8-c470-4562-9e28-39d18c5025c1",
+      "id": "5f11b9cd-7d54-4f91-8b9e-ee87da2bb7e6",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "3e05241b-3232-48f0-93ee-7a837bb18112",
+      "id": "f70116f6-32e9-4583-8c79-ae31331ee3ac",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "cd32424c-59cf-47a7-99b0-6958d9fbb707",
+      "id": "9dffe8be-5378-4118-a4e6-217c8bb40955",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -58,7 +58,7 @@
         "mediaType": "VIDEO",
         "mediaUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
       },
-      "id": "6271516b-9cc5-4bb7-a27b-5ac8d1799e52",
+      "id": "04e9f060-0bc1-4ed0-b9a8-185327a2d40b",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -91,9 +91,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "910f8374-c03d-4ad0-a9ec-263dfbad14b5",
+  "versionId": "aac5eb0a-e6bd-4315-bd18-e7e3f24bef85",
   "meta": {
-    "instanceId": "81a6973e-b7c9-4953-931c-7408adebee6b",
+    "instanceId": "8372bbf3-b8e5-4f28-b527-a1528ce2fb89",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

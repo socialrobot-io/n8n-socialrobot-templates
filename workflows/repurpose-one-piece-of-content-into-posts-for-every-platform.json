@@ -7,7 +7,7 @@
         "width": 480,
         "height": 570
       },
-      "id": "7df19297-5d31-4dc2-8d75-17533e5251dc",
+      "id": "c1945b53-ecca-4e57-bd48-19beb221e2c4",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "56c2fc93-afd9-4c73-a567-efa5890f5073",
+      "id": "47baa37d-066c-473c-820a-482f91dfe717",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "e12ea237-596d-4acf-848c-fbbb1977d9bd",
+      "id": "e150f533-2fa4-4498-8afe-0827cae36ed1",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "caae5acd-59fd-4862-887a-78b888643988",
+      "id": "c400c2a3-c932-4291-b798-dd6bb3418659",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -65,7 +65,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "cfbd3999-6176-4c83-a3f1-536ddc521280",
+              "id": "8b702866-4f59-4885-a26a-88d5dd86b164",
               "name": "content",
               "type": "string",
               "value": "Paste your long-form article or script here. The AI rewrites it for each platform."
@@ -73,7 +73,7 @@
           ]
         }
       },
-      "id": "eda73a77-cc24-43b3-a7e8-b4657dd455c7",
+      "id": "9995d421-e0aa-475e-8df9-5175c59a4bb4",
       "name": "Set source content",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -91,7 +91,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "a06538f4-f620-4392-8042-da60a46a13f9",
+      "id": "d586e87a-e1d8-4f7f-a098-be41e64aa6ed",
       "name": "AI Repurposing Engine",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -113,7 +113,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "e2c9b2dd-f7b4-4970-bdc8-91394ea283a9",
+      "id": "263fb03f-e869-445b-be8b-b463de6903d5",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -133,7 +133,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"twitter\": {\n      \"type\": \"string\"\n    },\n    \"linkedin\": {\n      \"type\": \"string\"\n    },\n    \"facebook\": {\n      \"type\": \"string\"\n    },\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    },\n    \"threads\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "7d3a3bd9-0bc1-46d8-a4a1-694d4055d2eb",
+      "id": "fc6d8415-4fde-42be-9ca1-03bb7d7702d8",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -154,7 +154,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.twitter }}"
       },
-      "id": "de220452-b612-4a6a-bc1e-f6f984f7b13f",
+      "id": "2ddf501c-843c-4f20-bc38-a85106996aba",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -181,7 +181,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.linkedin }}"
       },
-      "id": "4f31d83f-208f-4ca6-acb5-d9e5d032cfd5",
+      "id": "a1c17574-5d55-4a1d-9915-be15ec2d8a4f",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -208,7 +208,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.facebook }}"
       },
-      "id": "0ca0bc32-9ba6-4e21-9c30-28da0dad9434",
+      "id": "ccd7fbd5-abc9-4709-9856-9628559bcda2",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -235,7 +235,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.bluesky }}"
       },
-      "id": "25b707bb-72a3-4acc-99b5-04eb4c72d1ee",
+      "id": "f5a66cfc-db1b-4830-8585-85278a3b8008",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -262,7 +262,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.mastodon }}"
       },
-      "id": "cf739a26-676a-438a-bafa-1cb696342ee0",
+      "id": "8cabc9c4-cc50-44e9-8711-704cd3fa99b3",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -289,7 +289,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.threads }}"
       },
-      "id": "871d58ee-afad-4dc5-8c82-c30fb84f7887",
+      "id": "e106155a-a95a-4985-8b7f-f0c2a4ba7e17",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -391,9 +391,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "1d4dca8a-2805-4515-8494-ac0f71dad34b",
+  "versionId": "32e81622-f382-4304-b5f1-94fddb0dfbbc",
   "meta": {
-    "instanceId": "b8ae9130-7400-4a96-a3e6-c9df0d32f546",
+    "instanceId": "95746c66-1e47-4597-bd72-7509773deb0a",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

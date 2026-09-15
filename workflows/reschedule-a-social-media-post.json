@@ -7,7 +7,7 @@
         "width": 480,
         "height": 502
       },
-      "id": "6dd8212d-0923-496f-a96d-761762af7a47",
+      "id": "752faf33-9872-4683-9a99-202db917a8f9",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "a8bf8bd8-f0a1-4ef7-84cd-87d1dc17e49e",
+      "id": "085c0c7d-19d0-48a3-a88c-7160c7dac93b",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "b5f76116-98fc-45c5-b0d3-68dcb15f1a98",
+      "id": "87fbfa89-040e-4c7c-b388-d072fc6eb140",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
         "postId": "={{ $json.id }}",
         "scheduleDate": "={{ $json.newDate }}"
       },
-      "id": "2cffb397-c654-4dae-bf02-623578c72020",
+      "id": "4109b91e-fd12-408b-bd90-9563526d1c53",
       "name": "Reschedule Post",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -83,9 +83,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "81598b41-f401-4eca-b87d-18bb0f56b3d9",
+  "versionId": "a0147485-084c-4549-af33-828b9d491ea8",
   "meta": {
-    "instanceId": "5574e766-d5b1-4f30-b410-efaa9ac66fb5",
+    "instanceId": "d8c1ba0f-201c-42f1-b562-e98167a60f70",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}
