@@ -549,7 +549,7 @@ def build_customization(trigger, sources, actions):
 
     if sheets:
         return ("Download the [blank calendar CSV](https://raw.githubusercontent.com/socialrobot-io/"
-                "n8n-socialrobot-templates/main/workflows/schedule-social-media-posts-from-a-google-sheets-calendar.csv) "
+                "n8n-socialrobot-templates/main/workflows/schedule-social-media-posts-from-google-sheets.csv) "
                 "to start, or add an OpenAI node before the Publish nodes to rewrite captions automatically.")
 
     if publish_nodes:

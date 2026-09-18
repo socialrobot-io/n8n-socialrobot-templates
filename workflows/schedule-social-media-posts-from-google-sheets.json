@@ -1,13 +1,13 @@
 {
-  "name": "Schedule social media posts from a Google Sheets calendar",
+  "name": "Schedule social media posts from Google Sheets",
   "nodes": [
     {
       "parameters": {
-        "content": "## Schedule social media posts from a Google Sheets calendar\n\n### How it works\n\n1. Runs automatically every hour.\n2. Reads the scheduled posts from your content calendar spreadsheet.\n3. Keeps only rows marked ready whose date is still in the future.\n4. Marks each scheduled row as done so it is not picked up again.\n5. Schedules posts to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn for the date and time you set.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Connect Google Sheets and select your spreadsheet and sheet.\n- [ ] Use columns: date (ISO, e.g. 2026-09-16T09:00), caption, ready. Set ready to yes on rows you want picked up; the workflow writes done back after scheduling.\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Confirm the schedule date in each Publish node, or map it from an upstream field.\n\n### Customization\n\nDownload the [blank calendar CSV](https://raw.githubusercontent.com/socialrobot-io/n8n-socialrobot-templates/main/workflows/schedule-social-media-posts-from-a-google-sheets-calendar.csv) to start, or add an OpenAI node before the Publish nodes to rewrite captions automatically.",
+        "content": "## Schedule social media posts from Google Sheets\n\n### How it works\n\n1. Runs automatically every hour.\n2. Reads the scheduled posts from your content calendar spreadsheet.\n3. Keeps only rows marked ready whose date is still in the future.\n4. Marks each scheduled row as done so it is not picked up again.\n5. Schedules posts to X (Twitter), Bluesky, Mastodon, Threads, and LinkedIn for the date and time you set.\n\n### Setup steps\n\n- [ ] Install the SocialRobot community node and connect your SocialRobot API credential (API key: socialrobot.io, Scheduler -> API Keys).\n- [ ] Connect Google Sheets and select your spreadsheet and sheet.\n- [ ] Use columns: date (ISO, e.g. 2026-09-16T09:00), caption, ready. Set ready to yes on rows you want picked up; the workflow writes done back after scheduling.\n- [ ] Select your connected SocialRobot account in each Publish node.\n- [ ] Confirm the schedule date in each Publish node, or map it from an upstream field.\n\n### Customization\n\nDownload the [blank calendar CSV](https://raw.githubusercontent.com/socialrobot-io/n8n-socialrobot-templates/main/workflows/schedule-social-media-posts-from-google-sheets.csv) to start, or add an OpenAI node before the Publish nodes to rewrite captions automatically.",
         "width": 480,
         "height": 798
       },
-      "id": "783c156a-c457-4752-96f5-1b21b8f5d0f3",
+      "id": "f3b91f32-9efd-4d26-8a96-dd2605f04cc7",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "8178c63c-401e-419b-ad61-8edc3b3831e5",
+      "id": "40f606da-49e3-46c4-96a3-95674f0bea98",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 172,
         "color": 7
       },
-      "id": "efa12c23-c9c6-40a3-8de2-cd8e505da0e5",
+      "id": "d1c9f486-e949-4b51-ad37-4ee554ef7ed3",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -59,7 +59,7 @@
           ]
         }
       },
-      "id": "2984075f-03da-4d86-88eb-01e993386a49",
+      "id": "2be6e9ea-71b3-41cc-a843-6257aab46e32",
       "name": "Every Hour",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -83,7 +83,7 @@
           "value": ""
         }
       },
-      "id": "8a3d91d0-7a9b-44ae-90d2-261de09eb1c9",
+      "id": "310f93b7-ec8e-47ff-9e45-630425e0be0f",
       "name": "Read Content Calendar",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
@@ -104,7 +104,7 @@
         "language": "javaScript",
         "jsCode": "const out = [];\nfor (const item of $input.all()) {\n  const ready = String(item.json.ready || '').toLowerCase();\n  const due = item.json.date && new Date(item.json.date).getTime() > Date.now();\n  if ((ready === 'yes' || ready === 'true' || ready === 'ready') && due) out.push(item);\n}\nreturn out;"
       },
-      "id": "b9236373-2992-43d3-911e-7dc322a7d1d5",
+      "id": "ff0f3ad8-b2ba-4ad6-981b-c8281b3a91f2",
       "name": "Pick ready rows",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -119,13 +119,13 @@
         "assignments": {
           "assignments": [
             {
-              "id": "f3119bfb-b870-4ae5-b88a-55a26f08586f",
+              "id": "33592e77-8724-470e-ab8a-b259b24fc155",
               "name": "date",
               "type": "string",
               "value": "={{ $json.date }}"
             },
             {
-              "id": "47cfae66-7b97-46f7-b39d-1a24045cb04c",
+              "id": "7fe728d1-121d-4235-b83c-30e2a97ad094",
               "name": "ready",
               "type": "string",
               "value": "done"
@@ -133,7 +133,7 @@
           ]
         }
       },
-      "id": "8c70ce6f-ac62-4a65-9470-f5303c47feb5",
+      "id": "5832b0f3-a559-4ee1-8351-4fee9b4abbc0",
       "name": "Set done flag",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -158,7 +158,7 @@
         },
         "key": "date"
       },
-      "id": "a53edc03-746b-4963-bffd-e595af363ac7",
+      "id": "29c3b2cb-36a5-4527-b2a7-b65b123da76d",
       "name": "Update status",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
@@ -186,7 +186,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "b81ced22-9735-4b91-bf3b-e3202c87fca1",
+      "id": "a965c8fe-6216-4d78-b534-4f84ab788e85",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -214,7 +214,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "1a0bec8a-d423-4ef7-bb2c-2a4bf2e27dca",
+      "id": "d9f9680e-7603-4a6d-a07c-410a18cdc48a",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -242,7 +242,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "bc3b9735-fd18-4ad1-8090-9b0be365bc36",
+      "id": "5cb6efa7-e0ba-4e38-b4b7-25b6ce090826",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -270,7 +270,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "de095b2d-80af-4a7a-8535-c4a731e663f4",
+      "id": "65562377-e7e2-438a-96c6-7163da6ac8e8",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -298,7 +298,7 @@
         "scheduleDate": "={{ $json.date }}",
         "caption": "={{ $json.caption }}"
       },
-      "id": "28a5292f-15b6-4bef-94e0-c27af22047ab",
+      "id": "f7ace794-f813-4311-a615-3e6ab422e1bd",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -389,9 +389,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "2dc90ade-0023-45d6-954f-bb5b54072e34",
+  "versionId": "a8b81dbe-70fa-4ec5-8724-6728ec976401",
   "meta": {
-    "instanceId": "4a5fe641-68bb-4a55-a935-bd65e7dab1f0",
+    "instanceId": "6313b268-72a1-46da-8c87-bfcdc5a488fe",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

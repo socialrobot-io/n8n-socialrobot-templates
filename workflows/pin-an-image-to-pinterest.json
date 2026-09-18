@@ -7,7 +7,7 @@
         "width": 480,
         "height": 590
       },
-      "id": "892747c4-cb2f-4491-8359-c8f1af9bd902",
+      "id": "d44633f3-57ab-450f-91c1-a5ed3322dde3",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "19cf4345-be07-4328-8fa9-9304869a3c3f",
+      "id": "d9869b87-08b1-4a8d-b787-5617f66996de",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "f4d4d814-ebfd-4556-bbdf-8e775df11461",
+      "id": "d0f8877a-a3a6-4418-893a-5d938521d0be",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -63,7 +63,7 @@
           }
         ]
       },
-      "id": "ac3b7be5-6aec-431b-afbb-ef30abbf93d8",
+      "id": "46090c9f-8056-4440-8a5c-23f19c1dd4cb",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -96,9 +96,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "745ceeaa-0643-4c50-82e0-541ae889134c",
+  "versionId": "a9ae85c1-8ff6-44a7-88eb-2e1b5f36cce4",
   "meta": {
-    "instanceId": "04418914-6ba0-404c-9c7f-7125478f93b4",
+    "instanceId": "147a0684-e830-4d60-91ad-28ec14d7b58a",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

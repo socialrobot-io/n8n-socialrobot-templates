@@ -7,7 +7,7 @@
         "width": 480,
         "height": 568
       },
-      "id": "291fc5fa-430d-451e-bdad-7fd2f524ba2f",
+      "id": "ea401822-a948-45e2-92be-cde34d22b417",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "1e622ba8-b189-43ae-8229-14c1d9fab55c",
+      "id": "4b02d335-98e3-42f4-a1a3-4d0813a210d4",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "864addcb-40f4-4a01-ad73-467a3aee32de",
+      "id": "5e88eeff-bd37-4fed-a3d7-956c1db2c44b",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "f9e1a7aa-c0b8-4ac3-9c96-b18353fbfb88",
+      "id": "87928856-9e91-4a82-b74e-bb401d94e982",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -71,7 +71,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "9ebfa883-9047-4d7f-a027-24bbbd3c3d8c",
+      "id": "51f7ea47-a2d5-41a5-82c0-6dc77c97b9db",
       "name": "Sticky Note4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -91,7 +91,7 @@
           ]
         }
       },
-      "id": "18ef5bba-8646-478e-a89a-a0421dcedd79",
+      "id": "d287c530-f98e-41f3-8c0b-96bc094840f3",
       "name": "Every Hour",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -104,7 +104,7 @@
       "parameters": {
         "url": "https://example.com/feed.xml"
       },
-      "id": "1eb27a91-4f8b-4019-86b0-e508b877e065",
+      "id": "40d1fb7c-1281-4cc6-bbc2-bbd580558275",
       "name": "Fetch RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
@@ -122,7 +122,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "c58bc096-081d-4257-8b03-e2b06065f813",
+      "id": "f0ec8fc3-1b93-49fc-a039-30614c54e306",
       "name": "AI Summary Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -144,7 +144,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "af8d1088-f93e-4589-975c-51b908d77c85",
+      "id": "6e4adc52-ec40-4f31-9266-75127c50b8b9",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -164,7 +164,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"summary\": {\n      \"type\": \"string\"\n    },\n    \"hashtags\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "7abddcb2-6d00-47ee-8796-008f9ad1b181",
+      "id": "f6a06927-7cae-4843-b258-2cf1846b354b",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -185,7 +185,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.summary }} {{ $json.link }} {{ $json.output.hashtags }}"
       },
-      "id": "eebef08e-a878-4ff6-9508-b38881f6e0cb",
+      "id": "01cc247d-7da7-4cb5-a185-1c2ea108750f",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -212,7 +212,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.summary }} {{ $json.link }} {{ $json.output.hashtags }}"
       },
-      "id": "201a9d40-73cb-4d82-93ca-955769d9d515",
+      "id": "cd2bb9e7-358b-4746-aed6-123024e950e4",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -239,7 +239,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.summary }} {{ $json.link }} {{ $json.output.hashtags }}"
       },
-      "id": "00aa03c7-632c-414e-bd4c-d02bd767e56b",
+      "id": "e8cbeac7-5c0e-45af-b8d9-a100724b72fc",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -326,9 +326,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "f4a576d7-583e-462f-9c41-b42adc0d0421",
+  "versionId": "9277be47-5a3b-4c05-80df-3aaf2b42ebb4",
   "meta": {
-    "instanceId": "2fd80fc9-fd17-4aa5-aef7-091c6db908f6",
+    "instanceId": "43d3876e-57a5-431f-b518-d6c8f5e3a4a7",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -7,7 +7,7 @@
         "width": 480,
         "height": 586
       },
-      "id": "6d2a364a-30ec-4902-a4e7-ae221e93c7b7",
+      "id": "06ecc37e-9933-4810-886e-a551b94dc75a",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "0b186517-02e7-4e99-9a2f-a490bd3e68c5",
+      "id": "89b6bd1c-38cf-4537-b6c8-39c8377586b2",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "7044e5b2-c9d7-4b12-a19f-844075a3761f",
+      "id": "55afb015-aada-4e67-bf44-924f9d070d56",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "d0e56ed2-ec89-4c82-832f-215c518c5f95",
+      "id": "d0330dd1-e930-4273-84e1-a683a4353cb4",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "518e450d-05b8-45db-b30b-3240649067b1",
+      "id": "3a2c203d-87b1-4345-aeff-5cfb7c403421",
       "name": "Every Hour",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -88,7 +88,7 @@
       "parameters": {
         "url": "https://example.com/feed.xml"
       },
-      "id": "d955d504-60f1-4bdf-9102-f9a4b1785149",
+      "id": "fd39c485-09e5-4d34-b6c0-844e3cc6c007",
       "name": "Fetch RSS Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
@@ -109,7 +109,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "428c92e7-b120-4651-9501-e8dd618c39aa",
+      "id": "c881bf7f-0a63-44ec-8e46-d1d377b6d8f5",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -136,7 +136,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.title }} {{ $json.link }}"
       },
-      "id": "c8f8a84e-431f-4799-bf0f-33b1e9b4d866",
+      "id": "f2a517e3-3aec-4251-80d5-3ad4f6724a37",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -185,9 +185,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "31ec5cca-be9f-48c1-9ac7-71505ed8e693",
+  "versionId": "a358418b-75c6-426f-a69e-7e6410d2155c",
   "meta": {
-    "instanceId": "49f9b986-6c52-4e3f-8c10-d9ddeb27c5bb",
+    "instanceId": "6b8e8594-27cf-43a1-b2c1-286e256721a6",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -7,7 +7,7 @@
         "width": 480,
         "height": 526
       },
-      "id": "68bd44da-9a09-4d53-872b-99e31d3f7b1c",
+      "id": "cbe8e2fe-28b5-459f-bbb1-603458394bf9",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "d329e7e8-85fe-4a52-b1a4-ebd16ea1db60",
+      "id": "bb3d0655-562e-4987-9fb2-456d6560498b",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "b9f64e35-3e26-43e7-b693-db7acdb6bf80",
+      "id": "95e448e0-3046-48ea-a0f7-50c84a1b4116",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "publishMode": "NOW",
         "caption": "Automation is not about doing less. It is about doing the boring parts automatically so you can focus on the work that matters."
       },
-      "id": "5d88ce70-e4c3-4bad-96f8-31a4db01217c",
+      "id": "475c305f-98b7-4c7b-9d31-afd609d72304",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -88,9 +88,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "0eed1c07-b440-4a45-bd8b-d4f4f9d400f7",
+  "versionId": "94cb7580-6422-46f2-b30f-dc5af43f68fe",
   "meta": {
-    "instanceId": "fbbadf96-ed98-412e-9b88-4582ff0b3a85",
+    "instanceId": "0280d54e-6ee3-4e97-978f-f0eb890787ca",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

@@ -7,7 +7,7 @@
         "width": 480,
         "height": 654
       },
-      "id": "3904f354-a5ac-426c-9383-a7c19768fefc",
+      "id": "f037ca23-0bc3-41c8-8005-8c92d4095481",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "4eca4406-c966-43ef-808b-2107713a62e1",
+      "id": "7ef963e6-0a19-4a9f-935a-abb867b812a9",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "5ff5cb2f-7f08-462e-a4bc-b0cbf2417fd5",
+      "id": "f15fb5f6-51ff-411a-9f7b-11919b442fbd",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "68239211-d6c5-49a8-93a4-3e4dcd3a9bbf",
+      "id": "533c0994-9676-497b-9aba-b385629930e6",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -66,7 +66,7 @@
     },
     {
       "parameters": {},
-      "id": "b01f964c-3ce6-4dd2-8b66-b827ad6a0239",
+      "id": "116780f5-2fcc-43e2-8bf6-99801f96be77",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -81,7 +81,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "2ff34b9c-05e8-47e5-b422-05c95307b243",
+              "id": "cbd8b0dd-43dc-44d2-a677-87faba1d344d",
               "name": "topic",
               "type": "string",
               "value": "Automate your social media with one workflow"
@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "7071a79b-8e70-4565-9469-488113a58fa5",
+      "id": "a5329ea9-707b-481f-8231-4b58df0acbca",
       "name": "Set post topic",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -107,7 +107,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "a5082f57-8e83-4d08-9518-500e12717a68",
+      "id": "66efad3c-44c0-48bc-8c4b-b306da7c33fd",
       "name": "AI Caption Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -129,7 +129,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "86fbb650-4eac-4b92-96bc-b413c74c051d",
+      "id": "a2bccb6b-065f-4949-b264-2c6d05297968",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -149,7 +149,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"instagram\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_title\": {\n      \"type\": \"string\"\n    },\n    \"pinterest_description\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "0b67295b-b433-40b4-8e0c-df0e7af0dac1",
+      "id": "72d4b03c-efe3-4ab3-8e7c-09e20575ebd1",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -173,7 +173,7 @@
         "mediaType": "IMAGE",
         "mediaUrl": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
       },
-      "id": "f08cbce0-be54-4870-8165-bcb86a682ed5",
+      "id": "baca9d70-60ad-4543-a0ca-abadbdc70c28",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -208,7 +208,7 @@
           }
         ]
       },
-      "id": "3c40ad18-6ca3-4027-bf4e-177e1a40a8f8",
+      "id": "cd80a6d1-8cc0-47ee-90e2-a1a3fc4c5e9c",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -290,9 +290,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "ba3a73a9-47f0-4e2c-9b64-0c749fd56c6d",
+  "versionId": "52ef26b7-f1c5-4f9a-9345-baa77ae09d4d",
   "meta": {
-    "instanceId": "3099130b-8004-4f15-9ae4-e1818b4baa6d",
+    "instanceId": "ded0b283-dc3a-4de5-85ca-cf2f7759ddc2",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

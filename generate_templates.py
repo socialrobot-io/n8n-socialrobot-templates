@@ -415,7 +415,7 @@ def post_layout(wf):
     For the Sheets calendar workflow, move the mark-done branch (Set done flag
     -> Update status) onto its own lane below the publish column instead of
     mixing it in with the five platform publishes."""
-    if wf.get("name") != "Schedule social media posts from a Google Sheets calendar":
+    if wf.get("name") != "Schedule social media posts from Google Sheets":
         return wf
     by_name = {n["name"]: n for n in wf["nodes"]}
     pubs = sorted((n for n in wf["nodes"] if n.get("type") == NODE_TYPE), key=lambda n: n["name"])
@@ -959,7 +959,7 @@ sheets_publish = _publish_all(microblog5, "={{ $json.caption }}",
                               publish_mode="SCHEDULE", schedule_date="={{ $json.date }}")
 sheets_pub_names = [n["name"] for n in sheets_publish]
 templates.append(workflow(
-    "Schedule social media posts from a Google Sheets calendar",
+    "Schedule social media posts from Google Sheets",
     [schedule_node(field="hours", interval=1),
      google_sheets_read(name="Content calendar"),
      code_node("Pick ready rows", pick_ready_js),
