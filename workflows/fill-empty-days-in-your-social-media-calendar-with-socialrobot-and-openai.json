@@ -1,0 +1,600 @@
+{
+  "name": "Fill empty days in your social media calendar and catch failed posts with SocialRobot and OpenAI",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Fill empty days in your social media calendar\n\nKeeps your SocialRobot calendar from going quiet. Each morning it looks a week ahead, writes a post for every day that has nothing scheduled, and tells you about posts that failed to publish.\n\n### How it works\n1. Every day at 7am the workflow lists the next 7 days, skipping the weekdays you exclude.\n2. It asks SocialRobot which of those days already have scheduled posts.\n3. For each empty day, OpenAI writes a short post from a rotating content pillar in your brand voice.\n4. SocialRobot schedules that post on Bluesky, Mastodon and Threads at your chosen time.\n5. In parallel, it emails you about newly failed posts, once per post.\n\n### Setup steps\n- [ ] Install the SocialRobot community node and add an API key from socialrobot.io/scheduler/api-keys\n- [ ] Pick an account in each **Schedule on** node\n- [ ] Add OpenAI and Gmail credentials and your email in **Email Failure Alert**\n- [ ] Edit pillars, brand, voice, time and language in **Set Calendar Options**\n\n### Customization\n- Plug in the optional Facebook or X node (X needs SocialRobot Pro).\n- Use the optional Slack node instead of email.\n- Set the Platform filter in **Get Scheduled Posts per Day** to check one network only.\n\nScheduled posts can be edited, rescheduled or deleted in SocialRobot before they go live.",
+        "width": 480,
+        "height": 912
+      },
+      "id": "cc8a5947-8246-432d-a27c-7a50922ebe07",
+      "name": "Template Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Find empty days ahead\nLists the coming days and asks SocialRobot which ones already have a scheduled post.",
+        "width": 976,
+        "height": 352,
+        "color": 7
+      },
+      "id": "0960dc95-1b73-48cf-ba50-4a0b9f59f701",
+      "name": "Section Find Empty Days",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Write a post per day\nOpenAI writes one short post for each empty day from your content pillars.",
+        "width": 352,
+        "height": 576,
+        "color": 7
+      },
+      "id": "27e265b3-5646-4de3-a335-d009b469ec50",
+      "name": "Section Write Posts",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Schedule posts in SocialRobot\nSchedules the post at your post time. Optional: connect the Facebook or X node to add networks.",
+        "width": 352,
+        "height": 1024,
+        "color": 7
+      },
+      "id": "742fc56f-58e9-4c54-bba4-3ed3ecdf4d99",
+      "name": "Section Schedule Posts",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2016,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Alert on failed posts\nFinds failed posts, skips ones already reported and sends one alert. Swap in the optional Slack node if you prefer.",
+        "width": 784,
+        "height": 544,
+        "color": 7
+      },
+      "id": "ef79a67a-de8b-4d0d-8149-2b660a0ae81a",
+      "name": "Section Failed Posts",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        896,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "11f88051-4392-427c-910f-740bafc2ebb0",
+      "name": "Every Day at 7am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "81f33c60-ff06-4baa-a5b6-32f70f24c38e",
+              "name": "days_ahead",
+              "type": "number",
+              "value": 7
+            },
+            {
+              "id": "7c1a4fd9-315f-4a7a-b164-3c6afce267de",
+              "name": "post_time",
+              "type": "string",
+              "value": "10:00"
+            },
+            {
+              "id": "4515cb4b-2ebe-4697-a3c8-4e476015098c",
+              "name": "skip_weekdays",
+              "type": "string",
+              "value": "sat, sun"
+            },
+            {
+              "id": "1ef7a801-f1d7-49f3-8287-c17812e77e32",
+              "name": "content_pillars",
+              "type": "string",
+              "value": "Customer tip; Behind the scenes; Product feature; Question for the audience; Common mistake in our industry"
+            },
+            {
+              "id": "6c28e4ad-8658-4eb4-b4b1-27664ac195c1",
+              "name": "brand_description",
+              "type": "string",
+              "value": "A small business that helps people with ... (describe what you sell and who for)"
+            },
+            {
+              "id": "cb29d1cc-046e-4dd3-8a8b-fab777b54d9b",
+              "name": "brand_voice",
+              "type": "string",
+              "value": "Friendly, practical, no hype"
+            },
+            {
+              "id": "fc1405a2-97ff-4a83-8dc2-079585760655",
+              "name": "language",
+              "type": "string",
+              "value": "English"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "821c1711-bdff-4680-85b1-535d22057e83",
+      "name": "Set Calendar Options",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per upcoming day, in the workflow time zone.\nconst o = $input.first().json;\nconst [hour, minute] = String(o.post_time || '10:00').split(':').map(Number);\nconst pillars = String(o.content_pillars || '').split(';').map(p => p.trim()).filter(Boolean);\nconst skip = String(o.skip_weekdays || '').toLowerCase();\nconst days = [];\nfor (let i = 1; i <= Number(o.days_ahead || 7); i++) {\n  const day = $now.plus({ days: i }).startOf('day');\n  if (skip.includes(day.toFormat('ccc').toLowerCase())) continue;\n  days.push({ json: {\n    date: day.toFormat('yyyy-MM-dd'),\n    weekday: day.toFormat('cccc'),\n    day_start: day.toUTC().toISO({ suppressMilliseconds: true }),\n    day_end: day.endOf('day').toUTC().toISO({ suppressMilliseconds: true }),\n    publish_at: day.set({ hour, minute }).toISO({ suppressMilliseconds: true }),\n    pillar: pillars.length ? pillars[day.ordinal % pillars.length] : 'General update',\n  } });\n}\nreturn days;"
+      },
+      "id": "b5e8f1f8-f7af-4ebe-8e5d-4beb306259b6",
+      "name": "List Upcoming Days",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "status": "SCHEDULED",
+          "dateFrom": "={{ $json.day_start }}",
+          "dateTo": "={{ $json.day_end }}"
+        }
+      },
+      "id": "799ceb6c-0ab6-43d9-8452-f4a8e16a2d60",
+      "name": "Get Scheduled Posts per Day",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        400
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// SocialRobot returns each day's posts paired with the day that asked for them.\n// A day with no matching post is empty.\nconst busy = new Set();\n$input.all().forEach((item, i) => {\n  if (!item.json.id) return; // placeholder item when nothing is scheduled at all\n  busy.add($('List Upcoming Days').itemMatching(i).json.date);\n});\nreturn $('List Upcoming Days').all().filter(day => !busy.has(day.json.date)).map(day => ({ json: day.json }));"
+      },
+      "id": "dbe29f64-b5d7-4a9e-b89e-2be5182181b9",
+      "name": "Find Empty Days",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write one social media post for {{ $json.weekday }} {{ $json.date }}.\nContent pillar: {{ $json.pillar }}\nAbout the brand: {{ $('Set Calendar Options').first().json.brand_description }}\nVoice: {{ $('Set Calendar Options').first().json.brand_voice }}\nLanguage: {{ $('Set Calendar Options').first().json.language }}\n\nRules:\n- Under 270 characters so the same text fits X, Bluesky, Mastodon and Threads.\n- No links, no made-up facts, numbers or offers.\n- At most 2 hashtags.\n- Do not mention the date.",
+        "hasOutputParser": true
+      },
+      "id": "79f491a3-c4c3-46ca-98fe-b88e3e5872ac",
+      "name": "Write Post for Empty Day",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1632,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "id": "7f1fe70e-f152-436e-bfdb-d3b0702787c6",
+      "name": "OpenAI Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1616,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"text\": \"Your post text\"\n}"
+      },
+      "id": "1893c6c3-b7be-4669-b639-056418bb8a7b",
+      "name": "Post Format",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1776,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "bluesky",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $json.output.text.trim().slice(0, 280) }}",
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $('Find Empty Days').item.json.publish_at }}"
+      },
+      "id": "736d1110-39dd-4903-98d1-86457490c123",
+      "name": "Schedule on Bluesky",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        2064,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "mastodon",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $json.output.text.trim().slice(0, 280) }}",
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $('Find Empty Days').item.json.publish_at }}"
+      },
+      "id": "3255f73a-cd33-41f3-bbb2-b318e908a805",
+      "name": "Schedule on Mastodon",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        2064,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "threads",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $json.output.text.trim().slice(0, 280) }}",
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $('Find Empty Days').item.json.publish_at }}"
+      },
+      "id": "5300a88b-1b35-4d24-90b3-a93c984febef",
+      "name": "Schedule on Threads",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        2064,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "facebook",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $json.output.text.trim().slice(0, 280) }}",
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $('Find Empty Days').item.json.publish_at }}"
+      },
+      "id": "1cb65882-6ec9-4820-a44e-91165f5db47f",
+      "name": "Optional Schedule on Facebook",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        2064,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "x",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $json.output.text.trim().slice(0, 280) }}",
+        "publishMode": "SCHEDULE",
+        "scheduleDate": "={{ $('Find Empty Days').item.json.publish_at }}"
+      },
+      "id": "6ac10dc3-114a-44d5-9a0e-f843c059318a",
+      "name": "Optional Schedule on X",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        2064,
+        976
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "getAll",
+        "returnAll": false,
+        "limit": 50,
+        "filters": {
+          "status": "FAILED"
+        }
+      },
+      "id": "92447c4f-2e42-4690-b3cf-760f00f13a4d",
+      "name": "Get Failed Posts",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        944,
+        1008
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{ $json.id }}",
+        "options": {}
+      },
+      "id": "84af7bb5-39e7-465f-850d-74fd580d3035",
+      "name": "Skip Already Reported Posts",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        1008
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One alert listing every newly failed post. Only `id` is guaranteed; other fields are shown when present.\nconst esc = s => String(s ?? '').replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));\nconst rows = $input.all().map(({ json: p }) => {\n  const where = [].concat(p.platform ?? p.platforms ?? []).join(', ');\n  const text = String(p.caption ?? p.content ?? p.text ?? '').slice(0, 80);\n  const why = p.error ?? p.errorMessage ?? p.failureReason ?? '';\n  return `<li><b>${esc(p.id)}</b> ${esc(where)} ${esc(text)} ${why ? '<i>' + esc(why) + '</i>' : ''}</li>`;\n});\nreturn [{ json: {\n  count: rows.length,\n  subject: `${rows.length} social post(s) failed in SocialRobot`,\n  html: `<p>These posts failed to publish. Open SocialRobot to fix and reschedule them.</p><ul>${rows.join('')}</ul>`,\n  text: `${rows.length} post(s) failed in SocialRobot: ` + $input.all().map(i => i.json.id).join(', '),\n} }];"
+      },
+      "id": "9d12c740-247a-4f5b-ad5b-fbd476de1a55",
+      "name": "Build Failure Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        1008
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "",
+        "subject": "={{ $json.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "8a9ad70a-4ed5-4a63-b950-25aeb416359e",
+      "name": "Email Failure Alert",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1520,
+        1008
+      ],
+      "webhookId": "154ab13b-8bfd-477c-877a-7c45b0048632"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "text": "={{ $json.text }}",
+        "otherOptions": {}
+      },
+      "id": "3cbcffab-e57a-458e-b296-935d7621b620",
+      "name": "Optional Slack Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1520,
+        1200
+      ],
+      "webhookId": "41e6bb17-37ec-4ea9-b115-e25acbf961ff"
+    }
+  ],
+  "connections": {
+    "Every Day at 7am": {
+      "main": [
+        [
+          {
+            "node": "Set Calendar Options",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Failed Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Calendar Options": {
+      "main": [
+        [
+          {
+            "node": "List Upcoming Days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Upcoming Days": {
+      "main": [
+        [
+          {
+            "node": "Get Scheduled Posts per Day",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Scheduled Posts per Day": {
+      "main": [
+        [
+          {
+            "node": "Find Empty Days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Empty Days": {
+      "main": [
+        [
+          {
+            "node": "Write Post for Empty Day",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Post for Empty Day": {
+      "main": [
+        [
+          {
+            "node": "Schedule on Bluesky",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Schedule on Mastodon",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Schedule on Threads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Write Post for Empty Day",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Format": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Write Post for Empty Day",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Failed Posts": {
+      "main": [
+        [
+          {
+            "node": "Skip Already Reported Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Skip Already Reported Posts": {
+      "main": [
+        [
+          {
+            "node": "Build Failure Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Failure Alert": {
+      "main": [
+        [
+          {
+            "node": "Email Failure Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
