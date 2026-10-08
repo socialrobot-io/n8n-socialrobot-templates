@@ -114,7 +114,7 @@
     },
     {
       "parameters": {
-        "content": "## Finish in the TikTok app\nOpen the TikTok inbox notification, turn on the AI-generated content label, add sound or a product link, then post.",
+        "content": "## Finish in the TikTok app\nInstagram reels from this workflow are labeled as AI-generated automatically. In TikTok, open the inbox notification, turn on the AI-generated content label, add sound or a product link, then post.",
         "width": 320,
         "height": 272,
         "color": 3
@@ -704,7 +704,7 @@
               "id": "935a84c3-1b02-484f-8fd9-c3921a6f0fe4",
               "name": "next_step",
               "type": "string",
-              "value": "Open the TikTok inbox notification, add the AI-generated label, then post."
+              "value": "Instagram is labeled automatically. In TikTok, open the inbox notification, enable the AI-generated label, then post."
             }
           ]
         },
@@ -733,6 +733,7 @@
         "mediaType": "VIDEO",
         "binaryPropertyName": "data",
         "isReel": true,
+        "isAiGenerated": true,
         "publishMode": "NOW"
       },
       "id": "66f793f6-10ec-4203-9215-cb0bc777fd88",
