@@ -30,7 +30,7 @@ One node: `@socialrobot-io/n8n-nodes-socialrobot.socialRobot`.
 Multi-platform templates use one SocialRobot node per platform, fanned out from
 the source, so each node shows only the fields that platform supports.
 
-Note: the TikTok product-video drafts template requires `@socialrobot-io/n8n-nodes-socialrobot` version 3.1.0 or newer (new TikTok/Instagram fields).
+Note: the TikTok product-video drafts template requires `@socialrobot-io/n8n-nodes-socialrobot` version 3.1.1 or newer (new TikTok/Instagram fields).
 
 ## The templates (39)
 
