@@ -1,0 +1,280 @@
+{
+  "name": "Manage your social media calendar by chat with an AI agent and SocialRobot MCP",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Manage your social media calendar by chat\n\nTalk to your SocialRobot calendar in plain language. Ask what is scheduled this week, move a post to Friday, draft a Bluesky post, or check which Instagram posts did best last month.\n\n### How it works\n1. You send a message in n8n chat, or in Telegram with the optional nodes.\n2. The AI agent connects to SocialRobot's remote MCP server, which exposes accounts, posts, media upload, analytics and Pinterest boards as tools.\n3. It reads the calendar, creates drafts, schedules or reschedules posts, and answers in your language.\n4. Memory keeps recent messages, so you can ask follow-up questions.\n\n### Setup steps\n- [ ] Create an API key at socialrobot.io/scheduler/api-keys\n- [ ] Add it to **SocialRobot MCP** as a Bearer Auth credential (token starts with sk_)\n- [ ] Add an OpenAI credential to **OpenAI Model**\n- [ ] Open the chat and try: \"What is scheduled this week?\"\n\n### Customization\n- The agent is told to save new posts as drafts unless you ask it to publish or schedule. Edit the system message to change that.\n- For Telegram, add credentials and connect **Map Telegram Message** to the agent and the agent to **Reply in Telegram**.\n- No community node needed: this template only uses n8n's built-in MCP Client Tool.",
+        "width": 480,
+        "height": 896
+      },
+      "id": "d43b5d72-5209-4c7e-9ddc-13d954c55af3",
+      "name": "Template Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Chat with your calendar\nThe agent plans and edits posts through SocialRobot's MCP tools and remembers the conversation.",
+        "width": 880,
+        "height": 592,
+        "color": 7
+      },
+      "id": "a5f922a4-1990-4090-92b0-7582e6d31aab",
+      "name": "Section Chat Agent",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Optional Telegram chat\nConnect these nodes to the agent to chat from Telegram instead of the n8n chat.",
+        "width": 880,
+        "height": 352,
+        "color": 7
+      },
+      "id": "cc8c8e3b-880d-4083-82e9-a811747fc423",
+      "name": "Section Telegram Option",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        848
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Deleting is off\nThe MCP tool excludes `delete_post`. Remove it from the exclude list only if you want the agent to delete posts.",
+        "width": 240,
+        "height": 368,
+        "color": 3
+      },
+      "id": "df2afeed-8ed7-4f11-8d26-81e33d808c81",
+      "name": "Warning Delete Disabled",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "public": false,
+        "options": {}
+      },
+      "id": "2764c88f-b5da-42b9-8422-924e4ebd090f",
+      "name": "When Chat Message Received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        560,
+        400
+      ],
+      "webhookId": "b8636898-982c-4211-9475-23f1a1a66f5a"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are a social media manager assistant for the user's SocialRobot workspace. SocialRobot schedules posts to Instagram, Facebook, X, LinkedIn, TikTok, Pinterest, Bluesky, Mastodon and Threads.\n\nCurrent time: {{ $now.toISO() }} (time zone {{ $now.zoneName }}). Interpret dates the user mentions in this time zone.\n\nHow to work:\n- Call list_connected_accounts to find account IDs. If several accounts match, ask which one.\n- To review the calendar, call list_posts. dateFrom and dateTo must be UTC timestamps ending in Z.\n- Create new posts as DRAFT unless the user explicitly asks to publish now or schedule. Before publishing or scheduling, repeat the network, account, time and text, and wait for the user to confirm.\n- Schedule dates use ISO 8601 with a time zone offset.\n- Respect limits: X 280 characters, Bluesky 300, Threads 500, Mastodon 500, Instagram 2200, LinkedIn 3000.\n- Instagram, TikTok, Pinterest and LinkedIn posts need media. Ask for a public image or video URL and upload it with the media tools first. Pinterest also needs a board.\n- Analytics exist for Instagram, Facebook, Threads, LinkedIn, Pinterest and TikTok only. Never invent numbers.\n- Reply in the language the user writes in (for example English or Spanish). Keep answers short and list posts with date, time, network and the first words of the text.",
+          "maxIterations": 15
+        }
+      },
+      "id": "07ef9f7b-311e-4012-ac45-a638c5fc08d9",
+      "name": "Social Media Manager Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        800,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "id": "d968dc8c-309c-497a-8e36-0734476bf390",
+      "name": "OpenAI Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        752,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "id": "cc4c576a-1d33-45c0-b62a-a51167f38a38",
+      "name": "Conversation Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        896,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://socialrobot.io/api/mcp",
+        "serverTransport": "httpStreamable",
+        "authentication": "bearerAuth",
+        "include": "except",
+        "options": {},
+        "excludeTools": [
+          "delete_post"
+        ]
+      },
+      "id": "b729e378-ee2e-46d7-b3e0-e2a99951e74a",
+      "name": "SocialRobot MCP",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        1200,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "2c5d8c03-b488-4a77-82ad-3a81dd2bd50c",
+      "name": "Optional Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        1024
+      ],
+      "webhookId": "8dc34511-06be-4f4e-bf00-32d86e472102"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "07414f95-5fc0-4ece-8c24-a93cd7d79a59",
+              "name": "chatInput",
+              "type": "string",
+              "value": "={{ $json.message.text }}"
+            },
+            {
+              "id": "1e083ef2-8c5b-4559-9d87-07840e756e56",
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $json.message.chat.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "11f4b4af-513b-49a6-800c-42bfded59d97",
+      "name": "Map Telegram Message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        1024
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Map Telegram Message').item.json.sessionId }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "284389d2-2edb-4ea8-b713-8e31f321ff5d",
+      "name": "Reply in Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1104,
+        1024
+      ],
+      "webhookId": "e236e940-9ae4-405e-ad2e-e21c4d13683b"
+    }
+  ],
+  "connections": {
+    "When Chat Message Received": {
+      "main": [
+        [
+          {
+            "node": "Social Media Manager Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Social Media Manager Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Social Media Manager Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SocialRobot MCP": {
+      "ai_tool": [
+        [
+          {
+            "node": "Social Media Manager Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Optional Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Map Telegram Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
