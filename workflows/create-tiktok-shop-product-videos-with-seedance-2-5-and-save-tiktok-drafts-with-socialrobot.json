@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Create TikTok Shop product videos with Seedance 2.5\n\nTurn product photos and a few true selling points into a 15-second vertical AI product video, then send it to your TikTok inbox as a draft with SocialRobot.\n\n### How it works\n1. A form collects 0-4 optional product photos, selling points and the language (English or Spanish).\n2. Photos go to Replicate. OpenAI writes a timed script, the Seedance prompt and the caption.\n3. Seedance 2.5 renders a 9:16 720p video with sound. The workflow polls until it is done, failed or timed out.\n4. File size and duration are checked, then SocialRobot sends the video to your TikTok inbox.\n5. Any failure stops the run with a readable message.\n\n### Setup steps\n- [ ] Self-hosted n8n with the SocialRobot community node 3.1.1+ (npm latest 3.1.2) and your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Save TikTok Draft**\n- [ ] Add a Replicate API token (Bearer Auth) to the three Replicate nodes\n- [ ] Add an OpenAI credential\n- [ ] Check model, length and limits in **Set Video Settings**\n\n### Customization\n- Switch to Seedance 2.0 fast or another provider in the video section.\n- Connect **Optional Instagram Reel** to cross-post.\n- SocialRobot does not publish to YouTube.\n\nAbout $3.47 per 15-second video on Replicate at 720p (list price, Oct 2026).",
+        "content": "## Create TikTok Shop product videos with Seedance 2.5\n\nTurn product photos and a few true selling points into a 15-second vertical AI product video, then send it to your TikTok inbox as a draft with SocialRobot.\n\n### How it works\n1. A form collects 0-4 optional product photos, selling points and the language (English or Spanish).\n2. Any photos go to Replicate (skipped when none are uploaded). OpenAI writes a timed script, the Seedance prompt and the caption.\n3. Seedance 2.5 renders a 9:16 720p video with sound. The workflow polls until it is done, failed or timed out.\n4. File size and duration are checked, then SocialRobot sends the video to your TikTok inbox.\n5. Any failure stops the run with a readable message.\n\n### Setup steps\n- [ ] Self-hosted n8n with the SocialRobot community node 3.1.1+ (npm latest 3.1.2) and your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Save TikTok Draft**\n- [ ] Add a Replicate API token (Bearer Auth) to the three Replicate nodes\n- [ ] Add an OpenAI credential\n- [ ] Check model, length and limits in **Set Video Settings**\n\n### Customization\n- Switch to Seedance 2.0 fast or another provider in the video section.\n- Enable **Optional Instagram Reel** (disabled by default) and pick an account to cross-post.\n- SocialRobot does not publish to YouTube.\n\nAbout $3.47 per 15-second video on Replicate at 720p (list price, Oct 2026).",
         "width": 512,
         "height": 1008
       },
@@ -18,9 +18,9 @@
     },
     {
       "parameters": {
-        "content": "## Collect the product brief\nThe form takes 0-4 optional product photos, selling points and the language. Photos go to Replicate file storage so Seedance can use them as references.",
+        "content": "## Collect the product brief\nThe form takes 0-4 optional product photos, selling points and the language. **Has Product Photos?** sends photos to Replicate file storage so Seedance can use them as references; with no photos it skips straight to a text-only prompt.",
         "width": 976,
-        "height": 352,
+        "height": 520,
         "color": 7
       },
       "id": "20f9e8db-22ec-454b-8133-369e44212c94",
@@ -82,7 +82,7 @@
     },
     {
       "parameters": {
-        "content": "## Save the TikTok draft\nPublish Now with Post Mode Send to Inbox (Draft) puts the video in your TikTok inbox. Nothing goes public until you post it in the app. Optional: connect the Instagram Reel node.",
+        "content": "## Save the TikTok draft\nPublish Now with Post Mode Send to Inbox (Draft) puts the video in your TikTok inbox. Nothing goes public until you post it in the app. Optional: enable the Instagram Reel node (already connected, disabled by default) and pick an account.",
         "width": 400,
         "height": 800,
         "color": 7
@@ -114,7 +114,7 @@
     },
     {
       "parameters": {
-        "content": "## Finish in the TikTok app\nInstagram reels from this workflow are labeled as AI-generated automatically. The SocialRobot node does not send the TikTok AI label for inbox drafts. In TikTok, open the inbox notification, turn on the 'AI-generated content' label, add sound or a product link, then post.",
+        "content": "## Finish in the TikTok app\nIf you enable the Instagram Reel node, reels are labeled as AI-generated automatically. The SocialRobot node does not send the TikTok AI label for inbox drafts. In TikTok, open the inbox notification, turn on the 'AI-generated content' label, add sound or a product link, then post.",
         "width": 320,
         "height": 272,
         "color": 3
@@ -340,7 +340,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Replicate returns one file URL per photo. Seedance reads them as [Image1], [Image2], ...\nconst uploads = $('Upload Photo to Replicate').all();\nconst urls = uploads.map(item => item.json?.urls?.get).filter(Boolean);\nreturn [{ json: { photo_urls: urls, photo_count: urls.length } }];"
+        "jsCode": "// Replicate returns one file URL per photo. Seedance reads them as [Image1], [Image2], ...\n// Runs with zero photos too: 'Has Product Photos?' skips the upload branch, so the upload node may not have run.\nlet uploads = [];\ntry {\n  if ($('Upload Photo to Replicate').isExecuted) uploads = $('Upload Photo to Replicate').all();\n} catch (e) {\n  uploads = [];\n}\nconst urls = uploads.map(item => item.json?.urls?.get).filter(Boolean);\nreturn [{ json: { photo_urls: urls, photo_count: urls.length } }];"
       },
       "id": "4bb433ef-3966-4c27-a208-787b936430e3",
       "name": "Collect Photo URLs",
@@ -755,7 +755,9 @@
       "position": [
         3648,
         656
-      ]
+      ],
+      "disabled": true,
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -799,6 +801,39 @@
         3392,
         928
       ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "befb5380-c39d-4f1c-a0db-47a849d58756",
+              "leftValue": "={{ Object.values($('Product Video Form').first().binary || {}).filter(b => String(b.mimeType || '').startsWith('image/')).length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ce97dac6-42f7-4e98-a420-5777c4f2865c",
+      "name": "Has Product Photos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        944,
+        560
+      ]
     }
   ],
   "connections": {
@@ -809,11 +844,6 @@
             "node": "Set Video Settings",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "Collect Photo URLs",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -822,7 +852,7 @@
       "main": [
         [
           {
-            "node": "Prepare Product Photos",
+            "node": "Has Product Photos?",
             "type": "main",
             "index": 0
           }
@@ -842,7 +872,13 @@
     },
     "Upload Photo to Replicate": {
       "main": [
-        []
+        [
+          {
+            "node": "Collect Photo URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Collect Photo URLs": {
@@ -851,17 +887,6 @@
           {
             "node": "Write Script and Prompt",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Write Script and Prompt",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -1005,6 +1030,11 @@
             "node": "Save TikTok Draft",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Optional Instagram Reel",
+            "type": "main",
+            "index": 0
           }
         ],
         [
@@ -1044,6 +1074,35 @@
           }
         ]
       ]
+    },
+    "Has Product Photos?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Product Photos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Collect Photo URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Write Script and Prompt",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "pinData": {},
@@ -1053,5 +1112,30 @@
   "meta": {
     "templateCredsSetupCompleted": false
   },
-  "tags": []
+  "tags": [
+    {
+      "name": "SocialRobot"
+    },
+    {
+      "name": "TikTok"
+    },
+    {
+      "name": "TikTok Shop"
+    },
+    {
+      "name": "Seedance"
+    },
+    {
+      "name": "AI Video"
+    },
+    {
+      "name": "Replicate"
+    },
+    {
+      "name": "OpenAI"
+    },
+    {
+      "name": "Instagram Reels"
+    }
+  ]
 }
