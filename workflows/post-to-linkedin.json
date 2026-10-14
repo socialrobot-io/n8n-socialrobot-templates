@@ -7,7 +7,7 @@
         "width": 480,
         "height": 566
       },
-      "id": "f24695f9-e898-4848-8097-48aef6e63ae3",
+      "id": "b0ab4bea-18db-4710-85b2-46998ce3ca55",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "2d16c1ea-1171-40b9-8a15-c24053fe9994",
+      "id": "2f20766e-199b-4395-94ba-0b8bb227b19e",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "0041e040-0328-4b63-a356-1798c1dc7009",
+      "id": "78e4195b-3c1a-444f-bd48-ec53971680d6",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "publishMode": "NOW",
         "caption": "We just automated our social media publishing end to end. What used to take an hour a day now takes one workflow. How much time do you spend scheduling posts?"
       },
-      "id": "a8ae2e66-a811-4299-8c54-d9e252e503fc",
+      "id": "ca188fa7-ef1a-4f46-a675-834706825046",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -88,9 +88,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "d0cae00b-e5a4-4952-ac5d-0512f5804c14",
+  "versionId": "e6f75374-8083-4947-be9d-f59114cfcc8f",
   "meta": {
-    "instanceId": "d1db3fc3-acb5-4b82-9eea-0d3d911c3d16",
+    "instanceId": "f9f04355-6f53-4e70-8708-3cab021d3a4d",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

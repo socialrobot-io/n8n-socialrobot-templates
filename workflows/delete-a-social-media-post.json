@@ -7,7 +7,7 @@
         "width": 480,
         "height": 502
       },
-      "id": "dc3706f7-8d8b-480d-b402-df020ac0c5e1",
+      "id": "fb12d0b4-9a16-4c1b-91bf-fb16bf810a83",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "cef21f18-1ec6-4787-8944-2284fa89361f",
+      "id": "71e0cec3-5bf3-4f42-a648-ff0a3b752780",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "f10d7ad5-4c0b-4458-9371-b3d55e374296",
+      "id": "449d918a-66fc-4cca-8ff0-e073f05d5aef",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -49,7 +49,7 @@
         "operation": "delete",
         "postId": "={{ $json.id }}"
       },
-      "id": "c77b4b7d-a8b5-4271-8879-ec24366e6c1a",
+      "id": "c0ddf861-2fcc-453d-a721-95ed2b74a1a9",
       "name": "Delete Post",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -82,9 +82,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "40936952-61db-4e7d-8a89-963d59dcae2b",
+  "versionId": "7315f423-326c-43dd-96be-ec21abbbe6ff",
   "meta": {
-    "instanceId": "d47c22f1-4d72-40b2-bac2-4c97b7018971",
+    "instanceId": "e62d4dd6-b506-423b-9d8b-8123b100cc12",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

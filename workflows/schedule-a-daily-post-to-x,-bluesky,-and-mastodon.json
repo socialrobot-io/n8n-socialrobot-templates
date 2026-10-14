@@ -7,7 +7,7 @@
         "width": 480,
         "height": 568
       },
-      "id": "d084c88a-4720-4df5-aa3f-cad50977cdec",
+      "id": "7dfa7e9b-ca96-4b96-b2db-5e4b0f1d19f1",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "301a45c5-f8a2-48bb-ad25-9dcd8ec7b14a",
+      "id": "ce3de82b-293c-47a3-aecf-212d21e5d641",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "03d736f9-6fb0-4fa9-9a9c-914e6ee7404f",
+      "id": "e55534e6-e174-47a7-a023-12447d363bae",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "19ba48ef-2450-4609-8a32-119ec0b2d205",
+      "id": "6b82cfc3-7800-428d-ba04-3096e2dc5257",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "08f63679-cf1c-4ef7-8146-b27cab88a008",
+      "id": "32e64160-b966-46c6-b02d-8772691aa477",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -96,7 +96,7 @@
         "publishMode": "NOW",
         "caption": "Your daily post"
       },
-      "id": "9ccf47ac-95be-4aab-b59a-ba22558c6d6b",
+      "id": "0e826736-f446-4b91-b3b7-1fd8334e9f4e",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -123,7 +123,7 @@
         "publishMode": "NOW",
         "caption": "Your daily post"
       },
-      "id": "4e980215-49b9-4614-b046-3bc89260e97b",
+      "id": "50a9efe4-537d-4df6-b508-1af9c9f93b58",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -150,7 +150,7 @@
         "publishMode": "NOW",
         "caption": "Your daily post"
       },
-      "id": "584e8c98-34f6-47ad-b9ae-ef5ac0dd368d",
+      "id": "485b02cc-5d51-4465-b77b-a2029d80dc97",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -193,9 +193,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "4a02e3e5-733c-41fa-bf00-78c4b73592b9",
+  "versionId": "f2705aaa-59bf-4a13-a591-a697f3a0b9e2",
   "meta": {
-    "instanceId": "ae4f275c-c29d-4777-a4a1-59aa383ff010",
+    "instanceId": "fe3614b3-c9d6-42df-8eb4-fb084150d01f",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}
