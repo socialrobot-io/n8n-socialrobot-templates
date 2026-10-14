@@ -7,7 +7,7 @@
         "width": 480,
         "height": 610
       },
-      "id": "9d191407-6234-4bbf-b2c0-147fcbe3e34d",
+      "id": "63584ae6-8624-44ad-947f-c4c3c7cc089a",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "d0f9da5f-6033-4314-945c-e4d34fcdd385",
+      "id": "fdcc2148-a12f-4eeb-a127-c7887d3b4b83",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "8923b98d-962d-4c09-86b6-5d8cb02f480e",
+      "id": "4e6254e5-816d-4715-af98-1e771bebb260",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "30d21b84-e55a-41dc-83a4-8b961e44711b",
+      "id": "7d4a6629-821c-4bf9-a674-5b2a2c861f15",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -75,7 +75,7 @@
           ]
         }
       },
-      "id": "a9e0b56e-f712-4efe-83ce-d71a8f32fbeb",
+      "id": "bbca3e9c-008f-4b70-aa24-d2edfcdcbc08",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -90,7 +90,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "08ec4497-cac6-4582-baf5-350db04d804e",
+              "id": "05c87186-b2b0-477b-8e06-581aebc73ac2",
               "name": "theme",
               "type": "string",
               "value": "indie hacking and automation"
@@ -98,7 +98,7 @@
           ]
         }
       },
-      "id": "39665ad3-ddb8-44fe-a717-bdd265e129c2",
+      "id": "634d0a79-a5b5-4db5-98f9-39a9f71f8d70",
       "name": "Set post theme",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -116,7 +116,7 @@
         "promptType": "define",
         "hasOutputParser": true
       },
-      "id": "5cb6b1c5-b015-456b-82aa-99dc18e57036",
+      "id": "11828a06-6b6a-4346-b7df-56f267ff39b2",
       "name": "AI Daily Post Generator",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
@@ -138,7 +138,7 @@
           "responseFormat": "text"
         }
       },
-      "id": "27564170-ec15-4599-b1ee-43a60d54f139",
+      "id": "6ad19af9-9fcf-48af-8b2d-26868012ca67",
       "name": "OpenAI Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
@@ -158,7 +158,7 @@
         "schemaType": "manual",
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"bluesky\": {\n      \"type\": \"string\"\n    },\n    \"mastodon\": {\n      \"type\": \"string\"\n    }\n  }\n}"
       },
-      "id": "9c7e5be2-616f-495d-901f-1d8b46da49b5",
+      "id": "91361e8e-a525-448b-8515-989f7c7c4f2e",
       "name": "Content Schema",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
@@ -179,7 +179,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.bluesky }}"
       },
-      "id": "ae0d8d14-9d84-4a4a-9b0e-82d86a226837",
+      "id": "a99c259e-e752-422f-9ee3-44543c4825b5",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -206,7 +206,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.output.mastodon }}"
       },
-      "id": "2bf4eee4-54c8-46e3-81e2-9e5f7190dfaa",
+      "id": "f8051a69-715b-4e3c-ad87-e4572d4eed19",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -288,9 +288,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "28704d31-f286-4fa9-a4b5-dff97dce56c7",
+  "versionId": "210614da-7926-452b-9a2f-b4e48ede09f5",
   "meta": {
-    "instanceId": "dbad4294-24c8-4c8d-abea-991a849b7b0f",
+    "instanceId": "c333d52a-237d-4ce1-b2d5-92851e39e0c3",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

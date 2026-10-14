@@ -1195,13 +1195,12 @@ def main():
         with open(path) as f:
             json.load(f)
 
-    # remove stale template files that are no longer generated
-    generated = {fn for fn, _ in written}
-    for existing in os.listdir(OUT_DIR):
-        if existing.endswith(".json") and existing not in generated:
-            os.remove(os.path.join(OUT_DIR, existing))
+    # IMPORTANT: Do not delete unrelated workflow files.
+    # This repository includes hand-authored templates alongside generated ones.
+    # To avoid accidental data loss, we no longer remove non-generated JSON files.
+    # If you need to clean up stale generated outputs, do it manually by filename.
 
-    print(f"Generated {len(written)} annotated templates in {OUT_DIR} (removed stale files):")
+    print(f"Generated {len(written)} annotated templates in {OUT_DIR}:")
     for fn, name in sorted(written):
         print(f"  {fn}  <-  {name}")
 

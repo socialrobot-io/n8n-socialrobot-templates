@@ -7,7 +7,7 @@
         "width": 480,
         "height": 568
       },
-      "id": "382d4a70-60f1-4886-8a39-4f56a17252d2",
+      "id": "ba43542a-b921-435c-ab20-623bd9b338fd",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "04e34602-501f-42c8-9c2e-5472a8117ca2",
+      "id": "e613559d-e15e-455c-a0f3-49482918cb8b",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "9f32327e-37c7-41e0-bdeb-effd150d55ac",
+      "id": "5c2e5e10-0d4f-4ddd-8fb3-036fa7ce62cb",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "d279deff-3aac-4761-a079-c393dd533a89",
+      "id": "b8b17305-83aa-4d2c-88aa-dc22fa9d8930",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -71,7 +71,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "283157c4-71a1-4a74-9b81-2c10ec0630e7",
+      "id": "b75c82e9-803a-499c-a2aa-3e47da4883aa",
       "name": "Sticky Note4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -91,7 +91,7 @@
           ]
         }
       },
-      "id": "06cd337f-e685-4285-b3a8-6bb860c3eb63",
+      "id": "3051cdeb-e144-40e2-8039-4f1bc5a53ca5",
       "name": "Every Day",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
@@ -104,7 +104,7 @@
       "parameters": {
         "url": "https://example.com/blog/feed.xml"
       },
-      "id": "df73c688-0fde-4c8c-8e49-42efc4195df3",
+      "id": "cb88336f-7865-4b4f-9b54-6b910cd6578c",
       "name": "Fetch Blog Feed",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
@@ -125,7 +125,7 @@
         "publishMode": "NOW",
         "caption": "New on the blog: {{ $json.title }} {{ $json.link }}"
       },
-      "id": "538142a8-1a07-4f74-8bd2-971e3b9f2399",
+      "id": "5ca96675-e4c9-4784-b063-f4b68ed49405",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -152,7 +152,7 @@
         "publishMode": "NOW",
         "caption": "New on the blog: {{ $json.title }} {{ $json.link }}"
       },
-      "id": "b7fe8f34-976e-4dda-bd7e-213592d51251",
+      "id": "81494490-b8d0-4a50-b6cd-67ae390f4d08",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -179,7 +179,7 @@
         "publishMode": "NOW",
         "caption": "New on the blog: {{ $json.title }} {{ $json.link }}"
       },
-      "id": "2e77d977-6a3d-4a39-86a5-de90ae761b74",
+      "id": "6fe5f13f-34b8-489a-8096-aa43cc7f3d63",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -233,9 +233,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "6aeab4bc-23b7-4794-9e52-2394c7d3d437",
+  "versionId": "2c2cc2c6-003f-4c5d-b1f7-766b63830be5",
   "meta": {
-    "instanceId": "9241bafa-1d60-4901-855c-90cc49abd731",
+    "instanceId": "04be46bd-d0ae-4b34-bda3-b8f76f2d3300",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

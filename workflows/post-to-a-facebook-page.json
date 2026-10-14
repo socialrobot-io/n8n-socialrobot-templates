@@ -7,7 +7,7 @@
         "width": 480,
         "height": 568
       },
-      "id": "170731f3-f60b-4999-bb04-60fc5c023363",
+      "id": "3e2988cb-b205-47fe-9894-2bb7c7ffb3a8",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "82922a7e-e4c8-4bc5-948e-801ba6cf1e2e",
+      "id": "a70d3957-34df-4582-b610-4e8a67633f71",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -34,7 +34,7 @@
     },
     {
       "parameters": {},
-      "id": "fd616d59-2a56-4779-9475-ae60bc1533d5",
+      "id": "754ff527-3610-44bf-af25-62ffe8913dc2",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -62,7 +62,7 @@
           }
         ]
       },
-      "id": "09dc3ce9-feaa-4343-bff8-bc01b05fc1a8",
+      "id": "4272cacf-8786-4074-9387-d789ec3fdfec",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -95,9 +95,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "feb825bb-2fd7-4bdf-b08d-142414a79f28",
+  "versionId": "5ff14762-522e-40b0-90cd-947d46f13aa2",
   "meta": {
-    "instanceId": "b9598bd1-2153-4d11-8b63-f1a0c81d0277",
+    "instanceId": "779ee69f-1802-484a-91be-9dbc6f0c263d",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

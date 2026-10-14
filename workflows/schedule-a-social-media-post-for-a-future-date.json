@@ -7,7 +7,7 @@
         "width": 480,
         "height": 570
       },
-      "id": "70d54a65-2059-40f1-8e1d-a65112a0cf11",
+      "id": "d4f03f82-8584-4709-9823-c6e672674bd7",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "99572c48-1e7d-46ec-9c13-b1c926794d46",
+      "id": "c6f20554-fecb-4615-af9b-29e017d59012",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "dd0d7839-de64-4955-af42-2aac09f5bb9b",
+      "id": "d5962d4c-a1b5-4501-af87-e0af376b91ea",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "7e698a97-9e10-4a50-b30b-4615dc41116c",
+      "id": "6fd827fc-2264-4bde-88f6-67bd5ae6434e",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -72,7 +72,7 @@
         "scheduleDate": "2026-08-20T09:00:00-03:00",
         "caption": "Scheduled ahead of time: this post went out without touching a button."
       },
-      "id": "4766a56f-4680-4267-8223-b2bd11871ecf",
+      "id": "820796ef-67d8-45e3-95fb-e5bb32dd6c24",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -100,7 +100,7 @@
         "scheduleDate": "2026-08-20T09:00:00-03:00",
         "caption": "Scheduled ahead of time: this post went out without touching a button."
       },
-      "id": "0ee1e0fa-0dbe-4d03-96a8-571e5c5325d1",
+      "id": "dc11861e-7ec4-4c44-8330-19204f8cc052",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -138,9 +138,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "1dece966-9c3e-449a-ba0a-6cbb83ec1394",
+  "versionId": "f2a0939a-106f-492c-a342-8205aab2ea35",
   "meta": {
-    "instanceId": "8b21483f-38f6-45f4-b1c4-abc86733bfaa",
+    "instanceId": "583ea932-6e42-459d-82db-a5b7eee58ff8",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

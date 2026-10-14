@@ -109,6 +109,10 @@ def describe(wf):
     parts.append("**How it works**")
     for i, item in enumerate(how_items(how_text), 1):
         parts.append(f"{i}. {item}")
+    # Special notes for the Seedance 2.5 TikTok Shop template
+    if wf.get("name") == "Create TikTok Shop product videos with Seedance 2.5 and save them as TikTok drafts via SocialRobot":
+        parts.append("6. Photos are optional: upload zero to four product photos. With none, the video is generated from the text brief only.")
+        parts.append("7. The workflow polls Replicate every 20 seconds for up to 30 minutes until the job succeeds, fails, or times out.")
     parts.append("")
 
     parts.append("**How to set up**")

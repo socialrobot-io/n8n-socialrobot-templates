@@ -7,7 +7,7 @@
         "width": 480,
         "height": 674
       },
-      "id": "07bce0b1-c281-43e1-8210-2004884c17a4",
+      "id": "eb032362-b88b-4aae-9fa9-47b7536d9cbf",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "1a18c0ed-573b-48e4-bcbb-594d6d5682e1",
+      "id": "fe1d8ef3-11c5-4130-9180-eba947677e9a",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "3efe7cd5-daa4-4fb6-8d50-4ea0bfd1f467",
+      "id": "88e8a0cf-3529-477d-8ef0-9b8142ae56c0",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "ce4ec930-d516-46b8-b7ed-803b100e211d",
+      "id": "9829512a-7078-4284-8a57-772afb5b2b32",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -66,7 +66,7 @@
     },
     {
       "parameters": {},
-      "id": "a59764e6-4e2d-482a-8829-020e4bd99596",
+      "id": "bb1127a2-6d86-44e6-952a-a3d89656fa54",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -81,7 +81,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "51362ed0-f57a-41b1-87ed-d5c490b1d564",
+              "id": "f87c2dd1-44f5-442a-8542-9c8602b244fa",
               "name": "imagePrompt",
               "type": "string",
               "value": "A minimalist flat-lay of a laptop, coffee, and notebook in soft violet morning light"
@@ -89,7 +89,7 @@
           ]
         }
       },
-      "id": "59cde560-1b17-4098-b522-564ead5208e2",
+      "id": "c49b49ba-ff21-421e-8784-09fa874264a6",
       "name": "Set image idea",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -115,7 +115,7 @@
           }
         }
       },
-      "id": "f3628e96-b875-4f73-bbd2-e2a341438cb9",
+      "id": "8e47d4d0-cbf5-467f-8eab-f47dd786327d",
       "name": "Generate Image (gpt-image-2)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -136,7 +136,7 @@
         "language": "javaScript",
         "jsCode": "const items = [];\nfor (const item of $input.all()) {\n  const b64 = item.json.data?.[0]?.b64_json;\n  if (!b64) throw new Error('No image data in response');\n  const prompt = $('Set image idea').first().json.imagePrompt || 'AI-generated artwork';\n  const caption = `${prompt}.\n\nWhat do you think? #aiart #designinspo #smallbusiness`;\n  const ptitle = prompt.length > 95 ? prompt.slice(0, 95).trimEnd() : prompt;\n  const pdesc = `${prompt}. Created with gpt-image-2 and published with SocialRobot. Follow for more visual ideas.`;\n  items.push({\n    json: { instagram: caption, pinterest_title: ptitle, pinterest_description: pdesc },\n    binary: { data: await this.helpers.prepareBinaryData(\n      Buffer.from(b64, 'base64'), 'generated.png', 'image/png') },\n  });\n}\nreturn items;"
       },
-      "id": "7d0c2528-0ca6-4d51-b898-a156218178ff",
+      "id": "d7232e47-fc6c-4722-b6d5-3c6b1744556f",
       "name": "Extract Image Binary",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -160,7 +160,7 @@
         "mediaType": "IMAGE",
         "binaryPropertyName": "data"
       },
-      "id": "6c799f16-bd8b-43aa-a3da-1883fc5b1adc",
+      "id": "2dcd7361-6641-4a36-8e7a-21b65380b7c0",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -195,7 +195,7 @@
           }
         ]
       },
-      "id": "eec82ce1-1b20-4a3a-9e7b-2d587ccd92ac",
+      "id": "d23f7909-a4d1-422c-a4a5-f25e61e54b05",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -266,9 +266,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "7b4191d1-968b-4597-ab8b-d7521814cb16",
+  "versionId": "430abf8f-d747-47f9-9fad-912d115bf93c",
   "meta": {
-    "instanceId": "e840f2e1-ecf2-4dfd-9b25-7474634e8c93",
+    "instanceId": "6a86d390-5b5b-486c-87d5-ce2b7b434cbf",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

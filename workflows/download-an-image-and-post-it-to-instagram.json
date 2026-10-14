@@ -7,7 +7,7 @@
         "width": 480,
         "height": 568
       },
-      "id": "2b676079-bad3-4a4d-a162-2b20ad25ae40",
+      "id": "bb481bed-06d9-43fc-b78a-5fb114b0b40d",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "d3d562bc-b923-420a-9199-5dc9f4cfa5a4",
+      "id": "22f1c73b-d122-449a-9b76-cf1f8d96c5ae",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "248d154e-1e8f-4dd0-8176-ad7502decf11",
+      "id": "45d8f6d8-8b9a-4a2f-8a76-3f9bc6b082e7",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "839231b5-3753-4a40-be07-3521e7ecd9f9",
+      "id": "bc5d0aac-87b7-411f-9ab7-f333ac57f3c6",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -66,7 +66,7 @@
         "responseFormat": "file",
         "options": {}
       },
-      "id": "8dd0a6b3-a6a0-4091-9e1c-fc1af629424c",
+      "id": "30c59c55-3eb8-4dfc-9b44-9c6345a5596a",
       "name": "Download image",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -90,7 +90,7 @@
         "mediaType": "IMAGE",
         "binaryPropertyName": "data"
       },
-      "id": "6d7b9535-cd87-42dd-be08-716021589aea",
+      "id": "b21d959b-fde4-46c1-b23f-2c41be65e2a0",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -134,9 +134,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "ea44d585-18dd-49b3-95cb-563f73f92ae5",
+  "versionId": "9ee2ed1b-918f-4941-beb3-181c6d39b6e5",
   "meta": {
-    "instanceId": "7f8ee28f-53fb-44f4-b0d7-ac41d2c30c53",
+    "instanceId": "8328b316-a9c9-43fd-b7fb-3939ed3b58ad",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

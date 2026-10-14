@@ -7,7 +7,7 @@
         "width": 480,
         "height": 568
       },
-      "id": "0df70e0f-c349-40a2-824e-758d9c673b3d",
+      "id": "2e3970cd-e420-4ecf-af5b-47a580e2e21c",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "831151bb-a164-46e0-8911-c714641cbab4",
+      "id": "110ffe6d-fb1b-4f62-af7b-dbf664d91a48",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "eee2c9c5-9ff9-4b01-9442-a7e3e6d88601",
+      "id": "b986028e-11a0-4b28-a697-72b193108c02",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {},
-      "id": "f3debc36-5db9-4a9c-8470-0df0129a9908",
+      "id": "cffddd91-9b4c-43c1-b26d-4bc7d3058fb6",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -65,7 +65,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "5c27961c-ee4b-4790-bb38-bcfd4a8f0fe2",
+              "id": "9f214110-cafc-4d3c-a3eb-e12009a0b3d9",
               "name": "caption",
               "type": "string",
               "value": "One post, every network. Type your text here."
@@ -73,7 +73,7 @@
           ]
         }
       },
-      "id": "6409a7c7-d843-44c1-979c-cc741710d6c9",
+      "id": "339f01d9-034a-467a-af33-bfa1694f5759",
       "name": "Set post text",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -94,7 +94,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "eab26be1-a946-4328-818d-cee9909d90ef",
+      "id": "67f7702c-8409-42c0-b7a3-63c322d98356",
       "name": "Publish to X (Twitter)",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -121,7 +121,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "0432988b-0f77-4445-9c2a-a5c98fbb4e38",
+      "id": "02459812-c5ea-493d-b908-1ce43d9ca952",
       "name": "Publish to Bluesky",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -148,7 +148,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "57dbb0b9-530d-4f7c-9eac-2f265e669c45",
+      "id": "86ba99ab-03ba-4028-ac77-a646d6988d5c",
       "name": "Publish to Mastodon",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -175,7 +175,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "91e05ce8-e95f-495f-918b-fa16b450e3d0",
+      "id": "374d541a-8e1e-4a8a-8028-fbaffcf7419f",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -202,7 +202,7 @@
         "publishMode": "NOW",
         "caption": "={{ $json.caption }}"
       },
-      "id": "4dc55526-b3ea-4b58-96ae-2a3d728e55fb",
+      "id": "d988fe9d-7e66-42f2-b232-d1bc7aacccd8",
       "name": "Publish to LinkedIn",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -266,9 +266,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "272ec3fc-3716-479d-8b94-bc94da04ff25",
+  "versionId": "7b88b7fd-3c6e-4027-a3ed-d745d62921dd",
   "meta": {
-    "instanceId": "a92fa138-7175-42a2-8061-804029e43c2c",
+    "instanceId": "5c35d7f4-bd70-486a-800d-c9fc893cf0cb",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

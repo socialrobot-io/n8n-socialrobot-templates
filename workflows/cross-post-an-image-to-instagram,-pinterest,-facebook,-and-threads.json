@@ -7,7 +7,7 @@
         "width": 480,
         "height": 590
       },
-      "id": "b10aa315-8881-4c39-96d4-6cb0aff4a798",
+      "id": "613c716c-ceef-470e-b878-c9a1903e7c9e",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -23,7 +23,7 @@
         "height": 152,
         "color": 7
       },
-      "id": "437a1444-1196-4b3c-959a-bdc1d2592a5a",
+      "id": "cc7e4c1a-7535-4513-a557-2f011c3f5111",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -39,7 +39,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "a5e158b4-3d2b-4b57-a096-a48b4c036113",
+      "id": "d270acc9-92ba-4584-938c-b9be689ab596",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -55,7 +55,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "681bafa4-f6b0-428c-861b-3c83981a2606",
+      "id": "5a982e28-b593-4e23-b45a-b441e464053a",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -71,7 +71,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "72ab2bff-5a9f-4c82-a07f-557dd7895baa",
+      "id": "e2b5a2a8-57cc-48c4-b89c-8285296bd52f",
       "name": "Sticky Note4",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -87,7 +87,7 @@
         "height": 130,
         "color": 7
       },
-      "id": "7f544e77-6e98-491c-8c20-279cf7d41f90",
+      "id": "d85a5a65-1f2f-4785-9c4d-11341d2f5cc7",
       "name": "Sticky Note5",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -98,7 +98,7 @@
     },
     {
       "parameters": {},
-      "id": "ed7af130-5a04-476c-97d0-b7692a8a0cbb",
+      "id": "401f0e9f-b6db-420d-82d8-e356748dad47",
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -113,13 +113,13 @@
         "assignments": {
           "assignments": [
             {
-              "id": "3cae9155-c1a9-470d-86ff-aa47abcec946",
+              "id": "3bb4ebb1-1abe-4a46-ba8a-a2103b292261",
               "name": "caption",
               "type": "string",
               "value": "A caption that works across visual platforms."
             },
             {
-              "id": "120dd7f0-3937-4391-872c-c1a402fbac99",
+              "id": "c735c73b-b32e-40b7-9d27-9b0821ecb425",
               "name": "imageUrl",
               "type": "string",
               "value": "https://placehold.co/1200x630/6e3edf/ffffff.png?text=Replace+with+your+image"
@@ -127,7 +127,7 @@
           ]
         }
       },
-      "id": "52dc4f21-e378-4915-80b1-6d67d84008b6",
+      "id": "a2dc412c-e452-4883-b338-a82cbfdf5653",
       "name": "Set post image",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -151,7 +151,7 @@
         "mediaType": "IMAGE",
         "mediaUrl": "={{ $json.imageUrl }}"
       },
-      "id": "730e062e-17bc-438b-8752-7d45766e9055",
+      "id": "e2078c03-83f2-40e4-b7e8-accd403ae76a",
       "name": "Publish to Instagram",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -186,7 +186,7 @@
           }
         ]
       },
-      "id": "b4a15cb5-4584-4e95-bc9b-7333e95ebb95",
+      "id": "68452a1e-f714-4a70-895d-4587a063fe5e",
       "name": "Publish to Pinterest",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -220,7 +220,7 @@
           }
         ]
       },
-      "id": "1783f62c-3790-43fe-a3d1-649e028d5083",
+      "id": "fe98a537-e298-420b-9810-0bc4d132d136",
       "name": "Publish to Facebook",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -254,7 +254,7 @@
           }
         ]
       },
-      "id": "2952dd43-04e1-41b8-9805-9b9c039e4040",
+      "id": "b2f67575-f8bc-4234-8620-d98235fc98f3",
       "name": "Publish to Threads",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
       "typeVersion": 1,
@@ -313,9 +313,9 @@
     "executionOrder": "v1"
   },
   "active": false,
-  "versionId": "adb4ad75-6370-460c-bd18-e4b70bfbf81e",
+  "versionId": "65ee5571-df2f-4a5b-b7e2-35e5eacc2937",
   "meta": {
-    "instanceId": "deb0638f-f890-495f-b452-dd982e73dc03",
+    "instanceId": "21574549-70dc-41ec-8c2a-cb233b39e66f",
     "templateCredsSetupCompleted": false
   },
   "pinData": {}

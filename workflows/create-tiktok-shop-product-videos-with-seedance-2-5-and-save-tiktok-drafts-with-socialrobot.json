@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Create TikTok Shop product videos with Seedance 2.5\n\nTurn product photos and a few true selling points into a 15-second vertical AI product video, then send it to your TikTok inbox as a draft with SocialRobot.\n\n### How it works\n1. A form collects 1-4 product photos, selling points and the language (English or Spanish).\n2. Photos go to Replicate. OpenAI writes a timed script, the Seedance prompt and the caption.\n3. Seedance 2.5 renders a 9:16 720p video with sound. The workflow polls until it is done, failed or timed out.\n4. File size and duration are checked, then SocialRobot sends the video to your TikTok inbox.\n5. Any failure stops the run with a readable message.\n\n### Setup steps\n- [ ] Self-hosted n8n with the SocialRobot community node 3.1+ and your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Save TikTok Draft**\n- [ ] Add a Replicate API token (Bearer Auth) to the three Replicate nodes\n- [ ] Add an OpenAI credential\n- [ ] Check model, length and limits in **Set Video Settings**\n\n### Customization\n- Switch to Seedance 2.0 fast or another provider in the video section.\n- Connect **Optional Instagram Reel** to cross-post.\n- SocialRobot does not publish to YouTube.\n\nAbout $3.47 per 15-second video on Replicate at 720p (list price, Oct 2026).",
+        "content": "## Create TikTok Shop product videos with Seedance 2.5\n\nTurn product photos and a few true selling points into a 15-second vertical AI product video, then send it to your TikTok inbox as a draft with SocialRobot.\n\n### How it works\n1. A form collects 0-4 optional product photos, selling points and the language (English or Spanish).\n2. Photos go to Replicate. OpenAI writes a timed script, the Seedance prompt and the caption.\n3. Seedance 2.5 renders a 9:16 720p video with sound. The workflow polls until it is done, failed or timed out.\n4. File size and duration are checked, then SocialRobot sends the video to your TikTok inbox.\n5. Any failure stops the run with a readable message.\n\n### Setup steps\n- [ ] Self-hosted n8n with the SocialRobot community node 3.1.1+ (npm latest 3.1.2) and your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Save TikTok Draft**\n- [ ] Add a Replicate API token (Bearer Auth) to the three Replicate nodes\n- [ ] Add an OpenAI credential\n- [ ] Check model, length and limits in **Set Video Settings**\n\n### Customization\n- Switch to Seedance 2.0 fast or another provider in the video section.\n- Connect **Optional Instagram Reel** to cross-post.\n- SocialRobot does not publish to YouTube.\n\nAbout $3.47 per 15-second video on Replicate at 720p (list price, Oct 2026).",
         "width": 512,
         "height": 1008
       },
@@ -18,7 +18,7 @@
     },
     {
       "parameters": {
-        "content": "## Collect the product brief\nThe form takes 1-4 product photos, selling points and the language. Photos go to Replicate file storage so Seedance can use them as references.",
+        "content": "## Collect the product brief\nThe form takes 0-4 optional product photos, selling points and the language. Photos go to Replicate file storage so Seedance can use them as references.",
         "width": 976,
         "height": 352,
         "color": 7
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {
-        "content": "## Generate with Seedance 2.5\nSubmits the Replicate job, checks every 20 s and gives up after 15 min. For Seedance 2.0 fast change `model` in Set Video Settings. For fal, WaveSpeed or BytePlus swap the URLs (see description).",
+        "content": "## Generate with Seedance 2.5\nSubmits the Replicate job, checks every 20 s and gives up after 30 min. For Seedance 2.0 fast change `model` in Set Video Settings. For fal, WaveSpeed or BytePlus swap the URLs (see description).",
         "width": 784,
         "height": 352,
         "color": 7
@@ -114,7 +114,7 @@
     },
     {
       "parameters": {
-        "content": "## Finish in the TikTok app\nInstagram reels from this workflow are labeled as AI-generated automatically. In TikTok, open the inbox notification, turn on the AI-generated content label, add sound or a product link, then post.",
+        "content": "## Finish in the TikTok app\nInstagram reels from this workflow are labeled as AI-generated automatically. The SocialRobot node does not send the TikTok AI label for inbox drafts. In TikTok, open the inbox notification, turn on the 'AI-generated content' label, add sound or a product link, then post.",
         "width": 320,
         "height": 272,
         "color": 3
@@ -131,7 +131,7 @@
     {
       "parameters": {
         "formTitle": "Create a TikTok Shop product video",
-        "formDescription": "Upload 1-4 clear product photos and list a few true selling points. The finished 15-second video is sent to your TikTok inbox as a draft.",
+        "formDescription": "Upload up to 4 clear product photos (optional) and list a few true selling points. The finished 15-second video is sent to your TikTok inbox as a draft.",
         "formFields": {
           "values": [
             {
@@ -169,7 +169,7 @@
               "fieldType": "file",
               "multipleFiles": true,
               "acceptFileTypes": ".jpg, .jpeg, .png, .webp",
-              "requiredField": true
+              "requiredField": false
             }
           ]
         },
@@ -249,7 +249,7 @@
               "id": "839204dd-393c-465b-bd5a-27a8bf48b5f0",
               "name": "timeout_minutes",
               "type": "number",
-              "value": 15
+              "value": 30
             },
             {
               "id": "6ebec8f9-abcb-4ed0-a78b-b76dc2008842",
@@ -296,7 +296,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// One item per product photo. The form stores each upload in its own binary field.\nconst s = $('Set Video Settings').first().json;\nconst form = $('Product Video Form').first();\nconst photos = Object.values(form.binary || {}).filter(b => String(b.mimeType || '').startsWith('image/'));\nif (!photos.length) throw new Error('Add at least one product photo (JPG, PNG or WebP).');\nreturn photos.slice(0, Number(s.max_photos) || 4).map((photo, i) => ({\n  json: { photo_number: i + 1, file_name: photo.fileName },\n  binary: { photo },\n}));"
+        "jsCode": "// One item per product photo. The form stores each upload in its own binary field.\nconst s = $('Set Video Settings').first().json;\nconst form = $('Product Video Form').first();\nconst photos = Object.values(form.binary || {}).filter(b => String(b.mimeType || '').startsWith('image/'));\nconst max = Number(s.max_photos) || 4;\nreturn photos.slice(0, max).map((photo, i) => ({\n  json: { photo_number: i + 1, file_name: photo.fileName },\n  binary: { photo },\n}));"
       },
       "id": "d70b5e64-79d8-4309-a55e-3184cb882a13",
       "name": "Prepare Product Photos",
@@ -340,7 +340,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Replicate returns one file URL per photo. Seedance reads them as [Image1], [Image2], ...\nconst urls = $input.all().map(item => item.json.urls && item.json.urls.get).filter(Boolean);\nif (!urls.length) throw new Error('Replicate did not return file URLs for the photos.');\nreturn [{ json: { photo_urls: urls, photo_count: urls.length } }];"
+        "jsCode": "// Replicate returns one file URL per photo. Seedance reads them as [Image1], [Image2], ...\nconst uploads = $('Upload Photo to Replicate').all();\nconst urls = uploads.map(item => item.json?.urls?.get).filter(Boolean);\nreturn [{ json: { photo_urls: urls, photo_count: urls.length } }];"
       },
       "id": "4bb433ef-3966-4c27-a208-787b936430e3",
       "name": "Collect Photo URLs",
@@ -354,7 +354,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=You plan short, honest TikTok Shop product videos that an AI video model (Seedance 2.5) renders in one take.\n\nProduct: {{ $('Product Video Form').first().json['Product Name'] }}\nSelling points (the only facts you may use):\n{{ $('Product Video Form').first().json['Selling Points'] }}\nOffer or call to action: {{ $('Product Video Form').first().json['Offer or Call to Action'] || 'none given, use a soft call to action' }}\nLanguage for speech and caption: {{ $('Product Video Form').first().json['Video Language'] }}\nVoice: {{ $('Set Video Settings').first().json.brand_voice }}\nReference photos: {{ $json.photo_count }} product photo(s), called [Image1] to [Image{{ $json.photo_count }}].\nLength: {{ $('Set Video Settings').first().json.duration_seconds }} seconds, vertical {{ $('Set Video Settings').first().json.aspect_ratio }}.\n\nReturn:\n- seedance_prompt: a production brief in English with timed beats: 0-3 s scroll-stopping hook, 3-11 s demo of the selling points, 11-15 s call to action. Describe setting, camera moves, lighting and sound. Say the product must look exactly like the reference photos. Include one short spoken line in the video language inside double quotes.\n- hook: the first spoken line.\n- voiceover: every spoken line, in the video language.\n- caption: TikTok caption in the video language, under 300 characters, ending with 3-5 hashtags including {{ $('Set Video Settings').first().json.extra_hashtags }}.\n\nRules: no claims beyond the selling points, no prices unless given, no fake reviews or customer testimonials, no real or famous people, no medical or before-and-after claims, no on-screen text, logos or watermarks.",
+        "text": "=You plan short, honest TikTok Shop product videos that an AI video model (Seedance 2.5) renders in one take.\n\nProduct: {{ $('Product Video Form').first().json['Product Name'] }}\nSelling points (the only facts you may use):\n{{ $('Product Video Form').first().json['Selling Points'] }}\nOffer or call to action: {{ $('Product Video Form').first().json['Offer or Call to Action'] || 'none given, use a soft call to action' }}\nLanguage for speech and caption: {{ $('Product Video Form').first().json['Video Language'] }}\nVoice: {{ $('Set Video Settings').first().json.brand_voice }}\nReference photos: {{ $('Collect Photo URLs').first().json.photo_count > 0 ? ($('Collect Photo URLs').first().json.photo_count + ' product photo(s), called [Image1] to [Image' + $('Collect Photo URLs').first().json.photo_count + ']') : 'no reference photos; generate visuals from the brief only' }}.\nLength: {{ $('Set Video Settings').first().json.duration_seconds }} seconds, vertical {{ $('Set Video Settings').first().json.aspect_ratio }}.\n\nReturn:\n- seedance_prompt: a production brief in English with timed beats: 0-3 s scroll-stopping hook, 3-11 s demo of the selling points, 11-15 s call to action. Describe setting, camera moves, lighting and sound. Say the product must look exactly like the reference photos. Include one short spoken line in the video language inside double quotes.\n- hook: the first spoken line.\n- voiceover: every spoken line, in the video language.\n- caption: TikTok caption in the video language, under 300 characters, ending with 3-5 hashtags including {{ $('Set Video Settings').first().json.extra_hashtags }}.\n\nRules: no claims beyond the selling points, no prices unless given, no fake reviews or customer testimonials, no real or famous people, no medical or before-and-after claims, no on-screen text, and only show logos or icons that appear in the reference photos; never invent brand logos. If no photos are provided, avoid showing any specific brand logos or trademarks.",
         "hasOutputParser": true
       },
       "id": "b76e6f86-1a3f-4c6a-97f6-919daea50279",
@@ -400,7 +400,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Replicate input for Seedance 2.5. Other models may use different field names: check the model's API tab.\nconst s = $('Set Video Settings').first().json;\nconst script = $json.output;\nreturn [{ json: {\n  model: s.model,\n  body: { input: {\n    prompt: script.seedance_prompt,\n    reference_images: $('Collect Photo URLs').first().json.photo_urls,\n    duration: Number(s.duration_seconds),\n    resolution: s.resolution,\n    aspect_ratio: s.aspect_ratio,\n    generate_audio: s.generate_audio === true || s.generate_audio === 'true',\n    watermark: false,\n  } },\n} }];"
+        "jsCode": "// Replicate input for Seedance 2.5. Other models may use different field names: check the model's API tab.\nconst s = $('Set Video Settings').first().json;\nconst script = $json.output;\nconst urls = ($('Collect Photo URLs').first().json.photo_urls) || [];\nconst input = {\n  prompt: script.seedance_prompt,\n  duration: Number(s.duration_seconds),\n  resolution: s.resolution,\n  aspect_ratio: s.aspect_ratio,\n  generate_audio: s.generate_audio === true || s.generate_audio === 'true',\n  watermark: false,\n};\nif (Array.isArray(urls) && urls.length) {\n  input.reference_images = urls;\n}\nreturn [{ json: { model: s.model, body: { input } } }];"
       },
       "id": "d65d2b3f-2804-42a4-a1da-602112a12f18",
       "name": "Build Seedance Request",
@@ -671,6 +671,12 @@
               "value": "={{ $json.id }}"
             },
             {
+              "id": "f4c7e9a0-6b30-4e6a-b5d5-6d0f3a3d9f1b",
+              "name": "status",
+              "type": "string",
+              "value": "={{ $json.status }}"
+            },
+            {
               "id": "fc18fce5-b812-42b3-85d7-bfed9aa342cf",
               "name": "product",
               "type": "string",
@@ -699,6 +705,12 @@
               "name": "estimated_cost_usd",
               "type": "number",
               "value": "={{ Math.round($('Set Video Settings').first().json.duration_seconds * $('Set Video Settings').first().json.price_per_second_usd * 100) / 100 }}"
+            },
+            {
+              "id": "8a5e5b5e-1d1e-4a2b-bf5e-0c5b8b9e3a2f",
+              "name": "status_note",
+              "type": "string",
+              "value": "In UPLOAD mode SocialRobot returns PUBLISHED when the video is delivered to your TikTok inbox as a draft, not public."
             },
             {
               "id": "935a84c3-1b02-484f-8fd9-c3921a6f0fe4",
@@ -797,6 +809,11 @@
             "node": "Set Video Settings",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Collect Photo URLs",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -825,13 +842,7 @@
     },
     "Upload Photo to Replicate": {
       "main": [
-        [
-          {
-            "node": "Collect Photo URLs",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Collect Photo URLs": {
