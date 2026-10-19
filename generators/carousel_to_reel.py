@@ -52,9 +52,9 @@ def boolean_if_parameters(left_expression: str):
 
 
 BUILD_FFMPEG_JS = """// Builds one ffmpeg command: zoompan per slide, xfade between slides, optional music.
-const s = $('Set Render Settings').first().json;
-const slides = $('Prepare Slides').all().map(i => i.json);
-const music = String($('Carousel Form').first().json['Music URL'] || '').trim();
+const s = $('Set Video Render Settings').first().json;
+const slides = $('Arrange Slides').all().map(i => i.json);
+const music = String($('When Carousel Submitted').first().json['Music URL'] || '').trim();
 const W = Number(s.width), H = Number(s.height), FPS = Number(s.fps);
 const D = Number(s.seconds_per_slide), T = Number(s.crossfade_seconds);
 const L = D + T; // each clip overlaps the next by T seconds
@@ -108,7 +108,7 @@ return [{ json: { command, output_file: outFile, expected_seconds: total, slides
 """
 
 CHECK_SIZE_JS = """// Checks the file before it goes to SocialRobot. Duration comes from the MP4 header (mvhd box).
-const s = $('Set Render Settings').first().json;
+const s = $('Set Video Render Settings').first().json;
 const item = $input.first();
 const video = item.binary && item.binary.data;
 const problems = [];
@@ -135,21 +135,21 @@ return [{ json: { ok: problems.length === 0, problems, size_mb: Math.round(sizeM
 
 DESCRIBE_FAILURE_JS = """// One readable reason for whatever went wrong. Add an error workflow in the settings to get alerts.
 const j = $json;
-const s = $('Set Render Settings').first().json;
+const s = $('Set Video Render Settings').first().json;
 const out = String(j.stdout || '');
 let message;
 if (out.includes('FFMPEG_MISSING')) {
-  message = 'ffmpeg is not installed on this n8n server. Install it (see the yellow note) and run again.';
+  message = 'ffmpeg is not installed on this n8n server. Install it (see the yellow \"Install ffmpeg\" note) and run again.';
 } else if (out.includes('RENDER_FAILED')) {
   message = `ffmpeg could not render the Reel: ${out.replace('RENDER_FAILED', '').trim().slice(-800) || 'no log'}`;
 } else if (Array.isArray(j.problems) && j.problems.length) {
   message = `The video did not pass the checks: ${j.problems.join(' ')}`;
 } else if (j.error) {
   const e = typeof j.error === 'string' ? j.error : (j.error.message || JSON.stringify(j.error));
-  message = $('Save TikTok Video Draft').isExecuted
+  message = $('Draft TikTok Video').isExecuted
     ? `SocialRobot could not save the TikTok draft: ${e}`
     : `File or command step failed (check temp_dir "${s.temp_dir}" and file access settings): ${e}`;
-} else if (!$('Create Temp Folder').isExecuted) {
+} else if (!$('Initialize Temp Folder').isExecuted) {
   message = `Upload ${s.min_slides}-${s.max_slides} slide images (JPG, PNG or WebP). The form had a different number.`;
 } else {
   message = `Unexpected failure: ${JSON.stringify(j).slice(0, 500)}`;
@@ -170,122 +170,63 @@ def main():
     nodes = []
     connections = {}
 
-    # Sticky notes
-    nodes.append(
-        make_node(
-            "Template Overview",
-            "n8n-nodes-base.stickyNote",
-            1,
-            [-80, 32],
-            {
-                "content": "## Convert Instagram carousels to Reels and TikTok slideshow videos with ffmpeg\n\nUpload 2-10 carousel slides and get a 1080x1920 Reel with pan-and-zoom on each slide, crossfades and optional music. It renders on your own n8n server with ffmpeg, so there are no render fees. SocialRobot sends the video to your TikTok inbox as a draft and can also post it as an Instagram Reel, a Facebook Reel or a Threads video.\n\n### How it works\n1. A form takes 2-10 slides (in carousel order), a caption, the seconds per slide and an optional music URL.\n2. The workflow checks that ffmpeg is installed, then writes the slides to a temporary folder.\n3. ffmpeg places each slide on a blurred 9:16 background (so square and 4:5 slides keep their text), adds a zoom or pan, crossfades between slides and mixes in the music.\n4. The MP4 is read back, size and duration are checked, then SocialRobot sends it to your TikTok inbox.\n5. Optional: the original slides also go to TikTok as a photo slideshow draft.\n6. Temp files are deleted at the end, and on errors too.\n\n### Setup steps\n- [ ] **Self-hosted n8n with ffmpeg installed** and the Execute Command node enabled (see the yellow note)\n- [ ] SocialRobot community node 3.1.1+ (npm latest 3.1.2) and your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Save TikTok Video Draft**\n- [ ] Check `temp_dir` in **Set Render Settings**: it must be a folder n8n is allowed to write to\n\n### Customization\n- Change slide length, crossfade, motions, zoom and size in **Set Render Settings**.\n- Enable **Optional Instagram Reel**, **Optional Facebook Reel** or **Optional Threads Video** (disabled by default) and pick accounts.\n- SocialRobot does not publish to YouTube.\n\nCost per run: $0. ffmpeg runs on your own server and no AI model is used.",
-                "width": 560,
-                "height": 940,
-            },
-        )
-    )
-    nodes.append(
-        make_node(
-            "Note Install ffmpeg",
-            "n8n-nodes-base.stickyNote",
-            1,
-            [-80, 1000],
-            {
-                "content": "## Install ffmpeg (self-hosted only)\nn8n Cloud can't run this template: it has no Execute Command node and no ffmpeg.\n\n**Docker:** build a small image on top of n8n:\n```\nFROM docker.n8n.io/n8nio/n8n:latest\nUSER root\nRUN apk add --no-cache ffmpeg\nUSER node\n```\nThen `docker build -t n8n-ffmpeg .` and run `n8n-ffmpeg` instead of the stock image. On Debian/Ubuntu installs use `sudo apt install ffmpeg`.\n\n**n8n 2.x:** Execute Command is turned off by default. Enable it with `NODES_EXCLUDE=[]`. Read/Write Files only works inside `N8N_RESTRICT_FILE_ACCESS_TO` (default `~/.n8n-files`), so keep `temp_dir` in there.",
-                "width": 560,
-                "height": 560,
-                "color": 6,
-            },
-        )
-    )
-    nodes.append(
-        make_node(
-            "Section Slides",
-            "n8n-nodes-base.stickyNote",
-            1,
-            [512, 224],
-            {
-                "content": "## Check ffmpeg and collect slides\n**Check ffmpeg Installed** stops with a clear message if ffmpeg is missing. **Has 2-10 Slides?** checks the upload count.",
-                "width": 1000,
-                "height": 520,
-                "color": 7,
-            },
-        )
-    )
-    nodes.append(
-        make_node(
-            "Section Render",
-            "n8n-nodes-base.stickyNote",
-            1,
-            [1536, 224],
-            {
-                "content": "## Render with ffmpeg\nSlides are written to a temp folder named after the execution ID. **Build ffmpeg Command** creates one zoompan + xfade filter graph; the music link is used only if it's a plain http(s) URL. ffmpeg's error log is kept for the error message.",
-                "width": 1180,
-                "height": 520,
-                "color": 7,
-            },
-        )
-    )
-    nodes.append(
-        make_node(
-            "Section Checks",
-            "n8n-nodes-base.stickyNote",
-            1,
-            [2740, 224],
-            {
-                "content": "## Read and check the video\nReads `reel.mp4` back and checks file size and real duration (from the MP4 header).",
-                "width": 620,
-                "height": 520,
-                "color": 7,
-            },
-        )
-    )
-    nodes.append(
-        make_node(
-            "Section Publish",
-            "n8n-nodes-base.stickyNote",
-            1,
-            [3380, 0],
-            {
-                "content": "## Send to TikTok and others\n**Save TikTok Video Draft** uses Post Mode *Send to Inbox (Draft)*: nothing goes public until you post it in the app. The optional nodes are connected and disabled by default. If you answer Yes on the form, the original slides also go to TikTok as a photo slideshow draft (1-35 images). SocialRobot hosts the files itself, so no public image URLs are needed.",
-                "width": 900,
-                "height": 1060,
-                "color": 7,
-            },
-        )
-    )
-    nodes.append(
-        make_node(
-            "Section Errors",
-            "n8n-nodes-base.stickyNote",
-            1,
-            [1536, 800],
-            {
-                "content": "## Handle errors and clean up\nMissing ffmpeg, a wrong slide count, ffmpeg errors, files that fail the checks and SocialRobot errors end here. The temp folder is deleted, then the run stops with one readable message. Add an error workflow in the settings to get alerts.",
-                "width": 1400,
-                "height": 380,
-                "color": 7,
-            },
-        )
-    )
-    nodes.append(
-        make_node(
-            "Note AI Label",
-            "n8n-nodes-base.stickyNote",
-            1,
-            [4300, 0],
-            {
-                "content": "## AI label\nPan-and-zoom isn't generative AI, so the label is off. If your slides were made with AI, turn on **AI-Generated Content** in the Instagram node and the 'AI-generated content' label in TikTok before posting. The node doesn't send TikTok's AI label for inbox drafts.",
-                "width": 320,
-                "height": 330,
-                "color": 3,
-            },
-        )
-    )
+    # Sticky notes (match n8n-submitted names and content)
+    nodes.append(make_node("Sticky Note", "n8n-nodes-base.stickyNote", 1, [-48, 224], {
+        "content": "## Convert Instagram carousels to Reels and TikTok slideshow videos with ffmpeg and SocialRobot\n\nUpload 2-10 carousel slides and get a 1080x1920 Reel with pan-and-zoom on each slide, crossfades and optional music. It renders on your own n8n server with ffmpeg, so there are no render fees. SocialRobot sends the video to your TikTok inbox as a draft and can also post it as an Instagram Reel, a Facebook Reel or a Threads video.\n\n### How it works\n1. **When Carousel Submitted** takes 2-10 slides (in carousel order), a caption, the seconds per slide and an optional music URL.\n2. The workflow checks that ffmpeg is installed and the slide count is right, then writes the slides to a temporary folder.\n3. ffmpeg places each slide on a blurred 9:16 background (so square and 4:5 slides keep their text), adds a zoom or pan, crossfades between slides and mixes in the music.\n4. The MP4 is read back, size and duration are checked, then SocialRobot sends it to your TikTok inbox as a draft.\n5. Optional: the original slides also go to TikTok as a photo slideshow draft.\n6. Temp files are deleted at the end, and on errors too.\n\n### Setup steps\n- [ ] **Self-hosted n8n with ffmpeg installed** and the Execute Command node enabled (see the yellow note)\n- [ ] SocialRobot community node 3.1.1+ (npm latest 3.1.2) and your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Draft TikTok Video** (and **Draft TikTok Slideshow** if you use it)\n- [ ] Check `temp_dir` in **Set Video Render Settings**: it must be a folder n8n is allowed to write to and delete from\n\n### Customization\n- Change slide length, crossfade, transition, motions, zoom, size and video limits in **Set Video Render Settings**.\n- Enable **Draft Instagram Reel**, **Draft Facebook Reel** or **Draft Threads Video** (disabled by default) and pick accounts.\n- SocialRobot does not publish to YouTube.\n\nCost per run: $0. ffmpeg runs on your own server and no AI model is used.",
+        "width": 480, "height": 1000
+    }))
+    nodes.append(make_node("Sticky Note1", "n8n-nodes-base.stickyNote", 1, [512, 240], {
+        "content": "## Collect render request\n\nStarts from the upload form. **Set Video Render Settings** holds every value you'd want to tweak: pacing, crossfade, motions, zoom, size and limits.",
+        "width": 384, "height": 320, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note2", "n8n-nodes-base.stickyNote", 1, [928, 240], {
+        "content": "## Preflight validation checks\n\n**Verify ffmpeg Installation** stops the run with a clear message if ffmpeg is missing. **Check Slide Count** makes sure there are 2-10 images before any files are created.",
+        "width": 576, "height": 320, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note3", "n8n-nodes-base.stickyNote", 1, [1536, 240], {
+        "content": "## Stage carousel slides\n\nCreates a temp folder named after the execution ID and writes each slide to disk in carousel order.",
+        "width": 576, "height": 320, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note4", "n8n-nodes-base.stickyNote", 1, [2144, 272], {
+        "content": "## Render reel video\n\n**Compose ffmpeg Command** builds one zoompan + xfade filter graph on a blurred 9:16 background. The music link is used only if it's a plain http(s) URL. ffmpeg's error log is kept for the error message.",
+        "width": 576, "height": 304, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note5", "n8n-nodes-base.stickyNote", 1, [2752, 240], {
+        "content": "## Validate rendered output\n\nReads `reel.mp4` back and checks file size and real duration (from the MP4 header) before anything goes to SocialRobot.",
+        "width": 576, "height": 320, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note6", "n8n-nodes-base.stickyNote", 1, [3392, 240], {
+        "content": "## Save TikTok draft\n\n**Draft TikTok Video** uses Post Mode *Send to Inbox (Draft)*: nothing goes public until you post it in the TikTok app.",
+        "width": 432, "height": 320, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note7", "n8n-nodes-base.stickyNote", 1, [3856, 224], {
+        "content": "## Clean successful render\n\nRemoves temporary files after the main TikTok draft path has completed successfully.",
+        "width": 240, "height": 336, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note8", "n8n-nodes-base.stickyNote", 1, [3632, 592], {
+        "content": "## Create photo slideshow\n\nIf you answer Yes on the form, the original slides also go to TikTok as a photo slideshow draft (1-35 images). SocialRobot hosts the files itself, so no public image URLs are needed.",
+        "width": 640, "height": 320, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note9", "n8n-nodes-base.stickyNote", 1, [3360, 592], {
+        "content": "## Optional social drafts\n\nConnected and **disabled by default**. Enable the ones you want and pick an account in each.",
+        "width": 240, "height": 752, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note10", "n8n-nodes-base.stickyNote", 1, [1792, 832], {
+        "content": "## Handle render failures\n\nMissing ffmpeg, a wrong slide count, ffmpeg errors, files that fail the checks and SocialRobot errors end here. The temp folder is deleted, then the run stops with one readable message. Add an error workflow in the settings to get alerts.",
+        "width": 672, "height": 304, "color": 7
+    }))
+    nodes.append(make_node("Sticky Note11", "n8n-nodes-base.stickyNote", 1, [-48, 1248], {
+        "content": "## Install ffmpeg (self-hosted only)\nn8n Cloud can't run this template: it has no Execute Command node and no ffmpeg.\n\n**Docker:** build a small image on top of n8n:\n```\nFROM docker.n8n.io/n8nio/n8n:latest\nUSER root\nRUN apk add --no-cache ffmpeg\nUSER node\n```\nThen `docker build -t n8n-ffmpeg .` and run `n8n-ffmpeg` instead of the stock image. On Debian/Ubuntu installs use `sudo apt install ffmpeg`.\n\n**n8n 2.x:** Execute Command is turned off by default. Enable it with `NODES_EXCLUDE=[]`. Read/Write Files only works inside `N8N_RESTRICT_FILE_ACCESS_TO` (default `~/.n8n-files`), so keep `temp_dir` in there.",
+        "width": 480, "height": 560, "color": 6
+    }))
+    nodes.append(make_node("Sticky Note12", "n8n-nodes-base.stickyNote", 1, [4304, 224], {
+        "content": "## AI label\nPan-and-zoom isn't generative AI, so the label is off. If your slides were made with AI, turn on **AI-Generated Content** in **Draft Instagram Reel** and the 'AI-generated content' label in TikTok before posting. The node doesn't send TikTok's AI label for inbox drafts.",
+        "width": 320, "height": 330, "color": 3
+    }))
 
     # Form trigger
     form_trigger = make_node(
-        "Carousel Form",
+        "When Carousel Submitted",
         "n8n-nodes-base.formTrigger",
         2.3,
         [560, 400],
@@ -319,7 +260,7 @@ def main():
         return {"id": generate_uuid(), "name": name, "type": typ, "value": value}
 
     set_settings = make_node(
-        "Set Render Settings",
+        "Set Video Render Settings",
         "n8n-nodes-base.set",
         3.4,
         [752, 400],
@@ -327,7 +268,7 @@ def main():
             "assignments": {
                 "assignments": [
                     assignment("temp_dir", "string", "=/home/node/.n8n-files/carousel-to-reel/{{ $execution.id }}"),
-                    assignment("seconds_per_slide", "number", "={{ Math.min(6, Math.max(1.5, Number($('Carousel Form').first().json['Seconds per Slide']) || 2.5)) }}"),
+                    assignment("seconds_per_slide", "number", "={{ Math.min(6, Math.max(1.5, Number($('When Carousel Submitted').first().json['Seconds per Slide']) || 2.5)) }}"),
                     assignment("crossfade_seconds", "number", 0.5),
                     assignment("transition", "string", "fade"),
                     assignment("motions", "string", "zoomIn,panLeft,zoomOut,panRight,panUp"),
@@ -350,43 +291,43 @@ def main():
 
     # ffmpeg check
     check_ffmpeg = make_node(
-        "Check ffmpeg Installed",
+        "Verify ffmpeg Installation",
         "n8n-nodes-base.executeCommand",
         1,
-        [944, 400],
+        [976, 400],
         {"executeOnce": True, "command": "command -v ffmpeg >/dev/null 2>&1 && ffmpeg -hide_banner -version | head -n 1 || echo FFMPEG_MISSING"},
     )
     nodes.append(check_ffmpeg)
     link(connections, set_settings["name"], check_ffmpeg["name"])
 
-    ffmpeg_found = make_node("ffmpeg Found?", "n8n-nodes-base.if", 2.2, [1136, 400], boolean_if_parameters("={{ String($json.stdout || '').startsWith('ffmpeg version') }}"))
+    ffmpeg_found = make_node("If ffmpeg Available", "n8n-nodes-base.if", 2.2, [1168, 400], boolean_if_parameters("={{ String($json.stdout || '').startsWith('ffmpeg version') }}"))
     nodes.append(ffmpeg_found)
     link(connections, check_ffmpeg["name"], ffmpeg_found["name"])
 
     has_slides = make_node(
-        "Has 2-10 Slides?",
+        "Check Slide Count",
         "n8n-nodes-base.if",
         2.2,
-        [1328, 400],
+        [1360, 400],
         boolean_if_parameters(
-            "= {{ (n => n >= $('Set Render Settings').first().json.min_slides && n <= $('Set Render Settings').first().json.max_slides)(Object.values($('Carousel Form').first().binary || {}).filter(b => String(b.mimeType || '').startsWith('image/')).length) }}"
+            "= {{ (n => n >= $('Set Video Render Settings').first().json.min_slides && n <= $('Set Video Render Settings').first().json.max_slides)(Object.values($('When Carousel Submitted').first().binary || {}).filter(b => String(b.mimeType || '').startsWith('image/')).length) }}"
         ),
     )
-    # Note: keep original expression string formatting from provided workflow (no spaces before '=')
-    has_slides["parameters"]["conditions"]["conditions"][0]["leftValue"] = "={{ (n => n >= $('Set Render Settings').first().json.min_slides && n <= $('Set Render Settings').first().json.max_slides)(Object.values($('Carousel Form').first().binary || {}).filter(b => String(b.mimeType || '').startsWith('image/')).length) }}"
+    # Note: keep original expression string formatting (no spaces before '=')
+    has_slides["parameters"]["conditions"]["conditions"][0]["leftValue"] = "={{ (n => n >= $('Set Video Render Settings').first().json.min_slides && n <= $('Set Video Render Settings').first().json.max_slides)(Object.values($('When Carousel Submitted').first().binary || {}).filter(b => String(b.mimeType || '').startsWith('image/')).length) }}"
     nodes.append(has_slides)
     link(connections, ffmpeg_found["name"], has_slides["name"], 0)
 
-    describe_failure = make_node("Describe Failure", "n8n-nodes-base.code", 2, [1840, 960], {"jsCode": DESCRIBE_FAILURE_JS})
+    describe_failure = make_node("Explain Process Error", "n8n-nodes-base.code", 2, [1840, 960], {"jsCode": DESCRIBE_FAILURE_JS})
     nodes.append(describe_failure)
     link(connections, ffmpeg_found["name"], describe_failure["name"], 1)
 
     create_temp = make_node(
-        "Create Temp Folder",
+        "Initialize Temp Folder",
         "n8n-nodes-base.executeCommand",
         1,
         [1584, 400],
-        {"executeOnce": True, "command": "=mkdir -p '{{ $('Set Render Settings').first().json.temp_dir }}' && echo OK"},
+        {"executeOnce": True, "command": "=mkdir -p '{{ $('Set Video Render Settings').first().json.temp_dir }}' && echo OK"},
         onError="continueErrorOutput",
     )
     nodes.append(create_temp)
@@ -394,12 +335,12 @@ def main():
     link(connections, has_slides["name"], describe_failure["name"], 1)
 
     prepare_slides = make_node(
-        "Prepare Slides",
+        "Arrange Slides",
         "n8n-nodes-base.code",
         2,
         [1776, 400],
         {
-            "jsCode": "// One item per slide, in upload order, with the path it gets in the temp folder.\nconst s = $('Set Render Settings').first().json;\nconst form = $('Carousel Form').first();\nconst slides = Object.values(form.binary || {}).filter(b => String(b.mimeType || '').startsWith('image/'));\nconst ext = b => ({ 'image/png': 'png', 'image/webp': 'webp' }[b.mimeType] || 'jpg');\nreturn slides.map((image, i) => {\n  const name = `slide_${String(i + 1).padStart(2, '0')}.${ext(image)}`;\n  return { json: { slide: i + 1, path: `${s.temp_dir}/${name}` }, binary: { image } };\n});"
+            "jsCode": "// One item per slide, in upload order, with the path it gets in the temp folder.\nconst s = $('Set Video Render Settings').first().json;\nconst form = $('When Carousel Submitted').first();\nconst slides = Object.values(form.binary || {}).filter(b => String(b.mimeType || '').startsWith('image/'));\nconst ext = b => ({ 'image/png': 'png', 'image/webp': 'webp' }[b.mimeType] || 'jpg');\nreturn slides.map((image, i) => {\n  const name = `slide_${String(i + 1).padStart(2, '0')}.${ext(image)}`;\n  return { json: { slide: i + 1, path: `${s.temp_dir}/${name}` }, binary: { image } };\n});"
         },
     )
     nodes.append(prepare_slides)
@@ -407,7 +348,7 @@ def main():
     link(connections, create_temp["name"], describe_failure["name"], 1)
 
     write_slide = make_node(
-        "Write Slide to Disk",
+        "Save Slide to Disk",
         "n8n-nodes-base.readWriteFile",
         1,
         [1968, 400],
@@ -417,45 +358,45 @@ def main():
     nodes.append(write_slide)
     link(connections, prepare_slides["name"], write_slide["name"])
 
-    build_ffmpeg = make_node("Build ffmpeg Command", "n8n-nodes-base.code", 2, [2160, 400], {"jsCode": BUILD_FFMPEG_JS})
+    build_ffmpeg = make_node("Compose ffmpeg Command", "n8n-nodes-base.code", 2, [2192, 400], {"jsCode": BUILD_FFMPEG_JS})
     nodes.append(build_ffmpeg)
     link(connections, write_slide["name"], build_ffmpeg["name"], 0)
     link(connections, write_slide["name"], describe_failure["name"], 1)
 
     render_cmd = make_node(
-        "Render Reel with ffmpeg",
+        "Execute ffmpeg Render",
         "n8n-nodes-base.executeCommand",
         1,
-        [2352, 400],
+        [2384, 400],
         {"executeOnce": True, "command": "={{ $json.command }}"},
         onError="continueErrorOutput",
     )
     nodes.append(render_cmd)
     link(connections, build_ffmpeg["name"], render_cmd["name"])
 
-    render_ok = make_node("Render Succeeded?", "n8n-nodes-base.if", 2.2, [2544, 400], boolean_if_parameters("={{ String($json.stdout || '').includes('RENDER_OK') }}"))
+    render_ok = make_node("If Render Successful", "n8n-nodes-base.if", 2.2, [2576, 400], boolean_if_parameters("={{ String($json.stdout || '').includes('RENDER_OK') }}"))
     nodes.append(render_ok)
     link(connections, render_cmd["name"], render_ok["name"], 0)
     link(connections, render_cmd["name"], describe_failure["name"], 1)
 
     read_video = make_node(
-        "Read Reel from Disk",
+        "Load Reel from Disk",
         "n8n-nodes-base.readWriteFile",
         1,
         [2800, 400],
-        {"operation": "read", "fileSelector": "={{ $('Build ffmpeg Command').first().json.output_file }}", "options": {"dataPropertyName": "data"}},
+        {"operation": "read", "fileSelector": "={{ $('Compose ffmpeg Command').first().json.output_file }}", "options": {"dataPropertyName": "data"}},
         onError="continueErrorOutput",
     )
     nodes.append(read_video)
     link(connections, render_ok["name"], read_video["name"], 0)
     link(connections, render_ok["name"], describe_failure["name"], 1)
 
-    check_size = make_node("Check Size and Duration", "n8n-nodes-base.code", 2, [2992, 400], {"jsCode": CHECK_SIZE_JS})
+    check_size = make_node("Validate Size and Duration", "n8n-nodes-base.code", 2, [2992, 400], {"jsCode": CHECK_SIZE_JS})
     nodes.append(check_size)
     link(connections, read_video["name"], check_size["name"], 0)
     link(connections, read_video["name"], describe_failure["name"], 1)
 
-    passes = make_node("Video Passes Checks", "n8n-nodes-base.if", 2.2, [3184, 400], boolean_if_parameters("={{ $json.ok }}"))
+    passes = make_node("If Video Verified", "n8n-nodes-base.if", 2.2, [3184, 400], boolean_if_parameters("={{ $json.ok }}"))
     nodes.append(passes)
     link(connections, check_size["name"], passes["name"])
 
@@ -465,7 +406,7 @@ def main():
     video_binary = [{"mediaSource": "binary", "binaryPropertyName": "data", "mediaType": "VIDEO"}]
 
     publish_tiktok_video = make_node(
-        "Save TikTok Video Draft",
+        "Draft TikTok Video",
         "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
         1,
         [3440, 400],
@@ -485,7 +426,7 @@ def main():
     link(connections, passes["name"], describe_failure["name"], 1)
 
     summarize = make_node(
-        "Summarize Result",
+        "Summarize Video Results",
         "n8n-nodes-base.set",
         3.4,
         [3680, 400],
@@ -494,9 +435,9 @@ def main():
                 "assignments": [
                     {"id": generate_uuid(), "name": "tiktok_post_id", "type": "string", "value": "={{ $json.id }}"},
                     {"id": generate_uuid(), "name": "status", "type": "string", "value": "={{ $json.status }}"},
-                    {"id": generate_uuid(), "name": "slides", "type": "number", "value": "={{ $('Build ffmpeg Command').first().json.slides }}"},
-                    {"id": generate_uuid(), "name": "duration_seconds", "type": "number", "value": "={{ $('Check Size and Duration').first().json.duration_seconds }}"},
-                    {"id": generate_uuid(), "name": "size_mb", "type": "number", "value": "={{ $('Check Size and Duration').first().json.size_mb }}"},
+                    {"id": generate_uuid(), "name": "slides", "type": "number", "value": "={{ $('Compose ffmpeg Command').first().json.slides }}"},
+                    {"id": generate_uuid(), "name": "duration_seconds", "type": "number", "value": "={{ $('Validate Size and Duration').first().json.duration_seconds }}"},
+                    {"id": generate_uuid(), "name": "size_mb", "type": "number", "value": "={{ $('Validate Size and Duration').first().json.size_mb }}"},
                     {
                         "id": generate_uuid(),
                         "name": "next_step",
@@ -513,43 +454,43 @@ def main():
     link(connections, publish_tiktok_video["name"], describe_failure["name"], 1)
 
     clean_success = make_node(
-        "Clean Up Temp Files",
+        "Remove Temp Files",
         "n8n-nodes-base.executeCommand",
         1,
         [3900, 400],
-        {"executeOnce": True, "command": "=rm -rf -- '{{ $('Set Render Settings').first().json.temp_dir }}' && echo CLEANED"},
+        {"executeOnce": True, "command": "=rm -rf -- '{{ $('Set Video Render Settings').first().json.temp_dir }}' && echo CLEANED"},
         onError="continueRegularOutput",
     )
     nodes.append(clean_success)
     link(connections, summarize["name"], clean_success["name"])
 
     wants_slideshow = make_node(
-        "Wants Photo Slideshow?",
+        "If Slideshow Required",
         "n8n-nodes-base.if",
         2.2,
-        [3680, 620],
-        boolean_if_parameters("={{ $('Carousel Form').first().json['Also Send TikTok Photo Slideshow'] === 'Yes' }}"),
+        [3680, 752],
+        boolean_if_parameters("={{ $('When Carousel Submitted').first().json['Also Send TikTok Photo Slideshow'] === 'Yes' }}"),
     )
     nodes.append(wants_slideshow)
     link(connections, summarize["name"], wants_slideshow["name"])
 
     gather_slides = make_node(
-        "Gather Slides for Slideshow",
+        "Collect Slides for Slideshow",
         "n8n-nodes-base.code",
         2,
-        [3900, 620],
+        [3904, 752],
         {
-            "jsCode": "// One item with every slide as its own binary field (slide_1, slide_2, ...).\n// The SocialRobot node uploads binary media to SocialRobot storage itself, so no public URLs are needed.\nconst slides = $('Prepare Slides').all().slice(0, 35);\nconst binary = {};\nslides.forEach((item, i) => { binary[`slide_${i + 1}`] = item.binary.image; });\nreturn [{ json: { slide_fields: slides.map((_, i) => `slide_${i + 1}`) }, binary }];"
+            "jsCode": "// One item with every slide as its own binary field (slide_1, slide_2, ...).\n// The SocialRobot node uploads binary media to SocialRobot storage itself, so no public URLs are needed.\nconst slides = $('Arrange Slides').all().slice(0, 35);\nconst binary = {};\nslides.forEach((item, i) => { binary[`slide_${i + 1}`] = item.binary.image; });\nreturn [{ json: { slide_fields: slides.map((_, i) => `slide_${i + 1}`) }, binary }];"
         },
     )
     nodes.append(gather_slides)
     link(connections, wants_slideshow["name"], gather_slides["name"], 0)
 
     publish_tiktok_slideshow = make_node(
-        "Save TikTok Photo Slideshow Draft",
+        "Draft TikTok Slideshow",
         "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
         1,
-        [4120, 620],
+        [4128, 752],
         {
             "resource": "tiktok",
             "operation": "create",
@@ -557,7 +498,7 @@ def main():
             "caption": caption_expr,
             "medias": "={{ $json.slide_fields.map(name => ({ mediaSource: 'binary', binaryPropertyName: name, mediaType: 'IMAGE' })) }}",
             "postMode": "UPLOAD",
-            "title": "={{ String($('Carousel Form').first().json['Slideshow Title'] || '').slice(0, 90) }}",
+            "title": "={{ String($('When Carousel Submitted').first().json['Slideshow Title'] || '').slice(0, 90) }}",
             "publishMode": "NOW",
         },
         onError="continueRegularOutput",
@@ -566,10 +507,10 @@ def main():
     link(connections, gather_slides["name"], publish_tiktok_slideshow["name"])
 
     optional_ig = make_node(
-        "Optional Instagram Reel",
+        "Draft Instagram Reel",
         "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
         1,
-        [3440, 640],
+        [3408, 816],
         {
             "resource": "instagram",
             "operation": "create",
@@ -589,10 +530,10 @@ def main():
     link(connections, passes["name"], optional_ig["name"], 0)
 
     optional_fb = make_node(
-        "Optional Facebook Reel",
+        "Draft Facebook Reel",
         "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
         1,
-        [3440, 820],
+        [3408, 992],
         {
             "resource": "facebook",
             "operation": "create",
@@ -609,10 +550,10 @@ def main():
     link(connections, passes["name"], optional_fb["name"], 0)
 
     optional_threads = make_node(
-        "Optional Threads Video",
+        "Draft Threads Video",
         "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
         1,
-        [3440, 1000],
+        [3408, 1184],
         {
             "resource": "threads",
             "operation": "create",
@@ -629,22 +570,22 @@ def main():
 
     # Error cleanup path
     clean_error = make_node(
-        "Clean Up After Error",
+        "Handle Error Cleanup",
         "n8n-nodes-base.executeCommand",
         1,
         [2080, 960],
-        {"executeOnce": True, "command": "=rm -rf -- '{{ $('Set Render Settings').first().json.temp_dir }}' && echo CLEANED"},
+        {"executeOnce": True, "command": "=rm -rf -- '{{ $('Set Video Render Settings').first().json.temp_dir }}' && echo CLEANED"},
         onError="continueRegularOutput",
     )
     nodes.append(clean_error)
     link(connections, describe_failure["name"], clean_error["name"])
 
     stop_with_error = make_node(
-        "Stop With Error",
+        "Terminate on Error",
         "n8n-nodes-base.stopAndError",
         1,
         [2320, 960],
-        {"errorMessage": "={{ $('Describe Failure').first().json.message }}"},
+        {"errorMessage": "={{ $('Explain Process Error').first().json.message }}"},
     )
     nodes.append(stop_with_error)
     link(connections, clean_error["name"], stop_with_error["name"])
