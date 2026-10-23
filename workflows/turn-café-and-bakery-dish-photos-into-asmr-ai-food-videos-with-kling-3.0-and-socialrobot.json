@@ -1,0 +1,1731 @@
+{
+  "name": "Turn café and bakery dish photos into ASMR AI food videos with Kling 3.0 and SocialRobot",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Turn a dish photo into an ASMR AI food video\n\nFor cafés, bakeries and restaurants: upload one real photo of a dish, pastry or drink and get a 10-second vertical food ASMR video with natural sound, cut into up to 3 close-up shots. SocialRobot sends it to your TikTok inbox as a draft. Instagram Reel, Facebook Reel and Threads are ready to switch on.\n\n### How it works\n1. **When Dish Photo Submitted** takes the photo, the dish name, ingredients, price, availability and your business name.\n2. The photo goes to fal storage and is center-cropped to 9:16 (Kling takes the video shape from the photo).\n3. Optional: OpenAI looks at the photo and writes the shot prompts and captions, using only the facts you typed. Without OpenAI, template shots and captions are used.\n4. One Kling 3.0 Standard job renders every shot in a single clip with native audio. The workflow polls, stops after 30 min and cancels the job on timeout.\n5. File size and the real MP4 duration are checked, then SocialRobot saves the TikTok draft.\n6. Any failure stops with one readable message.\n\n### Setup steps\n- [ ] Install the SocialRobot community node `@socialrobot-io/n8n-nodes-socialrobot` (3.1.1+, works on n8n Cloud) and add your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Draft TikTok Food Video**\n- [ ] Add your fal API key as a **Header Auth** credential: name `Authorization`, value `Key YOUR_FAL_KEY`. Select it in every fal HTTP node\n- [ ] Add an OpenAI credential to **OpenAI Luna GPT-6**, or set `use_openai` to false\n- [ ] Review **Configure Video Settings**\n\nRuns on n8n Cloud and self-hosted. No ffmpeg or Execute Command node.\n\n### Customization\n- `shot_count` (1-3) and `video_seconds` (3-15); the seconds are split across the shots.\n- `generate_audio`, the three template shot prompts, `prompt_guardrails`, `negative_prompt`.\n- `caption_language`, `caption_tone`, `extra_hashtags`, `ai_label_line`, `business_footer`.\n- Kling 3.0 Pro: set `video_model` to `fal-ai/kling-video/v3/pro/image-to-video` and update the prices.\n- Turn on the optional posts (disabled by default).\n\n### Cost per run (fal list prices, 21 Oct 2026)\nKling 3.0 Standard with audio is $0.126/s, so the default 10 s video is **$1.26**. 5 s = $0.63, 15 s = $1.89. Audio off: $0.084/s ($0.84 for 10 s). fal lists the crop utility at $0. OpenAI adds a few cents.",
+        "width": 560,
+        "height": 1560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        120
+      ],
+      "id": "5fc49ec8-15a8-5c81-92d5-30ff67151c88",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## 1. Collect the dish\n**When Dish Photo Submitted** is the form. **Configure Video Settings** holds every value you'd want to change, including the model id and prices. **If Dish Photo Exists** makes sure an image was uploaded.",
+        "width": 640,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        240
+      ],
+      "id": "763cb985-9a05-5e50-ae05-e652326af7e5",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 2. Read the photo\n**Organize Dish Photo** picks the uploaded image. **Design Vertical Crop for Photo** reads its size and plans a centered 9:16 crop.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        240
+      ],
+      "id": "fab018fd-16d2-5519-b285-ad0a29197960",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 3. Host the photo on fal\n**Post for fal Upload URL** asks fal storage for an upload URL, **Setup Photo for fal Upload** puts the photo next to it, and **Upload Photo to fal Storage** uploads it.",
+        "width": 640,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        272
+      ],
+      "id": "178c2347-cf8e-5f96-9cb1-fd6d1514739d",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## 4. Crop and check\n**Send Crop Request to fal** makes the 9:16 frame on fal. **Validate Photo on fal** catches upload or crop problems and **Switch by Food Video Plan** picks OpenAI or the template prompts from `use_openai`.",
+        "width": 640,
+        "height": 352,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        240
+      ],
+      "id": "847b4e32-7be0-54e1-8f80-f10030472252",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## 5. Shots and captions (optional OpenAI)\n**Create Shot Prompts and Captions** sees the cropped photo and writes 1-3 shot prompts plus TikTok, Instagram, Facebook and Threads captions. It may only use the facts from the form. **Format Shot Details** keeps the answer in shape. If OpenAI fails, the template shots and captions take over.",
+        "width": 384,
+        "height": 592,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3216,
+        224
+      ],
+      "id": "c31131cf-a332-5350-ba4f-b23bd9c64774",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## 6. Queue the Kling video\n**Build Kling Video Request** builds one request (multi-shot, native audio, guardrails added to every shot) and adds the AI label to every caption. **Submit Video Job to Kling** queues it on fal, **Verify Video Job Queued** checks fal accepted it and **If Video Job Queued** starts polling.",
+        "width": 848,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3728,
+        272
+      ],
+      "id": "bf5fbf2c-e2a7-515f-b3f4-3c13e60c3634",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Switching to Kling 4.0 later\nThe model id lives in one place: `video_model` in **Configure Video Settings**. fal lists `fal-ai/kling-video/v4/image-to-video` at $0.157/s (21 Oct 2026). To switch, change `video_model` and `price_per_second_usd`, then test one run. **Build Kling Video Request** sends Kling 3.0 extras (audio, negative prompt, cfg) only to v3 endpoints, and sends durations as the strings v3 expects or the integers v4 expects. Check the endpoint's input fields on fal before switching.",
+        "width": 560,
+        "height": 340,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3720,
+        640
+      ],
+      "id": "cc0bda04-07c1-5256-b298-d572e27fbf1f",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## 7. Wait for the render\n**Wait for Video Queue** and **Fetch Video Job Status** check fal every 15 s. **Assess Video Job Status** marks the job done, failed or timed out (30 min) and **Switch by Video Job Status** sends it on. Timeouts cancel the fal job.",
+        "width": 848,
+        "height": 368,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4688,
+        272
+      ],
+      "id": "f791922e-3ae1-5bb5-b256-035834599b9f",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## 8. Fetch and check the video\n**Retrieve Video Result from fal** gets the clip and **Download Video File from fal** downloads it. **Check Video Specs** reads the real MP4 duration and size, and **If Video Specs OK** only lets a good file through to SocialRobot.",
+        "width": 848,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5680,
+        272
+      ],
+      "id": "d4027214-1109-506d-a980-cbd84a3f05be",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## 9. Save the TikTok draft\n**Draft TikTok Food Video** uses Post Mode *Send to Inbox (Draft)*. Nothing is public until you post it in the TikTok app. **Summarize Food Video** lists the cost estimate and next steps.",
+        "width": 432,
+        "height": 336,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6656,
+        224
+      ],
+      "id": "2da9dd8f-0dfc-5e2b-a0ae-a0f5f0b62838",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## Optional posts (disabled)\nConnected and **disabled by default**. Enable a node and pick an account; it publishes when the run finishes.\n- **Publish Instagram Reel**: Reel with Instagram's AI label on\n- **Post Facebook Reel**: Facebook Reel\n- **Share Threads Video**: Threads video, caption kept under 500 characters",
+        "width": 400,
+        "height": 768,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6656,
+        592
+      ],
+      "id": "0fce1e7f-1269-5a59-a621-a388ecada5ac",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## AI label and honest food content\n- Kling makes new frames from your real photo. Every caption ends with `ai_label_line` (\"AI-generated video made from our real photo.\"), and **Publish Instagram Reel** has **AI-Generated Content** on.\n- The node can't set TikTok's AI label on inbox drafts: turn on 'AI-generated content' in TikTok before you post.\n- Prompts tell Kling to keep the dish exactly as photographed: no extra toppings, bigger portions or new ingredients. Watch the clip next to the real dish. If it looks better than what you serve, don't post it.\n- Captions only use the facts you typed: no invented ingredients, prices, allergens or diet claims, and no reviews or testimonials.\n- No people: the prompts and negative prompt exclude people, hands and faces.",
+        "width": 460,
+        "height": 760,
+        "color": 1
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        7200,
+        224
+      ],
+      "id": "60b3f698-c734-5f0e-b98b-3046c37927a0",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## Handle errors\nA missing photo, upload or crop problems, a rejected or failed Kling job, timeouts, download errors, files that fail the checks and SocialRobot errors all end in **Log Food Video Errors** with one readable message, then **Halt on Video Error**. **Cancel fal Video Job** cancels the fal job first when it timed out. Add an error workflow in the settings for alerts.",
+        "width": 672,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4560,
+        1104
+      ],
+      "id": "7a962f78-d0f9-539e-b1f0-9db0a633d3bf",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "formTitle": "Create an AI food video from your dish photo",
+        "formDescription": "Upload one real photo of a dish, pastry or drink you serve. Kling turns it into a short vertical food ASMR video with natural sound, and the video goes to your TikTok inbox as a draft. Captions only use the facts you type here.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Dish Photo",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".jpg, .jpeg, .png, .webp",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Dish Name",
+              "placeholder": "e.g. Almond croissant",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Ingredients",
+              "fieldType": "textarea",
+              "placeholder": "Optional. Only true facts, e.g. butter croissant, almond cream, flaked almonds, powdered sugar"
+            },
+            {
+              "fieldLabel": "Price",
+              "placeholder": "Optional, exactly as on your menu, e.g. €3.80"
+            },
+            {
+              "fieldLabel": "Availability",
+              "placeholder": "Optional, e.g. Saturdays until sold out"
+            },
+            {
+              "fieldLabel": "Business Name",
+              "placeholder": "e.g. Bakkerij Noord",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Location or Link",
+              "placeholder": "Optional, e.g. Noordstraat 12, Utrecht or a menu link"
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "respondWithOptions": {
+            "values": {
+              "respondWith": "text",
+              "formSubmittedText": "Thanks! Your food video is rendering. It usually lands in your TikTok inbox within 5-15 minutes."
+            }
+          }
+        }
+      },
+      "name": "When Dish Photo Submitted",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        560,
+        400
+      ],
+      "id": "13db713d-c2da-5634-b215-a037e964a2b7",
+      "webhookId": "164d062d-bc0b-5fc5-8564-430bb9c22cc7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "da69e596-90d4-59b1-b238-9aa6c69a6808",
+              "name": "video_model",
+              "type": "string",
+              "value": "fal-ai/kling-video/v3/standard/image-to-video"
+            },
+            {
+              "id": "3f6582b1-9fb2-5b15-aeea-54f8223de3fe",
+              "name": "video_seconds",
+              "type": "number",
+              "value": 10
+            },
+            {
+              "id": "d78a02dc-51b0-5ea3-aa3a-2293b9e06f91",
+              "name": "shot_count",
+              "type": "number",
+              "value": 3
+            },
+            {
+              "id": "d81296f2-f4ab-5983-8bdb-2fe8ead48b53",
+              "name": "generate_audio",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "81456e39-3169-5b70-a21f-74b5dcd47ead",
+              "name": "price_per_second_usd",
+              "type": "number",
+              "value": 0.126
+            },
+            {
+              "id": "29742dfa-3072-5404-baf1-448cb1979386",
+              "name": "price_per_second_no_audio_usd",
+              "type": "number",
+              "value": 0.084
+            },
+            {
+              "id": "60770fb4-cfed-5d9a-bb9d-bbfb6f8372fe",
+              "name": "cfg_scale",
+              "type": "number",
+              "value": 0.5
+            },
+            {
+              "id": "eb924eb0-a8d8-5d84-91e3-5cbf3cda34e6",
+              "name": "negative_prompt",
+              "type": "string",
+              "value": "people, person, hands, fingers, arms, face, body, added ingredients, extra toppings, different dish, bigger portion, text, letters, logo, watermark, speech, voice, talking, singing, music, blur, distortion, warped plate, low quality"
+            },
+            {
+              "id": "237a3b9d-96cc-5dde-9c38-fe36cd73f7cc",
+              "name": "prompt_guardrails",
+              "type": "string",
+              "value": "Keep the dish, plate and background exactly as photographed, with no added or removed ingredients or toppings. No people, hands or faces. No text or logos. Natural food sounds only, no speech or music."
+            },
+            {
+              "id": "7bd1abb4-a400-5164-9c9c-14c61c5fedbd",
+              "name": "shot_1_prompt",
+              "type": "string",
+              "value": "Slow cinematic macro push-in toward the {dish}, shallow depth of field, soft natural window light, subtle natural movement in the food. Sound: close-up food ASMR, soft crisp textures, quiet cafe ambience."
+            },
+            {
+              "id": "921d136b-3f01-5a99-991c-8a37cc6de529",
+              "name": "shot_2_prompt",
+              "type": "string",
+              "value": "Extreme close-up slow pan across the texture of the {dish} with a gentle rack focus from the front edge to the center. Sound: delicate crunchy, crackling food ASMR, quiet cafe ambience."
+            },
+            {
+              "id": "b58a1196-1aa8-5492-a1d7-f3d6c6206350",
+              "name": "shot_3_prompt",
+              "type": "string",
+              "value": "Slow half orbit around the {dish} on its plate, ending on a clean hero framing. Warm natural light, same table and background. Sound: soft food ASMR textures and quiet cafe ambience."
+            },
+            {
+              "id": "9e08a76c-2888-593f-a7ae-5008d5cdad39",
+              "name": "use_openai",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "8a91f8e7-2bee-5c42-b3e8-d3ab8932df5e",
+              "name": "caption_language",
+              "type": "string",
+              "value": "English"
+            },
+            {
+              "id": "882ba481-1679-5f6f-83a3-347d8ca9bd81",
+              "name": "caption_tone",
+              "type": "string",
+              "value": "Warm, simple and appetizing. Short sentences. No hype or superlatives."
+            },
+            {
+              "id": "9b616f98-ae97-5618-9ce7-3e085dfe6d60",
+              "name": "extra_hashtags",
+              "type": "string",
+              "value": "#foodasmr #bakery #cafe"
+            },
+            {
+              "id": "8c707a39-6863-5617-a18f-7ec37aa4aeb3",
+              "name": "ai_label_line",
+              "type": "string",
+              "value": "AI-generated video made from our real photo."
+            },
+            {
+              "id": "0a9b1c99-e044-57a7-b1e9-39216813a6d7",
+              "name": "business_footer",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "e3e1f381-7caf-546e-b01b-7c93a522f221",
+              "name": "crop_to_vertical",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "1176b81f-0fa0-5b6e-a6d9-363da5a770af",
+              "name": "poll_every_seconds",
+              "type": "number",
+              "value": 15
+            },
+            {
+              "id": "5da273cc-6c6f-5d47-8313-6c9fb714ee13",
+              "name": "timeout_minutes",
+              "type": "number",
+              "value": 30
+            },
+            {
+              "id": "06a653cf-c48c-52c8-af05-ef61900c3255",
+              "name": "max_file_mb",
+              "type": "number",
+              "value": 200
+            },
+            {
+              "id": "48810289-17ef-5c09-99a8-971aa71d7a01",
+              "name": "duration_tolerance_seconds",
+              "type": "number",
+              "value": 1.5
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Configure Video Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        780,
+        400
+      ],
+      "id": "a2f1bda4-0913-5e16-a207-78f7e42ce760"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "93d0e0f8-74ba-568e-a349-47037956ae2c",
+              "leftValue": "={{ Object.values($('When Dish Photo Submitted').first().binary || {}).some(b => String(b.mimeType || '').startsWith('image/')) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "If Dish Photo Exists",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1000,
+        400
+      ],
+      "id": "a4ed70d2-ba1c-5c36-9dd6-b2fe87c68cbc"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Takes the dish photo from the form and stores it under one predictable binary name: photo.\nconst form = $('When Dish Photo Submitted').first();\nconst photo = Object.values(form.binary || {}).find(b => String(b.mimeType || '').startsWith('image/'));\nconst ext = { 'image/png': 'png', 'image/webp': 'webp' };\nreturn [{\n  json: {\n    file_name: photo.fileName || `dish.${ext[photo.mimeType] || 'jpg'}`,\n    mime_type: photo.mimeType || 'image/jpeg',\n  },\n  binary: { photo },\n}];"
+      },
+      "name": "Organize Dish Photo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        400
+      ],
+      "id": "60cf841a-7084-5e2d-9047-cf56720f312e"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Reads the photo's pixel size from its file header (JPEG, PNG, WebP) and plans a centered 9:16 crop.\n// Kling 3.0 has no aspect-ratio input: the video takes its shape from the photo, so a 9:16 photo gives a vertical Reel.\nconst s = $('Configure Video Settings').first().json;\nconst target = 9 / 16;\nconst cropOn = s.crop_to_vertical === true || s.crop_to_vertical === 'true';\n\nfunction exifOrientation(buf, t) {\n  const le = buf.toString('ascii', t, t + 2) === 'II';\n  const u16 = o => (le ? buf.readUInt16LE(o) : buf.readUInt16BE(o));\n  const u32 = o => (le ? buf.readUInt32LE(o) : buf.readUInt32BE(o));\n  const ifd = t + u32(t + 4);\n  const count = u16(ifd);\n  for (let k = 0; k < count; k++) {\n    const e = ifd + 2 + k * 12;\n    if (u16(e) === 0x0112) return u16(e + 8);\n  }\n  return 1;\n}\n\nfunction imageSize(buf) {\n  try {\n    if (buf[0] === 0x89 && buf.toString('ascii', 1, 4) === 'PNG') {\n      return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20), orientation: 1 };\n    }\n    if (buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP') {\n      const kind = buf.toString('ascii', 12, 16);\n      if (kind === 'VP8X') return { w: 1 + buf.readUIntLE(24, 3), h: 1 + buf.readUIntLE(27, 3), orientation: 1 };\n      if (kind === 'VP8L') { const b = buf.readUInt32LE(21); return { w: (b & 0x3fff) + 1, h: ((b >> 14) & 0x3fff) + 1, orientation: 1 }; }\n      if (kind === 'VP8 ') return { w: buf.readUInt16LE(26) & 0x3fff, h: buf.readUInt16LE(28) & 0x3fff, orientation: 1 };\n    }\n    if (buf[0] === 0xff && buf[1] === 0xd8) {\n      let i = 2;\n      let orientation = 1;\n      while (i + 9 < buf.length) {\n        if (buf[i] !== 0xff) { i++; continue; }\n        const marker = buf[i + 1];\n        if (marker === 0xff) { i++; continue; }\n        if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd8)) { i += 2; continue; }\n        const len = buf.readUInt16BE(i + 2);\n        if (marker === 0xe1 && buf.toString('ascii', i + 4, i + 8) === 'Exif') {\n          try { orientation = exifOrientation(buf, i + 10) || 1; } catch (e) { orientation = 1; }\n        }\n        if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {\n          return { w: buf.readUInt16BE(i + 7), h: buf.readUInt16BE(i + 5), orientation };\n        }\n        i += 2 + len;\n      }\n    }\n  } catch (e) {}\n  return null;\n}\n\nconst item = $input.first();\nconst buf = await this.helpers.getBinaryDataBuffer(0, 'photo');\nconst size = imageSize(buf);\nlet crop = { x_percent: 0, y_percent: 0, width_percent: 100, height_percent: 100 };\nlet problem = null;\nlet w = null;\nlet h = null;\nif (!size || !size.w || !size.h) {\n  problem = `The dish photo (${item.json.file_name}) could not be read. Use a JPG, PNG or WebP photo.`;\n} else {\n  // EXIF orientations 5-8 mean the phone stored the photo rotated by 90 degrees.\n  const rotated = size.orientation >= 5 && size.orientation <= 8;\n  w = rotated ? size.h : size.w;\n  h = rotated ? size.w : size.h;\n  const ratio = w / h;\n  if (cropOn && ratio > target * 1.01) {\n    const wp = (target / ratio) * 100;\n    crop = { x_percent: Math.round(((100 - wp) / 2) * 1000) / 1000, y_percent: 0, width_percent: Math.round(wp * 1000) / 1000, height_percent: 100 };\n  } else if (cropOn && ratio < target * 0.99) {\n    const hp = (ratio / target) * 100;\n    crop = { x_percent: 0, y_percent: Math.round(((100 - hp) / 2) * 1000) / 1000, width_percent: 100, height_percent: Math.round(hp * 1000) / 1000 };\n  }\n  const outW = (w * crop.width_percent) / 100;\n  const outH = (h * crop.height_percent) / 100;\n  if (outW < 300 || outH < 300) problem = `The dish photo is too small: Kling needs at least 300 x 300 px after cropping (got ${Math.round(outW)} x ${Math.round(outH)}).`;\n  if (!cropOn && (ratio < 0.4 || ratio > 2.5)) problem = `The dish photo has an aspect ratio Kling does not accept (0.4 to 2.5).`;\n}\nreturn [{ json: { ...item.json, width: w, height: h, ...crop, size_problem: problem }, binary: item.binary }];"
+      },
+      "name": "Design Vertical Crop for Photo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1500,
+        400
+      ],
+      "id": "32bdb52d-ad95-55ea-97f8-f0367646ebbd"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://rest.fal.ai/storage/upload/initiate?storage_type=fal-cdn-v3",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ content_type: $json.mime_type, file_name: $json.file_name }) }}",
+        "options": {}
+      },
+      "name": "Post for fal Upload URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1780,
+        400
+      ],
+      "id": "d813792a-abf0-50a2-9ec2-5f8d20196893",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// fal returned an upload URL. Put the photo back next to it for the upload step.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst photo = $('Design Vertical Crop for Photo').first();\nconst res = $input.first().json || {};\nreturn [{\n  json: {\n    ...photo.json,\n    upload_url: res.upload_url || '',\n    file_url: res.file_url || '',\n    upload_error: res.upload_url ? '' : errText(res.error) || 'no upload URL returned',\n  },\n  binary: photo.binary,\n}];"
+      },
+      "name": "Setup Photo for fal Upload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        400
+      ],
+      "id": "d7af5d99-44d5-5506-b926-d7a361097618"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.upload_url }}",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "photo",
+        "options": {}
+      },
+      "name": "Upload Photo to fal Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2220,
+        400
+      ],
+      "id": "8a2e7b27-7b7f-5fad-869b-b41f5a978e7b",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://fal.run/fal-ai/workflow-utilities/crop-image",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ image_url: $('Setup Photo for fal Upload').first().json.file_url, x_percent: $('Setup Photo for fal Upload').first().json.x_percent, y_percent: $('Setup Photo for fal Upload').first().json.y_percent, width_percent: $('Setup Photo for fal Upload').first().json.width_percent, height_percent: $('Setup Photo for fal Upload').first().json.height_percent, output_format: 'jpg' }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "name": "Send Crop Request to fal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2500,
+        400
+      ],
+      "id": "9c64e30f-06f3-58d1-948e-ec3f7331d043",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Makes sure the photo is on fal and cropped, then picks the plan: OpenAI prompts or the template prompts.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Configure Video Settings').first().json;\nconst p = $('Setup Photo for fal Upload').first().json;\nconst put = $('Upload Photo to fal Storage').first().json || {};\nconst crop = $input.first().json || {};\nconst url = crop.image && crop.image.url;\nconst problems = [];\nif (p.size_problem) problems.push(p.size_problem);\nelse if (p.upload_error) problems.push(`fal storage did not return an upload URL (${p.upload_error}).`);\nelse if (put.error) problems.push(`Upload to fal storage failed (${errText(put.error)}).`);\nelse if (!url) problems.push(`fal could not crop the photo (${errText(crop.error) || errText(crop.detail) || 'no image URL returned'}).`);\nif (problems.length) return [{ json: { route: 'error', ok: false, stage: 'Dish photo', problems } }];\nconst useAi = s.use_openai === true || s.use_openai === 'true';\nreturn [{ json: { route: useAi ? 'ai' : 'template', ok: true, file_name: p.file_name, image_url: url } }];"
+      },
+      "name": "Validate Photo on fal",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2720,
+        400
+      ],
+      "id": "21b8e0ba-3a8a-5e5c-826f-9d32e4450385"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "error",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "58a04612-4f8a-555f-9abf-60144faa64b1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Photo Problem"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "ai",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "aa1ee0bf-58ce-5ae0-a11e-493bb310c021"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Use OpenAI"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Template Prompts"
+        }
+      },
+      "name": "Switch by Food Video Plan",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2940,
+        400
+      ],
+      "id": "0d87e3d5-95d8-53bd-91a7-bf7eefc86429"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You plan a short vertical food ASMR video for a small café, bakery or restaurant, and write its social captions.\nThe attached image is the business's own REAL photo of the dish. An image-to-video model (Kling) will animate this exact photo, so the first frame is the photo.\n\nFacts from the business (the ONLY facts you may use in captions):\nDish name: {{ $('When Dish Photo Submitted').first().json['Dish Name'] }}\nIngredients: {{ $('When Dish Photo Submitted').first().json['Ingredients'] || 'not given' }}\nPrice: {{ $('When Dish Photo Submitted').first().json['Price'] || 'not given' }}\nAvailability: {{ $('When Dish Photo Submitted').first().json['Availability'] || 'not given' }}\nBusiness: {{ $('When Dish Photo Submitted').first().json['Business Name'] }}\nLocation or link: {{ $('When Dish Photo Submitted').first().json['Location or Link'] || 'not given' }}\nCaption language: {{ $('Configure Video Settings').first().json.caption_language }}. Tone: {{ $('Configure Video Settings').first().json.caption_tone }}\n\nReturn:\n- visible_dish: one sentence describing only what you can see in the photo.\n- shots: exactly {{ Math.min(3, Math.max(1, Math.round(Number($('Configure Video Settings').first().json.shot_count) || 1))) }} objects, each {\"prompt\": \"...\"}, in English, under 300 characters each, for a {{ $('Configure Video Settings').first().json.video_seconds }}-second clip cut into that many shots. Each prompt describes one slow, close, appetizing camera move on THIS dish (for example a macro push-in, a slow pan across the texture, a rack focus, a slow orbit, a top-down slow rotation) plus natural motion and the ASMR sound that fits it (soft crackle of pastry, crunch, gentle sizzle, bubbles, a slow pour, quiet café ambience).\n- tiktok_caption: under 300 characters, ending with 3-5 hashtags that include {{ $('Configure Video Settings').first().json.extra_hashtags }}.\n- instagram_caption: under 600 characters, short lines, hashtags at the end (include {{ $('Configure Video Settings').first().json.extra_hashtags }}).\n- facebook_caption: under 500 characters, at most 2 hashtags.\n- threads_caption: under 350 characters, at most 1 hashtag.\n\nRules for the shots:\n- Keep the dish exactly as photographed: same ingredients, toppings, garnish, portion size, plate, table and background. Never add, remove, enlarge or restyle anything.\n- No people at all: no hands, fingers, arms, faces or bodies. Nothing is picked up, cut, bitten or served by a person, and utensils do not move on their own.\n- Only show a pour, drizzle, dusting or melt if that sauce, syrup, drink or topping is already clearly visible in the photo, and let it come from above, out of frame, without making the portion bigger.\n- Steam only if the food looks hot. No text, logos, labels or watermarks. Realistic light, no fast moves, no fisheye.\n- Sound: natural food and café sounds only. No speech, voices, singing or music.\n\nRules for the captions:\n- Use only the facts above. Do not invent ingredients, flavours, allergens, diet or health claims (vegan, gluten-free, healthy, organic), origin, 'homemade', 'freshly baked', awards, discounts or prices.\n- Write the price and availability exactly as given, or leave them out if not given.\n- No reviews, ratings, quotes, testimonials or claims about what customers say. No superlatives like 'best in town'.\n- Do not say the video was filmed. Do not write an AI disclosure or disclaimer: one is added automatically.",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "type": "HumanMessagePromptTemplate",
+              "messageType": "imageUrl",
+              "imageUrl": "={{ $json.image_url }}",
+              "imageDetail": "low"
+            }
+          ]
+        }
+      },
+      "name": "Create Shot Prompts and Captions",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        3260,
+        400
+      ],
+      "id": "4fe717b5-21fc-55ff-8712-052893901317",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"visible_dish\": \"An almond croissant with flaked almonds and powdered sugar on a white plate on a wooden table\",\n  \"shots\": [\n    {\n      \"prompt\": \"Slow macro push-in toward the almond croissant, flakes of pastry shimmer in soft window light. Sound: soft crackle of flaky pastry, quiet cafe ambience.\"\n    },\n    {\n      \"prompt\": \"Extreme close-up slow pan across the flaked almonds and powdered sugar, gentle rack focus. Sound: delicate crunchy ASMR textures.\"\n    },\n    {\n      \"prompt\": \"Slow half orbit around the croissant on its plate, ending on a clean hero framing. Sound: soft pastry textures, quiet cafe ambience.\"\n    }\n  ],\n  \"tiktok_caption\": \"Almond croissant at Bakkerij Noord. €3.80, Saturdays until sold out. #foodasmr #bakery #cafe\",\n  \"instagram_caption\": \"...\",\n  \"facebook_caption\": \"...\",\n  \"threads_caption\": \"...\"\n}"
+      },
+      "name": "Format Shot Details",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3260,
+        660
+      ],
+      "id": "e4362ebb-d55f-5d81-8c5b-81d77caef765"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gpt-6-luna"
+        },
+        "options": {}
+      },
+      "name": "OpenAI Luna GPT-6",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3460,
+        660
+      ],
+      "id": "35f22b8a-37de-5cf8-a245-fe16ddb5dd21"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Builds the one Kling request (1-3 shots in a single clip) and the caption for every network.\n// The AI label line and your footer are added here, so every caption carries them.\nconst s = $('Configure Video Settings').first().json;\nconst f = $('When Dish Photo Submitted').first().json;\nconst photo = $('Validate Photo on fal').first().json;\nconst aiRan = $('Create Shot Prompts and Captions').isExecuted;\nconst ai = aiRan ? (($input.first().json && $input.first().json.output) || {}) : {};\nconst clean = v => String(v ?? '').trim();\nconst dish = clean(f['Dish Name']);\nconst model = clean(s.video_model);\nconst isV3 = /kling-video\\/v3\\//.test(model);\nconst isV4 = /kling-video\\/v4\\//.test(model);\n\n// ---- shots: Kling 3.0 takes 3-15 s in total and 1-15 s per shot\nconst shotCount = Math.min(3, Math.max(1, Math.round(Number(s.shot_count) || 1)));\nconst total = Math.min(15, Math.max(3, shotCount, Math.round(Number(s.video_seconds) || 10)));\nconst base = Math.floor(total / shotCount);\nconst durations = Array.from({ length: shotCount }, (_, i) => base + (i < total - base * shotCount ? 1 : 0));\nconst guard = clean(s.prompt_guardrails);\nconst templateShots = [s.shot_1_prompt, s.shot_2_prompt, s.shot_3_prompt].map(t => clean(t).split('{dish}').join(dish || 'dish'));\nconst aiShots = Array.isArray(ai.shots) ? ai.shots.map(x => clean(typeof x === 'string' ? x : x && x.prompt)) : [];\n// Kling 4.0 caps each shot prompt at 512 characters; Kling 3.0 at 2500 for the whole prompt.\nconst cap = isV4 ? 512 : 1200;\nlet fallbacks = 0;\nconst shots = durations.map((d, i) => {\n  let text = aiShots[i];\n  if (!text) { fallbacks++; text = templateShots[i] || templateShots[0]; }\n  return { prompt: `${text.slice(0, Math.max(80, cap - guard.length - 1))} ${guard}`.trim().slice(0, cap), duration: d };\n});\nlet promptSource = 'template shots';\nif (aiRan) promptSource = fallbacks === 0 ? 'OpenAI' : (fallbacks === shotCount ? 'template shots (OpenAI returned none)' : `OpenAI (${fallbacks} shot(s) from the template)`);\n\n// ---- fal request (field names from the fal OpenAPI schema of the endpoint in video_model)\nconst body = { start_image_url: photo.image_url };\nif (shots.length === 1) {\n  body.prompt = shots[0].prompt;\n  body.duration = isV3 ? String(total) : total;\n} else {\n  body.multi_prompt = shots.map(x => ({ prompt: x.prompt, duration: isV3 ? String(x.duration) : x.duration }));\n  if (isV3) { body.duration = String(total); body.shot_type = 'customize'; }\n}\nconst audio = s.generate_audio === true || s.generate_audio === 'true';\nif (isV3) {\n  body.generate_audio = audio;\n  body.negative_prompt = clean(s.negative_prompt);\n  body.cfg_scale = Number(s.cfg_scale);\n}\n\n// ---- captions: only facts typed into the form\nconst about = clean(f['Ingredients']);\nconst price = clean(f['Price']);\nconst when = clean(f['Availability']);\nconst business = clean(f['Business Name']);\nconst where = clean(f['Location or Link']);\nconst tags = clean(s.extra_hashtags);\nconst firstTag = (tags.match(/#[^\\s#]+/) || [''])[0];\nconst tail = [clean(s.ai_label_line), clean(s.business_footer)].filter(Boolean).join('\\n');\nconst head = business ? `${dish} at ${business}` : dish;\nconst offer = [price, when].filter(Boolean).join(' | ');\nconst template = {\n  tiktok: [head, about, offer, tags].filter(Boolean).join('\\n'),\n  instagram: [head, about, offer, where, tags].filter(Boolean).join('\\n\\n'),\n  facebook: [head, about, offer, where].filter(Boolean).join('\\n\\n'),\n  threads: [head, offer, where, firstTag].filter(Boolean).join('\\n'),\n};\nconst pick = (key, aiKey, max) => {\n  const body = clean(ai[aiKey]) || template[key];\n  const room = Math.max(0, max - tail.length - 2);\n  return `${body.slice(0, room).trim()}\\n\\n${tail}`.trim();\n};\nconst captions = {\n  tiktok: pick('tiktok', 'tiktok_caption', 2200),\n  instagram: pick('instagram', 'instagram_caption', 2200),\n  facebook: pick('facebook', 'facebook_caption', 5000),\n  threads: pick('threads', 'threads_caption', 500),\n  source: clean(ai.tiktok_caption) ? 'OpenAI' : 'template',\n};\n\nreturn [{\n  json: {\n    model,\n    body,\n    shots: shots.length,\n    total_seconds: total,\n    generate_audio: isV3 ? audio : null,\n    captions,\n    prompt_source: promptSource,\n    visible_dish: clean(ai.visible_dish),\n  },\n}];"
+      },
+      "name": "Build Kling Video Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3780,
+        400
+      ],
+      "id": "7d0cdcb5-db9c-5e3e-8e68-4f6bc4662f76"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://queue.fal.run/' + $json.model }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {}
+      },
+      "name": "Submit Video Job to Kling",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4000,
+        400
+      ],
+      "id": "d24b3ca3-df4c-5a68-a45d-ffb12d9172f1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// The video job must have a request id from fal before polling starts.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst j = $input.first().json || {};\nif (!j.request_id || !j.status_url || !j.response_url) {\n  return [{ json: { ok: false, stage: 'Kling submit', problems: [`fal did not accept the video job (${errText(j.error) || errText(j.detail) || 'no request id'}).`] } }];\n}\nreturn [{\n  json: {\n    ok: true,\n    request_id: j.request_id,\n    status_url: j.status_url,\n    response_url: j.response_url,\n    cancel_url: j.cancel_url || `${j.response_url}/cancel`,\n    submitted_at: Date.now(),\n  },\n}];"
+      },
+      "name": "Verify Video Job Queued",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4220,
+        400
+      ],
+      "id": "edade6ea-06b9-57de-8296-1ada04c2fd15"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "44b78426-32b1-55bb-8fb4-bca6e877c0e4",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "If Video Job Queued",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4440,
+        400
+      ],
+      "id": "d52329f6-3061-5234-82a6-3d8cebde09cd"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $('Configure Video Settings').first().json.poll_every_seconds }}",
+        "unit": "seconds"
+      },
+      "name": "Wait for Video Queue",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4740,
+        400
+      ],
+      "id": "d9a97806-a2d8-538d-bef6-21a0087153ea",
+      "webhookId": "e9663c8f-cf28-5fd2-bdd9-da8df2737dea"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.status_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Fetch Video Job Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4960,
+        400
+      ],
+      "id": "41306789-ebb9-5830-8168-de208f85f0b0",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Decides one state for the job: done, failed, timed_out, or running (check again).\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Configure Video Settings').first().json;\nconst job = $('Verify Video Job Queued').first().json;\nconst c = $input.first().json || {};\nconst minutes = (Date.now() - Number(job.submitted_at || Date.now())) / 60000;\nconst status = c.status || 'UNKNOWN';\nconst problems = [];\nlet state = 'running';\nif (!c.status && c.error) { state = 'failed'; problems.push(`Status check failed (${errText(c.error)}).`); }\nelse if (status === 'COMPLETED' && c.error) { state = 'failed'; problems.push(`Kling failed on fal: ${errText(c.error)}${c.error_type ? ` [${c.error_type}]` : ''}`); }\nelse if (status === 'COMPLETED') state = 'done';\nelse if (minutes > Number(s.timeout_minutes)) { state = 'timed_out'; problems.push(`Kling took longer than ${s.timeout_minutes} minutes (last status ${status}).`); }\nreturn [{ json: { ...job, status, state, stage: 'Kling render', queue_position: c.queue_position ?? null, minutes_elapsed: Math.round(minutes * 10) / 10, problems } }];"
+      },
+      "name": "Assess Video Job Status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5180,
+        400
+      ],
+      "id": "e17250b0-212d-53dd-8fe7-87083d7ffaa5"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.state }}",
+                    "rightValue": "done",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "13403f21-ef10-576b-907f-8aa0c2a4db15"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Video Done"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.state }}",
+                    "rightValue": "failed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5527b037-a4ed-50c3-ba2d-5d98cd4bd5fb"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Failed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.state }}",
+                    "rightValue": "timed_out",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d1cb7706-afc4-5af6-8c37-3b2c592b59a0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Timed Out"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Still Rendering"
+        }
+      },
+      "name": "Switch by Video Job Status",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        5400,
+        400
+      ],
+      "id": "9db526ff-6386-573e-9f12-2e845fa4d2c0"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.response_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Retrieve Video Result from fal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5720,
+        400
+      ],
+      "id": "e02b510b-defd-5db3-a503-e5f4c245cacb",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ ($json.video && $json.video.url) || '' }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "name": "Download Video File from fal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5940,
+        400
+      ],
+      "id": "b53b11aa-73ec-5918-99d0-706002a51987",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Checks the finished file before it goes to SocialRobot. Duration comes from the MP4 header (mvhd box).\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Configure Video Settings').first().json;\nconst plan = $('Build Kling Video Request').first().json;\nconst result = $('Retrieve Video Result from fal').first().json || {};\nconst item = $input.first();\nconst video = item.binary && item.binary.data;\nconst problems = [];\nlet sizeMb = 0;\nlet seconds = null;\nif (!result.video || !result.video.url) {\n  problems.push(`Kling finished but fal returned no video (${errText(result.error) || errText(result.detail) || 'empty response'}).`);\n} else if (!video) {\n  problems.push(`The video could not be downloaded from fal (${errText(item.json.error) || 'no file'}).`);\n} else {\n  const buf = await this.helpers.getBinaryDataBuffer(0, 'data');\n  sizeMb = buf.length / 1048576;\n  const i = buf.indexOf('mvhd');\n  if (i > 3) {\n    const v1 = buf[i + 4] === 1;\n    const scale = buf.readUInt32BE(i + (v1 ? 24 : 16));\n    const units = v1 ? Number(buf.readBigUInt64BE(i + 28)) : buf.readUInt32BE(i + 20);\n    if (scale) seconds = Math.round((units / scale) * 10) / 10;\n  }\n  const type = String(video.mimeType || '');\n  if (!/video\\/(mp4|quicktime)/.test(type) && !/\\.(mp4|mov)$/i.test(video.fileName || '')) problems.push(`Unexpected file type ${type || 'unknown'}.`);\n  if (sizeMb > Number(s.max_file_mb)) problems.push(`File is ${sizeMb.toFixed(1)} MB, above the ${s.max_file_mb} MB limit.`);\n  if (seconds === null) problems.push('Could not read the video duration.');\n  else if (Math.abs(seconds - Number(plan.total_seconds)) > Number(s.duration_tolerance_seconds)) problems.push(`Video is ${seconds} s; expected ${plan.total_seconds} s.`);\n  else if (seconds < 3) problems.push(`Video is ${seconds} s; Reels need at least 3 s.`);\n}\nreturn [{\n  json: { ok: problems.length === 0, stage: 'Video check', problems, size_mb: Math.round(sizeMb * 100) / 100, duration_seconds: seconds, video_url: (result.video && result.video.url) || '' },\n  binary: item.binary,\n}];"
+      },
+      "name": "Check Video Specs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6160,
+        400
+      ],
+      "id": "106a4538-718e-5335-8aa0-041861ba10ba"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d79af0ff-55a6-51e8-8919-cea67d9a5350",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "If Video Specs OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6380,
+        400
+      ],
+      "id": "8c8f5d4f-99d2-5f6f-95e5-0e93004f515f"
+    },
+    {
+      "parameters": {
+        "resource": "tiktok",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Build Kling Video Request').first().json.captions.tiktok }}",
+        "medias": [
+          {
+            "mediaSource": "binary",
+            "binaryPropertyName": "data",
+            "mediaType": "VIDEO"
+          }
+        ],
+        "postMode": "UPLOAD",
+        "publishMode": "NOW"
+      },
+      "name": "Draft TikTok Food Video",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        6700,
+        400
+      ],
+      "id": "12f53fa8-ae1f-500a-b31f-6cae2d073d9d",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9c914405-df57-5fa4-9e1c-e4ac850d0949",
+              "name": "tiktok_post_id",
+              "type": "string",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "id": "74eeed09-68af-5553-99b1-fb283720f038",
+              "name": "status",
+              "type": "string",
+              "value": "={{ $json.status }}"
+            },
+            {
+              "id": "5d221cd8-4d8f-5729-b4cb-101f09801d91",
+              "name": "dish",
+              "type": "string",
+              "value": "={{ $('When Dish Photo Submitted').first().json['Dish Name'] }}"
+            },
+            {
+              "id": "a2cf4179-1c9d-5f5c-912b-4abb87d59dfa",
+              "name": "shots",
+              "type": "number",
+              "value": "={{ $('Build Kling Video Request').first().json.shots }}"
+            },
+            {
+              "id": "3f6582b1-9fb2-5b15-aeea-54f8223de3fe",
+              "name": "video_seconds",
+              "type": "number",
+              "value": "={{ $('Check Video Specs').first().json.duration_seconds }}"
+            },
+            {
+              "id": "0bb68f8a-a0ef-509e-bf5a-45319aa4b1f1",
+              "name": "file_size_mb",
+              "type": "number",
+              "value": "={{ $('Check Video Specs').first().json.size_mb }}"
+            },
+            {
+              "id": "343d5be4-0c7d-556c-899b-8dec76289f9a",
+              "name": "estimated_kling_cost_usd",
+              "type": "number",
+              "value": "={{ Math.round(Number($('Build Kling Video Request').first().json.total_seconds) * Number($('Build Kling Video Request').first().json.generate_audio === false ? $('Configure Video Settings').first().json.price_per_second_no_audio_usd : $('Configure Video Settings').first().json.price_per_second_usd) * 100) / 100 }}"
+            },
+            {
+              "id": "5cb2e334-c31c-5187-adb6-29471eb0fe85",
+              "name": "prompt_source",
+              "type": "string",
+              "value": "={{ $('Build Kling Video Request').first().json.prompt_source }}"
+            },
+            {
+              "id": "9525dcdb-49f7-568e-b72c-012fc96dfca3",
+              "name": "caption_source",
+              "type": "string",
+              "value": "={{ $('Build Kling Video Request').first().json.captions.source }}"
+            },
+            {
+              "id": "ea7eb46d-a71f-59ba-8821-3abb95fcafc6",
+              "name": "fal_video_url",
+              "type": "string",
+              "value": "={{ $('Check Video Specs').first().json.video_url }}"
+            },
+            {
+              "id": "0e7c15b0-376c-547b-ac60-eebd9ddc6817",
+              "name": "status_note",
+              "type": "string",
+              "value": "In UPLOAD mode SocialRobot returns PUBLISHED when the video is delivered to your TikTok inbox as a draft, not public."
+            },
+            {
+              "id": "066a68d7-3b18-55c5-9271-b3ac075e1d27",
+              "name": "next_step",
+              "type": "string",
+              "value": "Watch the video next to the real dish. In TikTok, open the inbox notification, turn on the AI-generated content label, then post."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Summarize Food Video",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6940,
+        400
+      ],
+      "id": "93e03d63-1cf7-5500-9f49-3b1240d0978e"
+    },
+    {
+      "parameters": {
+        "resource": "instagram",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Build Kling Video Request').first().json.captions.instagram }}",
+        "mediaSource": "binary",
+        "mediaType": "VIDEO",
+        "binaryPropertyName": "data",
+        "isAiGenerated": true,
+        "isReel": true,
+        "publishMode": "NOW"
+      },
+      "name": "Publish Instagram Reel",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        6704,
+        832
+      ],
+      "id": "ed4d1d71-9af9-55f6-84d1-eb3205c59b0c",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "facebook",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Build Kling Video Request').first().json.captions.facebook }}",
+        "medias": [
+          {
+            "mediaSource": "binary",
+            "binaryPropertyName": "data",
+            "mediaType": "VIDEO"
+          }
+        ],
+        "isReel": true,
+        "publishMode": "NOW"
+      },
+      "name": "Post Facebook Reel",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        6704,
+        1008
+      ],
+      "id": "33d4b8c8-dd3d-54cc-a102-62cb35665bd3",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "threads",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Build Kling Video Request').first().json.captions.threads }}",
+        "medias": [
+          {
+            "mediaSource": "binary",
+            "binaryPropertyName": "data",
+            "mediaType": "VIDEO"
+          }
+        ],
+        "publishMode": "NOW"
+      },
+      "name": "Share Threads Video",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        6704,
+        1200
+      ],
+      "id": "120e7b6b-5322-5ac5-8a0f-51c3f9978885",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.cancel_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Cancel fal Video Job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4600,
+        1260
+      ],
+      "id": "b4b438d1-56fe-58a8-a60d-1a5d840edf7c",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One readable reason for whatever went wrong. Add an error workflow in the workflow settings to get alerts.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst f = $('When Dish Photo Submitted').first();\nconst j = $input.first().json || {};\nlet message;\nif ($('Cancel fal Video Job').isExecuted) {\n  const src = $('Assess Video Job Status').first().json;\n  message = `Kling video stopped (${src.stage || 'Kling'}): ${(src.problems || []).join(' ')} The unfinished fal job was sent a cancel request.`;\n} else if (Array.isArray(j.problems) && j.problems.length) {\n  message = `${j.stage || 'Check'} failed: ${j.problems.join(' ')}`;\n} else if (j.error && $('Draft TikTok Food Video').isExecuted) {\n  message = `SocialRobot could not save the TikTok draft: ${errText(j.error)}`;\n} else if (!$('Organize Dish Photo').isExecuted) {\n  message = 'Upload one photo of the dish (JPG, PNG or WebP).';\n} else {\n  message = `Unexpected failure: ${JSON.stringify(j).slice(0, 500)}`;\n}\nreturn [{ json: { message, dish: f.json['Dish Name'] || '' } }];"
+      },
+      "name": "Log Food Video Errors",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4840,
+        1260
+      ],
+      "id": "f393a500-43e0-552e-87c0-e5509eadf801"
+    },
+    {
+      "parameters": {
+        "errorMessage": "={{ $json.message }}"
+      },
+      "name": "Halt on Video Error",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        5080,
+        1260
+      ],
+      "id": "40fd1a0c-a25d-5151-beb0-5b6427f5fa0b"
+    }
+  ],
+  "connections": {
+    "When Dish Photo Submitted": {
+      "main": [
+        [
+          {
+            "node": "Configure Video Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configure Video Settings": {
+      "main": [
+        [
+          {
+            "node": "If Dish Photo Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Dish Photo Exists": {
+      "main": [
+        [
+          {
+            "node": "Organize Dish Photo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Food Video Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Organize Dish Photo": {
+      "main": [
+        [
+          {
+            "node": "Design Vertical Crop for Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Design Vertical Crop for Photo": {
+      "main": [
+        [
+          {
+            "node": "Post for fal Upload URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post for fal Upload URL": {
+      "main": [
+        [
+          {
+            "node": "Setup Photo for fal Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Setup Photo for fal Upload": {
+      "main": [
+        [
+          {
+            "node": "Upload Photo to fal Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Photo to fal Storage": {
+      "main": [
+        [
+          {
+            "node": "Send Crop Request to fal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Crop Request to fal": {
+      "main": [
+        [
+          {
+            "node": "Validate Photo on fal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Photo on fal": {
+      "main": [
+        [
+          {
+            "node": "Switch by Food Video Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch by Food Video Plan": {
+      "main": [
+        [
+          {
+            "node": "Log Food Video Errors",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Shot Prompts and Captions",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Kling Video Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Shot Details": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Create Shot Prompts and Captions",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Luna GPT-6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Create Shot Prompts and Captions",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Shot Prompts and Captions": {
+      "main": [
+        [
+          {
+            "node": "Build Kling Video Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Kling Video Request": {
+      "main": [
+        [
+          {
+            "node": "Submit Video Job to Kling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit Video Job to Kling": {
+      "main": [
+        [
+          {
+            "node": "Verify Video Job Queued",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Video Job Queued": {
+      "main": [
+        [
+          {
+            "node": "If Video Job Queued",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Video Job Queued": {
+      "main": [
+        [
+          {
+            "node": "Wait for Video Queue",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Food Video Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Video Queue": {
+      "main": [
+        [
+          {
+            "node": "Fetch Video Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Video Job Status": {
+      "main": [
+        [
+          {
+            "node": "Assess Video Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assess Video Job Status": {
+      "main": [
+        [
+          {
+            "node": "Switch by Video Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch by Video Job Status": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Video Result from fal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Food Video Errors",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancel fal Video Job",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for Video Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancel fal Video Job": {
+      "main": [
+        [
+          {
+            "node": "Log Food Video Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Video Result from fal": {
+      "main": [
+        [
+          {
+            "node": "Download Video File from fal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video File from fal": {
+      "main": [
+        [
+          {
+            "node": "Check Video Specs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Video Specs": {
+      "main": [
+        [
+          {
+            "node": "If Video Specs OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Video Specs OK": {
+      "main": [
+        [
+          {
+            "node": "Draft TikTok Food Video",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish Instagram Reel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post Facebook Reel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Share Threads Video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Food Video Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft TikTok Food Video": {
+      "main": [
+        [
+          {
+            "node": "Summarize Food Video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Food Video Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Food Video Errors": {
+      "main": [
+        [
+          {
+            "node": "Halt on Video Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "SocialRobot"
+    },
+    {
+      "name": "Food"
+    },
+    {
+      "name": "ASMR"
+    },
+    {
+      "name": "Kling"
+    },
+    {
+      "name": "fal"
+    },
+    {
+      "name": "AI Video"
+    },
+    {
+      "name": "OpenAI"
+    },
+    {
+      "name": "TikTok"
+    },
+    {
+      "name": "Instagram Reels"
+    },
+    {
+      "name": "Threads"
+    }
+  ]
+}
