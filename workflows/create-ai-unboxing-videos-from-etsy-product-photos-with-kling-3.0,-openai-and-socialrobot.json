@@ -1,0 +1,1850 @@
+{
+  "name": "Create AI unboxing videos from Etsy product photos with Kling 3.0, OpenAI and SocialRobot",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Turn product photos into an AI unboxing video\n\nFor Etsy sellers, makers and small online shops: upload a real photo of your product and, if you have one, a photo of the closed package as you ship it. Kling 3.0 makes a 10-second vertical video that opens the package and ends on your real product photo. SocialRobot posts it publicly to your TikTok profile with TikTok's AI-generated label. TikTok is the only network on by default: the Instagram Reel, Facebook Reel, Threads and Pinterest video pin nodes are disabled until you enable them. To review videos in the TikTok app first, set Post Mode to *Send to Inbox (Draft)*.\n\n### How it works\n1. **Form Submission Trigger** takes the product photo, an optional packaging photo, up to 3 extra angles and the facts: name, materials, what ships, price, shop and listing link.\n2. The photos go to fal storage. The packaging and product photos are center-cropped to 9:16.\n3. Optional: OpenAI looks at the photos and writes 3 shot prompts and the captions, using only the facts you typed.\n4. One Kling 3.0 Standard job renders the clip: packaging photo first, product photo last, extra angles as a reference. No packaging photo means a product reveal with no packaging shown.\n5. The workflow polls fal, stops after 30 min and cancels the job on timeout. File size and the real MP4 duration are checked.\n6. SocialRobot posts the video to TikTok (Direct Post, public, AI label on). Any failure stops with one readable message.\n\n### Setup steps\n- [ ] Install the SocialRobot community node `@socialrobot-io/n8n-nodes-socialrobot` (3.1.2+) and add your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Publish TikTok Unboxing Video**. Privacy Level is Public: set it to Private (Only Me) for your first test run\n- [ ] Add your fal API key as a **Header Auth** credential: name `Authorization`, value `Key YOUR_FAL_KEY`. Select it in every fal HTTP node\n- [ ] Add an OpenAI credential to **OpenAI Luna AI Model**, or set `use_openai` to false\n- [ ] Review **Set Video Configuration**\n\nn8n Cloud: works on Cloud and self-hosted. No ffmpeg, no Execute Command node, no local files.\n\nCommunity node: SocialRobot (`@socialrobot-io/n8n-nodes-socialrobot`) is a community node. It isn't maintained by n8n; install it at your own risk.\n\n### Customization\n- `video_seconds` (3-15), `shot_count` (1-3), `generate_audio`.\n- The unboxing and reveal shot prompts, `prompt_guardrails`, `negative_prompt`.\n- `end_on_product_photo`, `use_reference_photos`, `max_reference_photos`.\n- `caption_language`, `caption_tone`, `extra_hashtags`, `ai_label_line`, `business_footer`.\n\n### Cost per run (fal list prices, 23 Oct 2026)\n| Kling 3.0 Standard | Audio off (default) | Audio on |\n|---|---|---|\n| 5 s | $0.42 | $0.63 |\n| 10 s (default) | **$0.84** | $1.26 |\n| 15 s | $1.26 | $1.89 |\n\nKling 4.0 is $0.16/s ($1.57 for 10 s). fal storage and the crop utility are listed at $0. OpenAI adds about a cent or two.",
+        "height": 1800,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        192
+      ],
+      "id": "2325090b-21d5-5242-8d0f-6baa69152746",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## 1. Collect the product\n**Form Submission Trigger** is the form. **Set Video Configuration** holds every value you'd want to change, including the model id and prices. **Check Product Photo Presence** makes sure a product photo was uploaded.",
+        "height": 320,
+        "width": 640,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        240
+      ],
+      "id": "11485cd5-718f-5629-b404-e2a6ef550fd7",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 2. Read the photos\n**Prepare Product Images** sorts the uploads into packaging, product and extra angles. **Plan Photo Crops** reads each size and plans the 9:16 crops.",
+        "height": 336,
+        "width": 416,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        224
+      ],
+      "id": "80c1cf29-b66d-5c57-b723-58ea79690420",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 3. Host the photos on fal\n**Post Upload URL Request** asks fal storage for one upload URL per photo, **Attach Photos to URLs** puts each photo next to its URL, and **Upload Photos to Storage** uploads them.",
+        "height": 304,
+        "width": 640,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        272
+      ],
+      "id": "5ab832ae-2918-5e43-b1bf-0a9e526f7e55",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## 4. Crop and check\n**Post Crop Image Request** makes the 9:16 frames on fal (extra angles stay whole). **Verify Photos on Storage** catches upload problems and picks unboxing or product reveal. **Route by Video Plan** picks OpenAI or the template prompts.",
+        "height": 336,
+        "width": 640,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        272
+      ],
+      "id": "f4839a18-14e5-51b8-9e69-d27ddc9b1956",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## 5. Shots and captions (optional OpenAI)\n**Generate Unboxing Content** sees the product and packaging photos and writes the shot prompts plus TikTok, Instagram, Facebook, Threads and Pinterest captions. It may only use the facts from the form. **Format Unboxing Content** keeps the answer in shape. If OpenAI fails, the template shots and captions take over.",
+        "height": 608,
+        "width": 384,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3216,
+        192
+      ],
+      "id": "db291bcd-a2c1-5fa5-80fd-3da2926b5a37",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## 6. Queue the Kling video\n**Prepare Kling Request** builds one request: packaging photo as the first frame, product photo as the last frame, extra angles as `@Element1`, guardrails on every shot. It adds the AI label to every caption. **Submit Job to Kling** queues it on fal, **Verify Video Job Queue** checks fal accepted it and **Check Video Queued Status** starts polling.",
+        "height": 304,
+        "width": 848,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3728,
+        272
+      ],
+      "id": "f73c7577-b72b-54db-b27b-655c74008f86",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## 7. Wait for the render\n**Wait for Video Status** and **Fetch Video Job Status** check fal every 15 s. **Evaluate Job Status** marks the job done, failed or timed out (30 min) and **Route by Job Status** sends it on. Timeouts cancel the fal job.",
+        "height": 368,
+        "width": 848,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4688,
+        272
+      ],
+      "id": "29ef2ae8-c55a-546b-85c9-6bddcdc0f400",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## 8. Fetch and check the video\n**Fetch Video Result** gets the clip and **Download Unboxing Video** downloads it. **Validate Video Specs** reads the real MP4 duration and size (100 MB cap, Etsy's listing-video limit), and **Check Video Quality** only lets a good file through.",
+        "height": 304,
+        "width": 848,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5680,
+        272
+      ],
+      "id": "15bf4396-3ccd-530c-a51a-27079ce70514",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## 9. Post to TikTok\n**Publish TikTok Unboxing Video** uses *Direct Post*: Public, AI label on. To test, set Privacy Level to Private. To review in the TikTok app first, use *Send to Inbox (Draft)*. **Compose Video Summary** has the cost, the fal link for Etsy and next steps.",
+        "height": 320,
+        "width": 432,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6656,
+        240
+      ],
+      "id": "f21d3183-670d-5e37-b6ba-8856b6891583",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## Optional posts (disabled)\nConnected and **disabled by default**. Enable a node and pick an account; it publishes when the run finishes.\n- **Submit Instagram Video**: Reel with Instagram's AI label on\n- **Post Facebook Reel**: Facebook Reel\n- **Publish Threads Clip**: Threads video, caption kept under 500 characters\n- **Pin Video on Pinterest**: video pin with a link to your listing and your product photo as the cover. The node has no Pinterest link or cover fields, so this calls the SocialRobot API. Add a Header Auth credential (`x-api-key` = your SocialRobot API key) and set `pinterest_account_id` and `pinterest_board_id`.",
+        "height": 928,
+        "width": 880,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6656,
+        608
+      ],
+      "id": "dfa7d003-a6aa-5653-9745-a57fb2d48415",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## Handle errors\nA missing photo, unreadable or tiny photos, upload or crop problems, a rejected or failed Kling job, timeouts, download errors, files that fail the checks and SocialRobot errors all end in **Log Unboxing Errors** with one readable message, then **Halt on Video Error**. **Cancel Video Job Request** cancels the fal job first when it timed out. Add an error workflow in the settings for alerts.",
+        "height": 304,
+        "width": 672,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4560,
+        1120
+      ],
+      "id": "372c55d2-68fd-587b-8cee-303973cbc171",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## Switching to Kling 4.0 later\nThe model id lives in one place: `video_model` in **Set Video Configuration**. fal lists `fal-ai/kling-video/v4/image-to-video` at $0.157/s ($1.57 for 10 s). To switch, change `video_model` and `price_per_second_usd`, then test one run. **Prepare Kling Request** keeps the first and last frame and sends integer shot durations for v4. Kling 4.0 has no audio, reference-photo or negative-prompt fields, so those are only sent to v3. Check the endpoint's input fields on fal before switching.",
+        "height": 380,
+        "width": 560,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3728,
+        640
+      ],
+      "id": "b9d2c173-79a1-5287-b562-047abc4e3751",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## AI label and honest product content\n- Kling makes new frames from your real photos. Every caption ends with `ai_label_line` (\"AI-generated video made from our real product photos.\"). **Publish TikTok Unboxing Video** and **Submit Instagram Video** have **AI-Generated Content** on, so TikTok shows \"Creator labeled as AI-generated\".\n- Direct Post goes public with no review step. Test with Privacy Level Private, or set Post Mode to *Send to Inbox (Draft)* to review each video in the TikTok app first (then turn on TikTok's AI-generated label in the app when you post).\n- The video must show what a buyer gets. Prompts and the negative prompt rule out extra items, gifts, cards, stickers, invented logos and packaging that isn't in your photos. Without a packaging photo, no packaging is shown at all.\n- No people: no hands, fingers or faces. The package opens by itself, so nobody looks like a real customer.\n- Captions only use the facts you typed: no invented materials or claims, and no reviews, ratings or testimonials. Don't present it as a customer's unboxing.\n- Watch the post next to the real product and package. If anything differs, delete it.",
+        "height": 820,
+        "width": 460,
+        "color": 1
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        7584,
+        240
+      ],
+      "id": "4d803df9-fe09-5f64-b8b6-b56cb138b4e4",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "formTitle": "Create an AI unboxing video from your product photos",
+        "formDescription": "Upload a real photo of your product and, if you have one, a photo of the closed package exactly as you ship it. Kling turns them into a short vertical video that opens the package and ends on your product. It is posted publicly to your TikTok profile with TikTok's AI-generated label. Captions only use the facts you type here.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Product Photo",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".jpg, .jpeg, .png, .webp",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Packaging Photo",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".jpg, .jpeg, .png, .webp"
+            },
+            {
+              "fieldLabel": "More Product Photos",
+              "fieldType": "file",
+              "multipleFiles": true,
+              "acceptFileTypes": ".jpg, .jpeg, .png, .webp"
+            },
+            {
+              "fieldLabel": "Product Name",
+              "placeholder": "e.g. Speckled stoneware mug",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Made Of",
+              "placeholder": "Optional. Only true facts, e.g. stoneware, food-safe glaze, 350 ml"
+            },
+            {
+              "fieldLabel": "What Ships in the Package",
+              "fieldType": "textarea",
+              "placeholder": "Optional. Only what really ships, e.g. kraft box, tissue paper, care card"
+            },
+            {
+              "fieldLabel": "Price",
+              "placeholder": "Optional, exactly as in your shop, e.g. €32"
+            },
+            {
+              "fieldLabel": "Shop Name",
+              "placeholder": "e.g. Klei Studio",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Listing Link",
+              "placeholder": "Optional, e.g. https://www.etsy.com/listing/..."
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "respondWithOptions": {
+            "values": {
+              "respondWith": "text",
+              "formSubmittedText": "Thanks! Your unboxing video is rendering. It is usually posted to your TikTok profile within 5-15 minutes, and TikTok may take a few more minutes to process it."
+            }
+          }
+        }
+      },
+      "name": "Form Submission Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        560,
+        400
+      ],
+      "id": "d0a9afdb-0d89-5898-9f6b-c37281f52d5b",
+      "webhookId": "21bd1e79-df19-5662-87be-22cbfc07c333"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "22280127-2347-5b43-a3c6-67b26d941078",
+              "name": "video_model",
+              "type": "string",
+              "value": "fal-ai/kling-video/v3/standard/image-to-video"
+            },
+            {
+              "id": "4dde5f72-9787-59db-af24-0e416604059e",
+              "name": "video_seconds",
+              "type": "number",
+              "value": 10
+            },
+            {
+              "id": "3843dbae-db87-506a-a49a-9f9d0c3194e7",
+              "name": "shot_count",
+              "type": "number",
+              "value": 3
+            },
+            {
+              "id": "95789f6b-9d69-5de5-a6a2-6fbb6212e2c8",
+              "name": "generate_audio",
+              "type": "boolean",
+              "value": false
+            },
+            {
+              "id": "10785527-2b2b-5a89-90c2-f9c034f06c55",
+              "name": "price_per_second_usd",
+              "type": "number",
+              "value": 0.126
+            },
+            {
+              "id": "bbc4d5f0-f9b0-5c1c-b851-863fd242a887",
+              "name": "price_per_second_no_audio_usd",
+              "type": "number",
+              "value": 0.084
+            },
+            {
+              "id": "232522f3-d892-599d-aa1d-c453c3c9c662",
+              "name": "end_on_product_photo",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "24bd84f6-eb2f-5e5d-b9ec-19b2210fcd41",
+              "name": "use_reference_photos",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "8ab168b2-f4d9-5b2a-a8a7-6eface3ae104",
+              "name": "max_reference_photos",
+              "type": "number",
+              "value": 3
+            },
+            {
+              "id": "1453534a-b6ce-5793-8ed7-be14542697a4",
+              "name": "cfg_scale",
+              "type": "number",
+              "value": 0.5
+            },
+            {
+              "id": "35be6d31-af6c-5cb2-9bb1-c2357b720d03",
+              "name": "negative_prompt",
+              "type": "string",
+              "value": "people, person, hands, fingers, arms, face, body, extra items, accessories, props, gift, free gift, thank-you card, stickers, ribbon, added packaging, different product, changed colors, changed shape, bigger product, text, letters, logo, brand name, watermark, speech, voice, talking, singing, music, blur, distortion, warped, low quality"
+            },
+            {
+              "id": "6226ed34-22cb-5c5d-87ac-f8d1b229f51b",
+              "name": "prompt_guardrails",
+              "type": "string",
+              "value": "Keep the product exactly as photographed: same shape, colors, size, materials and details. No items, accessories, gifts, cards, stickers or packaging that are not in the photos. No people, hands, fingers or faces. No text or logos that are not in the photos. No speech or music."
+            },
+            {
+              "id": "f084c071-aed1-5e12-bb0f-b11cae21e063",
+              "name": "unboxing_shot_1_prompt",
+              "type": "string",
+              "value": "The closed package exactly as photographed rests on the table. Slow, gentle push-in, soft natural daylight, calm and still."
+            },
+            {
+              "id": "ca106a0e-cf22-591e-b324-802af3f193f1",
+              "name": "unboxing_shot_2_prompt",
+              "type": "string",
+              "value": "The package slowly opens by itself with no hands: the lid or flaps lift gently and only the wrapping seen in the photo unfolds, revealing the {product} inside. Slow, smooth motion."
+            },
+            {
+              "id": "a1951242-edf9-5ea0-8cff-5da2a77d5328",
+              "name": "unboxing_shot_3_prompt",
+              "type": "string",
+              "value": "Slow push-in to the {product}, ending on a clean hero shot of the {product} exactly as in the product photo. Soft natural daylight."
+            },
+            {
+              "id": "f2c1699c-7a45-5294-aaca-128d8a59eb77",
+              "name": "reveal_shot_1_prompt",
+              "type": "string",
+              "value": "Slow cinematic push-in toward the {product}, soft natural daylight, shallow depth of field, calm background as photographed."
+            },
+            {
+              "id": "67f95698-07e0-5a03-962c-24abdffe5005",
+              "name": "reveal_shot_2_prompt",
+              "type": "string",
+              "value": "Extreme close-up slow pan across the materials and details of the {product}, gentle rack focus."
+            },
+            {
+              "id": "efa30fd6-e906-58ed-aa47-bdcdc2287582",
+              "name": "reveal_shot_3_prompt",
+              "type": "string",
+              "value": "Slow half orbit around the {product}, ending on a clean hero framing of the {product} exactly as photographed."
+            },
+            {
+              "id": "454ff760-7aab-51e2-840b-31e9452d1d0e",
+              "name": "use_openai",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "73f4b834-76e8-5b4e-9b1e-123cdc8b29b0",
+              "name": "caption_language",
+              "type": "string",
+              "value": "English"
+            },
+            {
+              "id": "6239d5f7-df70-518a-95e4-e3410511663a",
+              "name": "caption_tone",
+              "type": "string",
+              "value": "Warm, simple and personal, like a maker talking about their work. Short sentences. No hype or superlatives."
+            },
+            {
+              "id": "561c12de-376a-5555-b974-9fd0b96a0931",
+              "name": "extra_hashtags",
+              "type": "string",
+              "value": "#handmade #smallbusiness #unboxing"
+            },
+            {
+              "id": "b18477df-fe0b-54f7-a272-cc1a3a7f634e",
+              "name": "ai_label_line",
+              "type": "string",
+              "value": "AI-generated video made from our real product photos."
+            },
+            {
+              "id": "1e2ed275-054a-5192-851d-376df62b0309",
+              "name": "business_footer",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "1e8d7b35-7f53-5662-b9c4-d8adaf44b025",
+              "name": "pinterest_account_id",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "b0578b53-917e-508f-9d86-4c6c183c8a6b",
+              "name": "pinterest_board_id",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "922ef3df-3259-5a6e-af4a-96bf3090937d",
+              "name": "crop_to_vertical",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "a567730d-87a3-55b6-af4e-d97709003979",
+              "name": "poll_every_seconds",
+              "type": "number",
+              "value": 15
+            },
+            {
+              "id": "4f74ef52-b4ee-5aa9-afd0-ae4cdba3fb4e",
+              "name": "timeout_minutes",
+              "type": "number",
+              "value": 30
+            },
+            {
+              "id": "b3bbcc40-09fb-5492-9be3-350435f603bb",
+              "name": "max_file_mb",
+              "type": "number",
+              "value": 100
+            },
+            {
+              "id": "6ff7d8eb-a366-531d-979a-1eb68c8d8e6c",
+              "name": "duration_tolerance_seconds",
+              "type": "number",
+              "value": 1.5
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Set Video Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        780,
+        400
+      ],
+      "id": "fd76f86a-77c6-5015-9042-ac6504d46642"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "41c2b248-3e39-5953-aa7f-a07d892440ef",
+              "leftValue": "={{ Object.entries($('Form Submission Trigger').first().binary || {}).some(([k, b]) => !/^(Packaging_Photo|More_Product_Photos)/.test(k) && String(b.mimeType || '').startsWith('image/')) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Check Product Photo Presence",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1000,
+        400
+      ],
+      "id": "049f286a-014a-51af-983b-68ef9b988469"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per photo: the packaging photo (first frame, optional), the product photo (last frame)\n// and up to max_reference_photos extra angles of the product (Kling reference images).\nconst s = $('Set Video Configuration').first().json;\nconst form = $('Form Submission Trigger').first();\nconst entries = Object.entries(form.binary || {}).filter(([k, b]) => String(b.mimeType || '').startsWith('image/'));\nconst byName = (a, b) => String(a.fileName || '').localeCompare(String(b.fileName || ''), undefined, { numeric: true, sensitivity: 'base' });\nconst product = entries.filter(([k, b]) => !/^(Packaging_Photo|More_Product_Photos)/.test(k) && String(b.mimeType || '').startsWith('image/')).map(([, b]) => b)[0];\nconst packaging = entries.filter(([k]) => /^Packaging_Photo/.test(k)).map(([, b]) => b)[0];\nconst more = entries.filter(([k]) => /^More_Product_Photos/.test(k)).map(([, b]) => b).sort(byName);\nconst maxRefs = Math.min(3, Math.max(0, Math.round(Number(s.max_reference_photos) || 0)));\nconst list = [];\nif (packaging) list.push(['packaging', packaging]);\nlist.push(['product', product]);\nmore.slice(0, maxRefs).forEach(b => list.push(['reference', b]));\nconst ext = { 'image/png': 'png', 'image/webp': 'webp' };\nreturn list.map(([role, photo], i) => ({\n  json: {\n    role,\n    photo_number: i + 1,\n    file_name: photo.fileName || `${role}_${i + 1}.${ext[photo.mimeType] || 'jpg'}`,\n    mime_type: photo.mimeType || 'image/jpeg',\n    skipped_reference_photos: Math.max(0, more.length - maxRefs),\n  },\n  binary: { photo },\n}));"
+      },
+      "name": "Prepare Product Images",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        400
+      ],
+      "id": "628c8a3b-3542-5995-9dc4-ffa7c0a00153"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Reads each photo's pixel size from its file header (JPEG, PNG, WebP).\n// The packaging and product photos become the first and last frame, so they get a centered 9:16 crop\n// (Kling 3.0 has no aspect-ratio input: the frame image sets the video shape).\n// Extra angles are only reference images, so they are kept whole.\nconst s = $('Set Video Configuration').first().json;\nconst target = 9 / 16;\nconst cropOn = s.crop_to_vertical === true || s.crop_to_vertical === 'true';\nconst label = { packaging: 'The packaging photo', product: 'The product photo', reference: 'Extra product photo' };\n\nfunction exifOrientation(buf, t) {\n  const le = buf.toString('ascii', t, t + 2) === 'II';\n  const u16 = o => (le ? buf.readUInt16LE(o) : buf.readUInt16BE(o));\n  const u32 = o => (le ? buf.readUInt32LE(o) : buf.readUInt32BE(o));\n  const ifd = t + u32(t + 4);\n  const count = u16(ifd);\n  for (let k = 0; k < count; k++) {\n    const e = ifd + 2 + k * 12;\n    if (u16(e) === 0x0112) return u16(e + 8);\n  }\n  return 1;\n}\n\nfunction imageSize(buf) {\n  try {\n    if (buf[0] === 0x89 && buf.toString('ascii', 1, 4) === 'PNG') {\n      return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20), orientation: 1 };\n    }\n    if (buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP') {\n      const kind = buf.toString('ascii', 12, 16);\n      if (kind === 'VP8X') return { w: 1 + buf.readUIntLE(24, 3), h: 1 + buf.readUIntLE(27, 3), orientation: 1 };\n      if (kind === 'VP8L') { const b = buf.readUInt32LE(21); return { w: (b & 0x3fff) + 1, h: ((b >> 14) & 0x3fff) + 1, orientation: 1 }; }\n      if (kind === 'VP8 ') return { w: buf.readUInt16LE(26) & 0x3fff, h: buf.readUInt16LE(28) & 0x3fff, orientation: 1 };\n    }\n    if (buf[0] === 0xff && buf[1] === 0xd8) {\n      let i = 2;\n      let orientation = 1;\n      while (i + 9 < buf.length) {\n        if (buf[i] !== 0xff) { i++; continue; }\n        const marker = buf[i + 1];\n        if (marker === 0xff) { i++; continue; }\n        if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd8)) { i += 2; continue; }\n        const len = buf.readUInt16BE(i + 2);\n        if (marker === 0xe1 && buf.toString('ascii', i + 4, i + 8) === 'Exif') {\n          try { orientation = exifOrientation(buf, i + 10) || 1; } catch (e) { orientation = 1; }\n        }\n        if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {\n          return { w: buf.readUInt16BE(i + 7), h: buf.readUInt16BE(i + 5), orientation };\n        }\n        i += 2 + len;\n      }\n    }\n  } catch (e) {}\n  return null;\n}\n\nconst out = [];\nconst items = $input.all();\nfor (let idx = 0; idx < items.length; idx++) {\n  const item = items[idx];\n  const name = `${label[item.json.role] || 'Photo'} (${item.json.file_name})`;\n  const buf = await this.helpers.getBinaryDataBuffer(idx, 'photo');\n  const size = imageSize(buf);\n  let crop = { x_percent: 0, y_percent: 0, width_percent: 100, height_percent: 100 };\n  let problem = null;\n  let w = null;\n  let h = null;\n  if (!size || !size.w || !size.h) {\n    problem = `${name} could not be read. Use a JPG, PNG or WebP photo.`;\n  } else {\n    // EXIF orientations 5-8 mean the phone stored the photo rotated by 90 degrees.\n    const rotated = size.orientation >= 5 && size.orientation <= 8;\n    w = rotated ? size.h : size.w;\n    h = rotated ? size.w : size.h;\n    const ratio = w / h;\n    const frame = item.json.role !== 'reference';\n    if (frame && cropOn && ratio > target * 1.01) {\n      const wp = (target / ratio) * 100;\n      crop = { x_percent: Math.round(((100 - wp) / 2) * 1000) / 1000, y_percent: 0, width_percent: Math.round(wp * 1000) / 1000, height_percent: 100 };\n    } else if (frame && cropOn && ratio < target * 0.99) {\n      const hp = (ratio / target) * 100;\n      crop = { x_percent: 0, y_percent: Math.round(((100 - hp) / 2) * 1000) / 1000, width_percent: 100, height_percent: Math.round(hp * 1000) / 1000 };\n    }\n    const outW = (w * crop.width_percent) / 100;\n    const outH = (h * crop.height_percent) / 100;\n    if (outW < 300 || outH < 300) problem = `${name} is too small: Kling needs at least 300 x 300 px after cropping (got ${Math.round(outW)} x ${Math.round(outH)}).`;\n    else if ((!frame || !cropOn) && (ratio < 0.4 || ratio > 2.5)) problem = `${name} has an aspect ratio Kling does not accept (0.4 to 2.5).`;\n  }\n  out.push({ json: { ...item.json, width: w, height: h, ...crop, size_problem: problem }, binary: item.binary });\n}\nreturn out;"
+      },
+      "name": "Plan Photo Crops",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1500,
+        400
+      ],
+      "id": "8f11f1b1-eee8-55bb-b665-1015d071c522"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://rest.fal.ai/storage/upload/initiate?storage_type=fal-cdn-v3",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ content_type: $json.mime_type, file_name: $json.file_name }) }}",
+        "options": {}
+      },
+      "name": "Post Upload URL Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1780,
+        400
+      ],
+      "id": "4707a576-0abc-5933-a8d3-e667e43506f3",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// fal returned one upload URL per photo. Put each photo back next to its URL for the upload step.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst photos = $('Plan Photo Crops').all();\nreturn $input.all().map((item, i) => ({\n  json: {\n    ...photos[i].json,\n    upload_url: item.json.upload_url || '',\n    file_url: item.json.file_url || '',\n    upload_error: item.json.upload_url ? '' : errText(item.json.error) || 'no upload URL returned',\n  },\n  binary: photos[i].binary,\n}));"
+      },
+      "name": "Attach Photos to URLs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        400
+      ],
+      "id": "c697c67d-4958-5300-bbd2-748986b677a9"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.upload_url }}",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "photo",
+        "options": {}
+      },
+      "name": "Upload Photos to Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2220,
+        400
+      ],
+      "id": "c2b42210-03bf-57f8-b5c0-572c79a2ef29",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://fal.run/fal-ai/workflow-utilities/crop-image",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ image_url: $('Attach Photos to URLs').item.json.file_url, x_percent: $('Attach Photos to URLs').item.json.x_percent, y_percent: $('Attach Photos to URLs').item.json.y_percent, width_percent: $('Attach Photos to URLs').item.json.width_percent, height_percent: $('Attach Photos to URLs').item.json.height_percent, output_format: 'jpg' }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "name": "Post Crop Image Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2500,
+        400
+      ],
+      "id": "21d6757d-55bf-5ba9-9c83-bbe0eb9ffbf3",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Makes sure every photo is on fal (and cropped), then picks the plan:\n// 'unboxing' when there is a packaging photo, 'product reveal' when there is not (no packaging is invented),\n// and OpenAI or the template prompts from use_openai.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Set Video Configuration').first().json;\nconst photos = $('Attach Photos to URLs').all().map(p => p.json);\nconst puts = $('Upload Photos to Storage').all().map(p => p.json || {});\nconst crops = $input.all().map(c => c.json || {});\nconst problems = [];\nconst urls = { packaging: '', product: '', reference: [] };\nphotos.forEach((p, i) => {\n  const crop = crops[i] || {};\n  const url = crop.image && crop.image.url;\n  const name = `${p.role} photo ${p.file_name}`;\n  if (p.size_problem) problems.push(p.size_problem);\n  else if (p.upload_error) problems.push(`${name}: fal storage did not return an upload URL (${p.upload_error}).`);\n  else if (puts[i] && puts[i].error) problems.push(`${name}: upload to fal storage failed (${errText(puts[i].error)}).`);\n  else if (!url) problems.push(`${name}: fal could not process the photo (${errText(crop.error) || errText(crop.detail) || 'no image URL returned'}).`);\n  else if (p.role === 'reference') urls.reference.push(url);\n  else urls[p.role] = url;\n});\nif (!problems.length && !urls.product) problems.push('No product photo arrived on fal.');\nif (problems.length) return [{ json: { route: 'error', ok: false, stage: 'Photo check', problems } }];\nconst useAi = s.use_openai === true || s.use_openai === 'true';\nreturn [{\n  json: {\n    route: useAi ? 'ai' : 'template',\n    ok: true,\n    mode: urls.packaging ? 'unboxing' : 'product reveal',\n    product_url: urls.product,\n    packaging_url: urls.packaging,\n    reference_urls: urls.reference,\n    skipped_reference_photos: photos[0] ? photos[0].skipped_reference_photos : 0,\n  },\n}];"
+      },
+      "name": "Verify Photos on Storage",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2720,
+        400
+      ],
+      "id": "223ebf2b-5d05-512c-aad8-5114a23e2ae5"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "error",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6e1c6eb1-4df2-5c8c-9805-49f543111242"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Photo Problem"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "ai",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "e4ac1c5f-9893-5dcf-8c12-edd61c9a958a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Use OpenAI"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Template Prompts"
+        }
+      },
+      "name": "Route by Video Plan",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2940,
+        400
+      ],
+      "id": "91664423-b067-59a2-9ced-7146524c220f"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You plan a short vertical AI unboxing video for a small handmade or Etsy shop, and write its social captions.\nImage 1 is the shop's REAL photo of the product. {{ $json.packaging_url ? 'Image 2 is the shop\\'s REAL photo of the closed package exactly as they ship it. An image-to-video model (Kling) starts the video on image 2 and ends it on image 1, so the video goes from the closed package to the product.' : 'There is no packaging photo (image 2 repeats image 1). Kling animates image 1, so this is a product reveal, not an unboxing: show NO box, bag, wrapping, tissue paper, card or packaging at all.' }}\n\nFacts from the shop (the ONLY facts you may use in captions):\nProduct name: {{ $('Form Submission Trigger').first().json['Product Name'] }}\nMade of: {{ $('Form Submission Trigger').first().json['Made Of'] || 'not given' }}\nWhat ships in the package: {{ $('Form Submission Trigger').first().json['What Ships in the Package'] || 'not given' }}\nPrice: {{ $('Form Submission Trigger').first().json['Price'] || 'not given' }}\nShop: {{ $('Form Submission Trigger').first().json['Shop Name'] }}\nListing link: {{ $('Form Submission Trigger').first().json['Listing Link'] || 'not given' }}\nCaption language: {{ $('Set Video Configuration').first().json.caption_language }}. Tone: {{ $('Set Video Configuration').first().json.caption_tone }}\n\nReturn:\n- visible_product: one sentence describing only what you can see of the product in image 1.\n- shots: exactly {{ Math.min(3, Math.max(1, Math.round(Number($('Set Video Configuration').first().json.shot_count) || 1))) }} objects, each {\"prompt\": \"...\"}, in English, under 300 characters each, for a {{ $('Set Video Configuration').first().json.video_seconds }}-second clip cut into that many shots, in order. {{ $json.packaging_url ? 'Beats: the closed package as photographed with a slow push-in; the package opening slowly by itself (lid or flaps lift, wrapping that is visible in image 2 unfolds); a slow move to the product, ending exactly on image 1. With fewer shots, merge the beats in that order.' : 'Beats: a slow push-in toward the product; a slow close pan across its materials and details; a slow half orbit ending on a clean hero framing of image 1. With fewer shots, merge the beats in that order.' }}\n- tiktok_caption: under 300 characters, ending with 3-5 hashtags that include {{ $('Set Video Configuration').first().json.extra_hashtags }}.\n- instagram_caption: under 600 characters, short lines, hashtags at the end (include {{ $('Set Video Configuration').first().json.extra_hashtags }}).\n- facebook_caption: under 500 characters, at most 2 hashtags.\n- threads_caption: under 350 characters, at most 1 hashtag.\n- pinterest_title: under 90 characters, the product name and the shop, no hashtags.\n- pinterest_description: under 500 characters, plain and searchable, at most 3 hashtags.\n\nRules for the shots:\n- Keep the product exactly as photographed: same shape, colors, size, materials, finish and details. Never add, remove, enlarge or restyle anything.\n- Show no extra items: no accessories, props, gifts, freebies, samples, thank-you cards, stickers, ribbons, tissue paper or other packaging unless it is clearly visible in the photos.\n- No invented branding: no logos, labels, brand names, text or printing that is not in the photos.\n- No people at all: no hands, fingers, arms, faces or bodies. Nothing is lifted, held, opened or touched by a person; the package opens slowly by itself.\n- Realistic soft daylight, a calm background like the one in the photos, slow smooth camera moves, no fast cuts, no fisheye. No speech, voices or music.\n\nRules for the captions:\n- Use only the facts above. Do not invent materials, sizes, colors, origin, 'handmade', 'eco-friendly', 'plastic-free', 'gift-ready', free gifts, shipping times, stock levels, discounts or prices.\n- Mention packaging only as written in 'What ships in the package'.\n{{ $json.packaging_url ? '' : '- This video is a product reveal, not an unboxing: do not use #unboxing and do not call it an unboxing.\\n' }}- Write the price exactly as given, or leave it out if not given.\n- No reviews, ratings, star counts, quotes, testimonials or claims about what customers say or feel. Do not present the video as a customer's unboxing, reaction or review. No superlatives like 'best gift ever'.\n- Do not say the video was filmed. Do not write an AI disclosure or disclaimer: one is added automatically.",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "type": "HumanMessagePromptTemplate",
+              "messageType": "imageUrl",
+              "imageUrl": "={{ $json.product_url }}",
+              "imageDetail": "low"
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "messageType": "imageUrl",
+              "imageUrl": "={{ $json.packaging_url || $json.product_url }}",
+              "imageDetail": "low"
+            }
+          ]
+        }
+      },
+      "name": "Generate Unboxing Content",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        3260,
+        400
+      ],
+      "id": "08a679af-634e-5679-8584-bec486f52bff",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"visible_product\": \"A speckled cream stoneware mug with a brown rim on a linen cloth\",\n  \"shots\": [\n    {\n      \"prompt\": \"The closed kraft box rests on a linen cloth, slow gentle push-in, soft daylight.\"\n    },\n    {\n      \"prompt\": \"The kraft box lid lifts slowly by itself and the tissue paper unfolds, revealing the speckled mug. No hands.\"\n    },\n    {\n      \"prompt\": \"Slow push-in to the speckled stoneware mug, ending on a clean hero shot of the mug exactly as photographed.\"\n    }\n  ],\n  \"tiktok_caption\": \"Speckled stoneware mug from Klei Studio. Ships in a kraft box with tissue paper. €32 #handmade #smallbusiness #unboxing\",\n  \"instagram_caption\": \"...\",\n  \"facebook_caption\": \"...\",\n  \"threads_caption\": \"...\",\n  \"pinterest_title\": \"Speckled stoneware mug by Klei Studio\",\n  \"pinterest_description\": \"...\"\n}"
+      },
+      "name": "Format Unboxing Content",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3260,
+        660
+      ],
+      "id": "31b74810-04d9-5a54-9e61-d1c984ea2946"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gpt-6-luna"
+        },
+        "options": {}
+      },
+      "name": "OpenAI Luna AI Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3460,
+        660
+      ],
+      "id": "a6c4bb1b-b4fa-5c94-847d-892eccb531e1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Builds the one Kling request and the caption for every network.\n// Packaging photo = first frame, product photo = last frame, so the video ends on your real product photo.\n// The AI label line and your footer are added here, so every caption carries them.\nconst s = $('Set Video Configuration').first().json;\nconst f = $('Form Submission Trigger').first().json;\nconst photo = $('Verify Photos on Storage').first().json;\nconst aiRan = $('Generate Unboxing Content').isExecuted;\nconst ai = aiRan ? (($input.first().json && $input.first().json.output) || {}) : {};\nconst clean = v => String(v ?? '').trim();\nconst on = v => v === true || v === 'true';\nconst product = clean(f['Product Name']);\nconst shop = clean(f['Shop Name']);\nconst model = clean(s.video_model);\nconst isV3 = /kling-video\\/v3\\//.test(model);\nconst isV4 = /kling-video\\/v4\\//.test(model);\nconst unboxing = Boolean(photo.packaging_url);\n\n// ---- shots: Kling 3.0 takes 3-15 s in total and 1-15 s per shot\nconst shotCount = Math.min(3, Math.max(1, Math.round(Number(s.shot_count) || 1)));\nconst total = Math.min(15, Math.max(3, shotCount, Math.round(Number(s.video_seconds) || 10)));\nconst base = Math.floor(total / shotCount);\nconst durations = Array.from({ length: shotCount }, (_, i) => base + (i < total - base * shotCount ? 1 : 0));\nconst fill = t => clean(t).split('{product}').join(product || 'product');\nconst three = (unboxing\n  ? [s.unboxing_shot_1_prompt, s.unboxing_shot_2_prompt, s.unboxing_shot_3_prompt]\n  : [s.reveal_shot_1_prompt, s.reveal_shot_2_prompt, s.reveal_shot_3_prompt]).map(fill);\n// Fewer shots: the same three beats are merged, so an unboxing still opens and still ends on the product.\nconst templateShots = shotCount === 1 ? [three.join(' Then: ')] : shotCount === 2 ? [`${three[0]} Then: ${three[1]}`, three[2]] : three;\nconst aiShots = Array.isArray(ai.shots) ? ai.shots.map(x => clean(typeof x === 'string' ? x : x && x.prompt)) : [];\nconst refs = (photo.reference_urls || []).slice(0, 3);\nconst useRefs = isV3 && refs.length > 0 && on(s.use_reference_photos);\nconst suffix = `${useRefs ? 'The product is @Element1 and looks exactly like it. ' : ''}${clean(s.prompt_guardrails)}`.trim();\n// Kling 4.0 caps each shot prompt at 512 characters; Kling 3.0 allows 2500 for the whole prompt.\nconst cap = isV4 ? 512 : (shotCount === 1 ? 2400 : 800);\nlet fallbacks = 0;\nconst shots = durations.map((d, i) => {\n  let text = aiShots.length === shotCount ? aiShots[i] : '';\n  if (!text) { fallbacks++; text = templateShots[i] || templateShots[0]; }\n  return { prompt: `${text.slice(0, Math.max(80, cap - suffix.length - 1))} ${suffix}`.trim().slice(0, cap), duration: d };\n});\nlet promptSource = 'template shots';\nif (aiRan) promptSource = fallbacks === 0 ? 'OpenAI' : 'template shots (OpenAI returned no usable shots)';\n\n// ---- fal request (field names from the fal OpenAPI schema of the endpoint in video_model)\nconst body = { start_image_url: unboxing ? photo.packaging_url : photo.product_url };\nif (unboxing && on(s.end_on_product_photo)) body.end_image_url = photo.product_url;\nif (shots.length === 1) {\n  body.prompt = shots[0].prompt;\n  body.duration = isV3 ? String(total) : total;\n} else {\n  body.multi_prompt = shots.map(x => ({ prompt: x.prompt, duration: isV3 ? String(x.duration) : x.duration }));\n  if (isV3) { body.duration = String(total); body.shot_type = 'customize'; }\n}\nconst audio = on(s.generate_audio);\nif (isV3) {\n  body.generate_audio = audio;\n  body.negative_prompt = clean(s.negative_prompt);\n  body.cfg_scale = Number(s.cfg_scale);\n  if (useRefs) body.elements = [{ frontal_image_url: photo.product_url, reference_image_urls: refs }];\n}\n\n// ---- captions: only facts typed into the form\nconst madeOf = clean(f['Made Of']);\nconst inBox = clean(f['What Ships in the Package']);\nconst price = clean(f['Price']);\nconst rawLink = clean(f['Listing Link']);\nconst link = /^https?:\\/\\/[^\\s]+$/i.test(rawLink) ? rawLink.slice(0, 2048) : '';\n// Without a packaging photo the video is a product reveal, so it is never tagged or called an unboxing.\nconst tags = unboxing ? clean(s.extra_hashtags) : clean(s.extra_hashtags).replace(/#unboxing\\w*/gi, '').replace(/\\s+/g, ' ').trim();\nconst firstTag = (tags.match(/#[^\\s#]+/) || [''])[0];\nconst tail = [clean(s.ai_label_line), clean(s.business_footer)].filter(Boolean).join('\\n');\nconst head = shop ? `${product} from ${shop}` : product;\nconst made = madeOf ? `Made of: ${madeOf}` : '';\nconst box = inBox ? `In the package: ${inBox}` : '';\nconst cost = price ? `Price: ${price}` : '';\nconst template = {\n  tiktok: [head, made, box, cost, tags].filter(Boolean).join('\\n'),\n  instagram: [head, made, box, cost, link, tags].filter(Boolean).join('\\n\\n'),\n  facebook: [head, made, box, cost, link].filter(Boolean).join('\\n\\n'),\n  threads: [head, cost, link, firstTag].filter(Boolean).join('\\n'),\n  pinterest: [head, made, box, cost, tags].filter(Boolean).join('\\n\\n'),\n};\nconst pick = (key, aiKey, max) => {\n  const text = clean(ai[aiKey]) || template[key];\n  const room = Math.max(0, max - tail.length - 2);\n  return `${text.slice(0, room).trim()}\\n\\n${tail}`.trim();\n};\nconst captions = {\n  tiktok: pick('tiktok', 'tiktok_caption', 2200),\n  instagram: pick('instagram', 'instagram_caption', 2200),\n  facebook: pick('facebook', 'facebook_caption', 5000),\n  threads: pick('threads', 'threads_caption', 500),\n  pinterest: pick('pinterest', 'pinterest_description', 800),\n  source: clean(ai.tiktok_caption) ? 'OpenAI' : 'template',\n};\nconst seen = clean(ai.visible_product);\nconst pinterest = {\n  title: (clean(ai.pinterest_title) || head).slice(0, 100),\n  alt_text: `${seen ? seen.replace(/[.\\s]+$/, '') : head}. AI-generated video made from the shop's own product photos.`.slice(0, 500),\n  link,\n  cover_image_url: photo.product_url,\n};\n\nreturn [{\n  json: {\n    model,\n    body,\n    mode: photo.mode,\n    shots: shots.length,\n    total_seconds: total,\n    generate_audio: isV3 ? audio : null,\n    reference_photos_used: useRefs ? refs.length : 0,\n    captions,\n    pinterest,\n    prompt_source: promptSource,\n    visible_product: seen,\n  },\n}];"
+      },
+      "name": "Prepare Kling Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3780,
+        400
+      ],
+      "id": "1bea9e50-51cc-5734-b73a-8fe3e3d9aa74"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://queue.fal.run/' + $json.model }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {}
+      },
+      "name": "Submit Job to Kling",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4000,
+        400
+      ],
+      "id": "a08a3db3-becc-5f60-a3a2-602862bd28f4",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// The video job must have a request id from fal before polling starts.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst j = $input.first().json || {};\nif (!j.request_id || !j.status_url || !j.response_url) {\n  return [{ json: { ok: false, stage: 'Kling submit', problems: [`fal did not accept the video job (${errText(j.error) || errText(j.detail) || 'no request id'}).`] } }];\n}\nreturn [{\n  json: {\n    ok: true,\n    request_id: j.request_id,\n    status_url: j.status_url,\n    response_url: j.response_url,\n    cancel_url: j.cancel_url || `${j.response_url}/cancel`,\n    submitted_at: Date.now(),\n  },\n}];"
+      },
+      "name": "Verify Video Job Queue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4220,
+        400
+      ],
+      "id": "464dc7d1-8083-59b3-83e2-a4b7e28152e0"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "073c35ba-bb93-5712-9aff-a80069adfff8",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Check Video Queued Status",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4440,
+        400
+      ],
+      "id": "669e0339-1ba7-5950-ab6f-c8d6137c6e44"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $('Set Video Configuration').first().json.poll_every_seconds }}",
+        "unit": "seconds"
+      },
+      "name": "Wait for Video Status",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4740,
+        400
+      ],
+      "id": "c76b491a-8b37-5768-b925-be80e52929dc",
+      "webhookId": "e0f22aa4-1bc8-5181-a29b-dbbad8dfc0ea"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.status_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Fetch Video Job Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4960,
+        400
+      ],
+      "id": "e41f3560-bae2-52af-adaf-b6295d49992c",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Decides one state for the job: done, failed, timed_out, or running (check again).\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Set Video Configuration').first().json;\nconst job = $('Verify Video Job Queue').first().json;\nconst c = $input.first().json || {};\nconst minutes = (Date.now() - Number(job.submitted_at || Date.now())) / 60000;\nconst status = c.status || 'UNKNOWN';\nconst problems = [];\nlet state = 'running';\nif (!c.status && c.error) { state = 'failed'; problems.push(`Status check failed (${errText(c.error)}).`); }\nelse if (status === 'COMPLETED' && c.error) { state = 'failed'; problems.push(`Kling failed on fal: ${errText(c.error)}${c.error_type ? ` [${c.error_type}]` : ''}`); }\nelse if (status === 'COMPLETED') state = 'done';\nelse if (minutes > Number(s.timeout_minutes)) { state = 'timed_out'; problems.push(`Kling took longer than ${s.timeout_minutes} minutes (last status ${status}).`); }\nreturn [{ json: { ...job, status, state, stage: 'Kling render', queue_position: c.queue_position ?? null, minutes_elapsed: Math.round(minutes * 10) / 10, problems } }];"
+      },
+      "name": "Evaluate Job Status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5180,
+        400
+      ],
+      "id": "f2536798-e942-5c70-9fcd-c044f9a54b96"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.state }}",
+                    "rightValue": "done",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "3a06bbc1-de82-59f0-90c3-0b79dfe12d88"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Video Done"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.state }}",
+                    "rightValue": "failed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d6c0bd48-6754-56ca-9bed-8f6cc0d609dd"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Failed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.state }}",
+                    "rightValue": "timed_out",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "3d7adbff-c647-5366-9c03-4455109dab14"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Timed Out"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Still Rendering"
+        }
+      },
+      "name": "Route by Job Status",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        5400,
+        400
+      ],
+      "id": "6f8f9473-2f9e-53e2-8f6b-0f6b83292270"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.response_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Fetch Video Result",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5720,
+        400
+      ],
+      "id": "14a99f8a-8c21-534c-bda6-4bb91dffbea6",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ ($json.video && $json.video.url) || '' }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "name": "Download Unboxing Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5940,
+        400
+      ],
+      "id": "d16df836-0a4c-52ff-888c-ac0591fd702a",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Checks the finished file before it goes to SocialRobot. Duration comes from the MP4 header (mvhd box).\n// max_file_mb defaults to 100 so the same file also fits an Etsy listing video (5-15 s, up to 100 MB, played muted).\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Set Video Configuration').first().json;\nconst plan = $('Prepare Kling Request').first().json;\nconst result = $('Fetch Video Result').first().json || {};\nconst item = $input.first();\nconst video = item.binary && item.binary.data;\nconst problems = [];\nlet sizeMb = 0;\nlet seconds = null;\nif (!result.video || !result.video.url) {\n  problems.push(`Kling finished but fal returned no video (${errText(result.error) || errText(result.detail) || 'empty response'}).`);\n} else if (!video) {\n  problems.push(`The video could not be downloaded from fal (${errText(item.json.error) || 'no file'}).`);\n} else {\n  const buf = await this.helpers.getBinaryDataBuffer(0, 'data');\n  sizeMb = buf.length / 1048576;\n  const i = buf.indexOf('mvhd');\n  if (i > 3) {\n    const v1 = buf[i + 4] === 1;\n    const scale = buf.readUInt32BE(i + (v1 ? 24 : 16));\n    const units = v1 ? Number(buf.readBigUInt64BE(i + 28)) : buf.readUInt32BE(i + 20);\n    if (scale) seconds = Math.round((units / scale) * 10) / 10;\n  }\n  const type = String(video.mimeType || '');\n  if (!/video\\/(mp4|quicktime)/.test(type) && !/\\.(mp4|mov)$/i.test(video.fileName || '')) problems.push(`Unexpected file type ${type || 'unknown'}.`);\n  if (sizeMb > Number(s.max_file_mb)) problems.push(`File is ${sizeMb.toFixed(1)} MB, above the ${s.max_file_mb} MB limit.`);\n  if (seconds === null) problems.push('Could not read the video duration.');\n  else if (Math.abs(seconds - Number(plan.total_seconds)) > Number(s.duration_tolerance_seconds)) problems.push(`Video is ${seconds} s; expected ${plan.total_seconds} s.`);\n  else if (seconds < 3) problems.push(`Video is ${seconds} s; Reels need at least 3 s.`);\n}\nreturn [{\n  json: { ok: problems.length === 0, stage: 'Video check', problems, size_mb: Math.round(sizeMb * 100) / 100, duration_seconds: seconds, video_url: (result.video && result.video.url) || '' },\n  binary: item.binary,\n}];"
+      },
+      "name": "Validate Video Specs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6160,
+        400
+      ],
+      "id": "bee26d60-4dbb-53d5-9975-4e58f0b79c7c"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ecd99436-8a44-5107-bb27-00f9fe1a9652",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Check Video Quality",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6380,
+        400
+      ],
+      "id": "2150574c-7305-570f-b096-05b5faeb62a0"
+    },
+    {
+      "parameters": {
+        "resource": "tiktok",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Prepare Kling Request').first().json.captions.tiktok }}",
+        "medias": [
+          {
+            "mediaSource": "binary",
+            "binaryPropertyName": "data",
+            "mediaType": "VIDEO"
+          }
+        ],
+        "postMode": "DIRECT_POST",
+        "privacyLevel": "PUBLIC",
+        "isAigc": true,
+        "allowComment": true,
+        "allowDuet": false,
+        "allowStitch": false,
+        "publishMode": "NOW"
+      },
+      "name": "Publish TikTok Unboxing Video",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        6700,
+        400
+      ],
+      "id": "909ff799-857a-5913-83c3-c9f9213bdda3",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "133b83c6-7e14-582a-ae0b-6fbeeae8674e",
+              "name": "tiktok_post_id",
+              "type": "string",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "id": "77123c5b-f106-516f-ab28-6f057a67920d",
+              "name": "status",
+              "type": "string",
+              "value": "={{ $json.status }}"
+            },
+            {
+              "id": "8f9b819d-926b-5611-966b-6e7bbaea195a",
+              "name": "product",
+              "type": "string",
+              "value": "={{ $('Form Submission Trigger').first().json['Product Name'] }}"
+            },
+            {
+              "id": "a62f2d54-10ca-5f6c-8ee0-700c116d3b19",
+              "name": "video_type",
+              "type": "string",
+              "value": "={{ $('Prepare Kling Request').first().json.mode }}"
+            },
+            {
+              "id": "101db8a9-64ce-5941-b442-939dea61e285",
+              "name": "shots",
+              "type": "number",
+              "value": "={{ $('Prepare Kling Request').first().json.shots }}"
+            },
+            {
+              "id": "4fbf9a95-f38f-5965-b1eb-b1fad4c61bfb",
+              "name": "reference_photos_used",
+              "type": "number",
+              "value": "={{ $('Prepare Kling Request').first().json.reference_photos_used }}"
+            },
+            {
+              "id": "4dde5f72-9787-59db-af24-0e416604059e",
+              "name": "video_seconds",
+              "type": "number",
+              "value": "={{ $('Validate Video Specs').first().json.duration_seconds }}"
+            },
+            {
+              "id": "f6841f94-47fb-5d4f-baeb-2bb49ccb7fd8",
+              "name": "file_size_mb",
+              "type": "number",
+              "value": "={{ $('Validate Video Specs').first().json.size_mb }}"
+            },
+            {
+              "id": "58aecf40-24e2-5d16-873a-4fb27f38370d",
+              "name": "estimated_kling_cost_usd",
+              "type": "number",
+              "value": "={{ Math.round(Number($('Prepare Kling Request').first().json.total_seconds) * Number($('Prepare Kling Request').first().json.generate_audio === false ? $('Set Video Configuration').first().json.price_per_second_no_audio_usd : $('Set Video Configuration').first().json.price_per_second_usd) * 100) / 100 }}"
+            },
+            {
+              "id": "a502fa78-c3d1-5706-a78f-b546e7dfd8a7",
+              "name": "prompt_source",
+              "type": "string",
+              "value": "={{ $('Prepare Kling Request').first().json.prompt_source }}"
+            },
+            {
+              "id": "9fe6fe2b-da13-582a-a6e0-73230f157273",
+              "name": "caption_source",
+              "type": "string",
+              "value": "={{ $('Prepare Kling Request').first().json.captions.source }}"
+            },
+            {
+              "id": "c6a7a330-f179-5537-af6b-c6dd3a6d6136",
+              "name": "fal_video_url",
+              "type": "string",
+              "value": "={{ $('Validate Video Specs').first().json.video_url }}"
+            },
+            {
+              "id": "d36dd948-e7a1-51b0-8276-2a24ff831f4b",
+              "name": "status_note",
+              "type": "string",
+              "value": "Direct Post: the video is posted publicly to your TikTok profile with TikTok's AI-generated label (Creator labeled as AI-generated). TikTok may take a few minutes to process it before it shows on your profile."
+            },
+            {
+              "id": "76416fc4-e475-576f-9e66-307d78522811",
+              "name": "etsy_note",
+              "type": "string",
+              "value": "Etsy listing videos can be 5-15 s and up to 100 MB and play without sound. Download fal_video_url soon if you want to add it to your listing yourself."
+            },
+            {
+              "id": "201db5d0-6ef5-5b7d-8e94-3304dd55cfdd",
+              "name": "next_step",
+              "type": "string",
+              "value": "In a few minutes, check the post on your TikTok profile next to the real product and package, and delete it if anything differs. To test first, change Privacy Level in Publish TikTok Unboxing Video to Private. To review each video in the TikTok app before it goes live, set Post Mode to Send to Inbox (Draft)."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Compose Video Summary",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6940,
+        400
+      ],
+      "id": "37de8537-4284-5fa5-b580-16c571bb2228"
+    },
+    {
+      "parameters": {
+        "resource": "instagram",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Prepare Kling Request').first().json.captions.instagram }}",
+        "mediaSource": "binary",
+        "mediaType": "VIDEO",
+        "binaryPropertyName": "data",
+        "isAiGenerated": true,
+        "isReel": true,
+        "publishMode": "NOW"
+      },
+      "name": "Submit Instagram Video",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        6704,
+        832
+      ],
+      "id": "e2db59bb-0015-5ffe-8d48-99929837d1d5",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "facebook",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Prepare Kling Request').first().json.captions.facebook }}",
+        "medias": [
+          {
+            "mediaSource": "binary",
+            "binaryPropertyName": "data",
+            "mediaType": "VIDEO"
+          }
+        ],
+        "isReel": true,
+        "publishMode": "NOW"
+      },
+      "name": "Post Facebook Reel",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        6704,
+        1008
+      ],
+      "id": "d82002af-c8e7-58e0-91c2-44325c103481",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "threads",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Prepare Kling Request').first().json.captions.threads }}",
+        "medias": [
+          {
+            "mediaSource": "binary",
+            "binaryPropertyName": "data",
+            "mediaType": "VIDEO"
+          }
+        ],
+        "publishMode": "NOW"
+      },
+      "name": "Publish Threads Clip",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        6704,
+        1200
+      ],
+      "id": "3df24d02-1c51-5fc0-a886-e1c4dbcc27c0",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://socialrobot.io/api/v1/pinterest/create",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ scheduledFor: { publish: 'NOW' }, post: { accountId: $('Set Video Configuration').first().json.pinterest_account_id, boardId: $('Set Video Configuration').first().json.pinterest_board_id, title: $('Prepare Kling Request').first().json.pinterest.title, description: $('Prepare Kling Request').first().json.captions.pinterest, altText: $('Prepare Kling Request').first().json.pinterest.alt_text, link: $('Prepare Kling Request').first().json.pinterest.link, mediaType: 'VIDEO', medias: { mediaType: 'VIDEO', medias: [{ mediaUrl: $('Validate Video Specs').first().json.video_url, coverImageUrl: $('Prepare Kling Request').first().json.pinterest.cover_image_url }] } } }) }}",
+        "options": {}
+      },
+      "name": "Pin Video on Pinterest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6704,
+        1376
+      ],
+      "id": "ea676e81-ee33-57bb-86b6-28fd0a63c197",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.cancel_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Cancel Video Job Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4600,
+        1260
+      ],
+      "id": "6f8131e7-af28-5e11-9573-6d92178306e9",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One readable reason for whatever went wrong. Add an error workflow in the workflow settings to get alerts.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst f = $('Form Submission Trigger').first();\nconst j = $input.first().json || {};\nlet message;\nif ($('Cancel Video Job Request').isExecuted) {\n  const src = $('Evaluate Job Status').first().json;\n  message = `Kling video stopped (${src.stage || 'Kling'}): ${(src.problems || []).join(' ')} The unfinished fal job was sent a cancel request.`;\n} else if (Array.isArray(j.problems) && j.problems.length) {\n  message = `${j.stage || 'Check'} failed: ${j.problems.join(' ')}`;\n} else if (j.error && $('Publish TikTok Unboxing Video').isExecuted) {\n  message = `SocialRobot could not post the video to TikTok: ${errText(j.error)}`;\n} else if (!$('Prepare Product Images').isExecuted) {\n  message = 'Upload one photo of the product in the \"Product Photo\" field (JPG, PNG or WebP).';\n} else {\n  message = `Unexpected failure: ${JSON.stringify(j).slice(0, 500)}`;\n}\nreturn [{ json: { message, product: f.json['Product Name'] || '' } }];"
+      },
+      "name": "Log Unboxing Errors",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4840,
+        1260
+      ],
+      "id": "c7cedc72-1484-5d52-87b0-4ad870883e04"
+    },
+    {
+      "parameters": {
+        "errorMessage": "={{ $json.message }}"
+      },
+      "name": "Halt on Video Error",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        5080,
+        1260
+      ],
+      "id": "42c59e6a-ddf5-5edb-a759-3f4acae5bb5a"
+    }
+  ],
+  "connections": {
+    "Form Submission Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Video Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Video Configuration": {
+      "main": [
+        [
+          {
+            "node": "Check Product Photo Presence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Product Photo Presence": {
+      "main": [
+        [
+          {
+            "node": "Prepare Product Images",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Unboxing Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Product Images": {
+      "main": [
+        [
+          {
+            "node": "Plan Photo Crops",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan Photo Crops": {
+      "main": [
+        [
+          {
+            "node": "Post Upload URL Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Upload URL Request": {
+      "main": [
+        [
+          {
+            "node": "Attach Photos to URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Photos to URLs": {
+      "main": [
+        [
+          {
+            "node": "Upload Photos to Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Photos to Storage": {
+      "main": [
+        [
+          {
+            "node": "Post Crop Image Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Crop Image Request": {
+      "main": [
+        [
+          {
+            "node": "Verify Photos on Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Photos on Storage": {
+      "main": [
+        [
+          {
+            "node": "Route by Video Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Video Plan": {
+      "main": [
+        [
+          {
+            "node": "Log Unboxing Errors",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Unboxing Content",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Kling Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Unboxing Content": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Generate Unboxing Content",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Luna AI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Unboxing Content",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Unboxing Content": {
+      "main": [
+        [
+          {
+            "node": "Prepare Kling Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Kling Request": {
+      "main": [
+        [
+          {
+            "node": "Submit Job to Kling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit Job to Kling": {
+      "main": [
+        [
+          {
+            "node": "Verify Video Job Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Video Job Queue": {
+      "main": [
+        [
+          {
+            "node": "Check Video Queued Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Video Queued Status": {
+      "main": [
+        [
+          {
+            "node": "Wait for Video Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Unboxing Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Video Status": {
+      "main": [
+        [
+          {
+            "node": "Fetch Video Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Video Job Status": {
+      "main": [
+        [
+          {
+            "node": "Evaluate Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluate Job Status": {
+      "main": [
+        [
+          {
+            "node": "Route by Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Job Status": {
+      "main": [
+        [
+          {
+            "node": "Fetch Video Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Unboxing Errors",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancel Video Job Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for Video Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancel Video Job Request": {
+      "main": [
+        [
+          {
+            "node": "Log Unboxing Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Video Result": {
+      "main": [
+        [
+          {
+            "node": "Download Unboxing Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Unboxing Video": {
+      "main": [
+        [
+          {
+            "node": "Validate Video Specs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Video Specs": {
+      "main": [
+        [
+          {
+            "node": "Check Video Quality",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Video Quality": {
+      "main": [
+        [
+          {
+            "node": "Publish TikTok Unboxing Video",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Submit Instagram Video",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post Facebook Reel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish Threads Clip",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Pin Video on Pinterest",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Unboxing Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish TikTok Unboxing Video": {
+      "main": [
+        [
+          {
+            "node": "Compose Video Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Unboxing Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Unboxing Errors": {
+      "main": [
+        [
+          {
+            "node": "Halt on Video Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "SocialRobot"
+    },
+    {
+      "name": "Etsy"
+    },
+    {
+      "name": "Unboxing"
+    },
+    {
+      "name": "Ecommerce"
+    },
+    {
+      "name": "Kling"
+    },
+    {
+      "name": "fal"
+    },
+    {
+      "name": "AI Video"
+    },
+    {
+      "name": "OpenAI"
+    },
+    {
+      "name": "TikTok"
+    },
+    {
+      "name": "Instagram Reels"
+    },
+    {
+      "name": "Pinterest"
+    }
+  ]
+}

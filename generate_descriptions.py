@@ -213,6 +213,70 @@ Every setting is in **Configure Video Settings**:
 This workflow uses the SocialRobot community node (`@socialrobot-io/n8n-nodes-socialrobot`). Community nodes are not maintained by n8n, and you install them at your own risk. The node is used for the TikTok draft and the optional Instagram, Facebook and Threads posts.
 """
 
+ETSY_UNBOXING_VIDEO_MD = """## Who it's for
+
+Etsy sellers, makers and small online shops that have good photos of their products but no time to film and edit. You upload a product photo and, if you have one, a photo of the closed package as you ship it. You get a short vertical AI unboxing video for TikTok, Instagram Reels, Facebook Reels, Threads and Pinterest, and a file you can also use as an Etsy listing video.
+
+## What it does
+
+1. A form takes one real product photo, an optional photo of the closed package exactly as you ship it, and up to 3 more angles of the product. It also asks for the product name, shop name and, optionally, what it's made of, what ships in the package, the price and the listing link.
+2. The photos are uploaded to fal storage. The packaging and product photos are center-cropped to 9:16. Kling 3.0 has no aspect-ratio field, so the frames set the shape.
+3. An optional OpenAI step (`gpt-6-luna`, vision, low detail) looks at the product and packaging photos and writes 1 to 3 shot prompts plus a caption for each network. Captions may only use the facts typed into the form. If OpenAI is off or fails, template shots and captions are used instead.
+4. One Kling 3.0 Standard image-to-video job renders a 10-second, 3-shot clip. The packaging photo is the first frame and the product photo is the last frame, so the video opens the package and ends on your real product. The extra angles are passed to Kling as a reference image of the product. Without a packaging photo, it makes a product reveal and shows no packaging at all. It runs through the fal queue with polling, a 30-minute timeout, and a cancel request if the job times out.
+5. The file is downloaded and checked for size (100 MB, Etsy's listing-video limit) and real duration by reading the MP4 `mvhd` atom.
+6. The video is posted to TikTok with **Direct Post** through the SocialRobot community node: public, with TikTok's "Creator labeled as AI-generated" label on, comments allowed, Duet and Stitch off. TikTok may take a few minutes to process it. To test first, change Privacy Level to Private. "Send to Inbox (Draft)" is still available in Post Mode if you want to review each video in the TikTok app before it goes live. Instagram Reel (with Instagram's AI label on), Facebook Reel, Threads video and a Pinterest video pin (with your listing link and your product photo as the cover) are already in the workflow but **disabled**.
+
+Every caption ends with a fixed line, "AI-generated video made from our real product photos." Every problem ends in one readable error message.
+
+## Requirements
+
+- n8n, self-hosted or Cloud. The workflow does not use an Execute Command node or ffmpeg.
+- A fal API key, stored as an n8n Header Auth credential: header name `Authorization`, value `Key <FAL_KEY>`.
+- The SocialRobot community node `@socialrobot-io/n8n-nodes-socialrobot` (3.1.2 or later), with your SocialRobot API key.
+- A TikTok account connected in SocialRobot. To post to Instagram, Facebook, Threads or Pinterest, connect those accounts and enable their nodes. The Pinterest pin uses the SocialRobot API through an HTTP Request node, with a second Header Auth credential (`x-api-key` = your SocialRobot API key), your Pinterest account id and a board id.
+- Optional: an OpenAI credential for the vision and caption step. To skip it, set `use_openai = false` in **Set Video Configuration**.
+
+## Cost
+
+These are fal list prices, checked on 23 Oct 2026. Kling 3.0 Standard costs $0.084 per second with audio off (the default) and $0.126 per second with audio on.
+
+| Video length | Audio off (default) | With audio |
+|---|---|---|
+| 5 s | $0.42 | $0.63 |
+| **10 s (default, 3 shots)** | **$0.84** | $1.26 |
+| 15 s | $1.26 | $1.89 |
+
+Audio is off by default: Etsy removes sound from listing videos. To add a TikTok sound, use "Send to Inbox (Draft)" and add it in the TikTok app. You pay for the total seconds, however many shots they are split into. fal lists storage and the crop utility at $0. The OpenAI step adds a few cents. If you cancel a job that is already rendering, fal may still bill it.
+
+## Customize
+
+Every setting is in **Set Video Configuration**:
+
+- `video_model`. The default is `fal-ai/kling-video/v3/standard/image-to-video`. To use Kling 3.0 Pro, set it to `fal-ai/kling-video/v3/pro/image-to-video` and update the prices. The sticky note **Switching to Kling 4.0 later** covers the v4 endpoint.
+- `video_seconds` (3 to 15) and `shot_count` (1 to 3). The seconds are split across the shots. Etsy listing videos must be 5 to 15 seconds.
+- `generate_audio`, `price_per_second_usd` and `price_per_second_no_audio_usd`.
+- `unboxing_shot_1_prompt` to `unboxing_shot_3_prompt` (with a packaging photo) and `reveal_shot_1_prompt` to `reveal_shot_3_prompt` (without one). `{product}` is replaced by the product name.
+- `end_on_product_photo`, `use_reference_photos` and `max_reference_photos` (up to 3).
+- `prompt_guardrails`, which is added to every shot, plus `negative_prompt` and `cfg_scale`.
+- `use_openai`, `caption_language`, `caption_tone` and `extra_hashtags`.
+- `ai_label_line` and `business_footer`, which are added to every caption. Keep the AI line.
+- `pinterest_account_id` and `pinterest_board_id` for the optional pin.
+- `crop_to_vertical`, `poll_every_seconds`, `timeout_minutes`, `max_file_mb` and `duration_tolerance_seconds`.
+
+## Good practice
+
+- The video is an AI illustration made from your real photos, not footage. Keep the AI line in the caption and leave the TikTok and Instagram AI labels on. If you switch TikTok to "Send to Inbox (Draft)", turn on TikTok's "AI-generated content" label in the app when you post.
+- A buyer should get exactly what the video shows. The prompts and the negative prompt rule out extra items, free gifts, cards, stickers, invented logos and any packaging that isn't in your photos. Upload the package exactly as you ship it, and only list what really ships. Direct Post has no review step, so run your first videos with Privacy Level set to Private and watch them next to the real product and package. If anything differs, delete the post.
+- No people appear. There are no hands, fingers or faces, and the package opens by itself, so the clip never looks like a real customer's unboxing.
+- Captions only use the facts you type into the form. There are no invented materials, sizes or claims, and no reviews, ratings or testimonials.
+- By default a run only posts to TikTok. Instagram, Facebook, Threads and Pinterest are disabled; once you enable them, they publish directly when the run finishes.
+- For Etsy, download the video from `fal_video_url` in the summary and add it to your listing yourself. Etsy plays listing videos without sound.
+
+## Community node
+
+This workflow uses the SocialRobot community node (`@socialrobot-io/n8n-nodes-socialrobot`). Community nodes are not maintained by n8n, and you install them at your own risk. The node is used for the TikTok post and the optional Instagram, Facebook and Threads posts. The optional Pinterest pin calls the SocialRobot API directly.
+"""
+
 
 def split_nodes(wf):
     nodes = wf.get("nodes", [])
@@ -283,6 +347,9 @@ def describe(wf):
         return REALESTATE_WALKTHROUGH_MD.strip()
     if wf.get("name") == "Turn café and bakery dish photos into ASMR AI food videos with Kling 3.0 and SocialRobot":
         return FOOD_ASMR_VIDEO_MD.strip()
+    # Curated gallery description for the Etsy unboxing template (approved in the n8n gallery 2026-10-23)
+    if wf.get("name") == "Create AI unboxing videos from Etsy product photos with Kling 3.0, OpenAI and SocialRobot":
+        return ETSY_UNBOXING_VIDEO_MD.strip()
     non_sticky, trigger, sources, actions = split_nodes(wf)
     _, who_for, how_text, steps, requirements, customization = build_overview(
         wf, non_sticky, trigger, sources, actions
