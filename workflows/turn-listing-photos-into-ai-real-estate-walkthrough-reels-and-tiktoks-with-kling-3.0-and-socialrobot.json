@@ -1,0 +1,2007 @@
+{
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "name": "Turn listing photos into AI real estate walkthrough Reels and TikToks with Kling 3.0 and SocialRobot",
+  "tags": [
+    {
+      "name": "SocialRobot"
+    },
+    {
+      "name": "Real Estate"
+    },
+    {
+      "name": "Kling"
+    },
+    {
+      "name": "fal"
+    },
+    {
+      "name": "AI Video"
+    },
+    {
+      "name": "OpenAI"
+    },
+    {
+      "name": "TikTok"
+    },
+    {
+      "name": "Instagram Reels"
+    },
+    {
+      "name": "LinkedIn"
+    }
+  ],
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Turn listing photos into an AI real estate walkthrough video\n\nUpload 3-8 photos of a listing and get one vertical walkthrough video. Kling 3.0 animates a smooth camera move between each pair of neighbouring photos (photo 1 → 2, 2 → 3, ...), fal stitches the clips, and SocialRobot sends the video to your TikTok inbox as a draft. Instagram Reel, Facebook Reel and LinkedIn video are ready to switch on.\n\n### How it works\n1. **When Listing Submitted Trigger** takes the photos (named in walkthrough order), address, price, beds, baths, features and agent.\n2. Photos are uploaded to fal storage and center-cropped to 9:16 (Kling takes the video shape from the start photo).\n3. Optional: OpenAI looks at each photo pair and writes a camera move, then writes fair-housing-safe captions. Without OpenAI a safe default prompt and template captions are used.\n4. One Kling 3.0 job per room pair (photo i = first frame, photo i+1 = last frame, 5 s, no audio). The workflow polls until all clips finish, fail or time out.\n5. fal's FFmpeg merge joins the clips. Size and real MP4 duration are checked, then SocialRobot saves the TikTok draft.\n6. Any failure stops with one readable message.\n\n### Setup steps\n- [ ] SocialRobot community node `@socialrobot-io/n8n-nodes-socialrobot` 3.1.1+ (works on n8n Cloud too) and your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Create TikTok Draft Walkthrough**\n- [ ] fal API key as a **Header Auth** credential: name `Authorization`, value `Key YOUR_FAL_KEY`. Select it in every fal HTTP node\n- [ ] OpenAI credential on **OpenAI Luna Model**, or set `use_openai` to false\n- [ ] Check **Set Walkthrough Configurations**\n\nRuns on n8n Cloud and self-hosted: no ffmpeg or Execute Command needed.\n\n### Customization\n- `video_model`: Kling 3.0 Standard by default. Pro: `fal-ai/kling-video/v3/pro/image-to-video` and `price_per_second_usd` 0.112.\n- `clip_seconds` (3-15), `generate_audio`, prompts, guardrails, hashtags, AI label line and footer.\n- Enable the optional posts (disabled by default). SocialRobot does not publish to YouTube.\n\n### Cost per run (fal list prices, 19 Oct 2026)\nKling 3.0 Standard, no audio: $0.084/s, so $0.42 per 5 s clip. 6 photos = 5 clips = **$2.10**; 8 photos = **$2.94**. With audio $0.126/s ($3.15 for 5 clips). Pro: $0.112/s ($2.80 for 5 clips). fal lists crop and merge at $0. OpenAI adds a few cents.",
+        "width": 480,
+        "height": 1500
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -80
+      ],
+      "id": "5f4396b7-3587-4e5d-8fbd-e79030f05450",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## 1. Collect the listing\n**When Listing Submitted Trigger** is the form. **Set Walkthrough Configurations** holds every value you'd want to change, including the model id. **If Sufficient Photos Present** needs 3-8 photos.",
+        "width": 640,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        272
+      ],
+      "id": "3bf69200-bd8f-4b52-9e99-81d7be576add",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 2. Order and measure photos\n**Prepare Photos for Walkthrough** sorts by file name (01-entry.jpg, 02-living.jpg ...). **Plan Vertical Crop for Photos** reads each size and plans a centered 9:16 crop.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        240
+      ],
+      "id": "707c3081-5a8f-40f8-a533-780fbdc9314c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 3. Prepare fal uploads\n**Post to fal for Upload URL** asks fal storage for one upload URL per photo, and **Prepare Photos for Upload** puts each photo next to its URL.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1664,
+        240
+      ],
+      "id": "87a609cd-dafb-440f-9490-15daf5c52870",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## 4. Store and crop photos\n**Put Photo to fal Storage** uploads each photo, and **Post Crop Request to fal** makes the 9:16 frames.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2112,
+        240
+      ],
+      "id": "e3b0be24-9121-402e-8eea-c88e8412e40e",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## 5. Pair the rooms\n**Pair Photos into Clips** checks every photo made it and pairs neighbours. **Route by Walkthrough Plan** sends photo problems to the error lane, and picks OpenAI or the default prompt from `use_openai`.",
+        "width": 416,
+        "height": 368,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        224
+      ],
+      "id": "b1829a66-154e-427e-a4ec-b297efa853af",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## 6. Camera moves (optional OpenAI)\n**Generate Camera Move Prompts** sees both photos of each pair and describes one camera move using only what is visible. **Aggregate Room Notes** falls back to the default prompt for any pair OpenAI missed.",
+        "width": 496,
+        "height": 544,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3008,
+        240
+      ],
+      "id": "f0ee8525-211c-4cb0-96b4-831aaa072bd7",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## 7. Captions\n**Generate Listing Captions** writes TikTok, Instagram, Facebook and LinkedIn captions under fair housing rules. With `use_openai` off, template captions are used.",
+        "width": 640,
+        "height": 528,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3536,
+        272
+      ],
+      "id": "fb241497-6773-4787-9b9b-3a498c4d964d",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## 8. Submit Kling jobs\n**Prepare Clip Requests for Kling** makes one fal request per room pair (first frame, last frame, prompt + guardrails, 5 s) and adds the AI label to every caption. **Post Clip Jobs to Kling** queues them.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3840,
+        -80
+      ],
+      "id": "df102907-43f4-4596-8271-c8fcc74ff2ff",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## 9. Confirm queued jobs\n**Check Clip Jobs Queued** makes sure every clip has a fal request id. If one failed, the others are canceled.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4304,
+        240
+      ],
+      "id": "4cd1cb0e-a3f5-445e-aaca-c688c007a8fc",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## 10. Poll clip progress\nChecks every 20 s. fal runs one Kling job at a time per account by default, so clips finish one after another. **Evaluate Clip Completion** marks the batch done, failed or timed out (60 min); failures and timeouts cancel unfinished jobs.",
+        "width": 848,
+        "height": 368,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4752,
+        272
+      ],
+      "id": "348bae02-cf50-47a3-85f2-68bba61e2eac",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## 11. Fetch finished clips\n**Get Clip Results from fal** gets each clip and **Compile Clip URLs** keeps them in walkthrough order.",
+        "width": 640,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5648,
+        272
+      ],
+      "id": "5b4ab340-26ae-42bb-b7bc-a421ca86cc48",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## 12. Merge on fal\n**Post to fal for Clip Merge** joins the clips with fal-ai/ffmpeg-api/merge-videos, so nothing runs on your server.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6320,
+        240
+      ],
+      "id": "8cabffcb-a95d-475c-89b9-f56333a0bdc7",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## 13. Check the video\n**Check Video Size and Duration** reads the real MP4 duration before anything goes to SocialRobot.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6784,
+        240
+      ],
+      "id": "6a3d5c50-717a-4b15-ab71-df1035dcd93e",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "## 14. Save the TikTok draft\n**Create TikTok Draft Walkthrough** uses Post Mode *Send to Inbox (Draft)*. Nothing is public until you post it in the TikTok app.",
+        "width": 432,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        7280,
+        240
+      ],
+      "id": "1d30b5f5-e110-44b3-a478-c0b5b572fdcf",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "content": "## Optional posts (disabled)\nConnected and **disabled by default**. Enable, pick an account and they publish when the run finishes.\n- **Submit Instagram Reel**: Reel with the AI label on\n- **Publish Facebook Reel**\n- **Post LinkedIn Video via SocialRobot**: LinkedIn video needs video metadata the node doesn't expose yet, so this calls the SocialRobot API. Add a Header Auth credential (`x-api-key`) and set `linkedin_account_id`.",
+        "width": 400,
+        "height": 720,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        7280,
+        608
+      ],
+      "id": "23b1ebec-7690-4eb5-b266-b926a7ce258a",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "content": "## Handle errors\nWrong photo count, upload or crop problems, rejected or failed Kling jobs, timeouts, merge or download errors, files that fail the checks and SocialRobot errors end here with one readable message. Add an error workflow in the settings for alerts.",
+        "width": 816,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4416,
+        1104
+      ],
+      "id": "40d71d90-bcfc-4a96-9e25-052c6b948f1d",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "content": "## Switching to Kling 4.0 later\nThe model id lives in one place: `video_model` in **Set Walkthrough Configurations**. When a Kling 4.0 image-to-video endpoint with published per-second pricing is live on fal, change that value and `price_per_second_usd`. **Prepare Clip Requests for Kling** sends Kling 3.0 extras (audio, negative prompt, cfg) only to v3 endpoints, and sends duration as the string Kling 3.0 expects or the number the Kling 4.0 schema expects. Check the new endpoint's input fields on fal before switching.",
+        "width": 540,
+        "height": 360,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5648,
+        640
+      ],
+      "id": "a651f5ae-233f-4a68-ba47-a20c26a53e47",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "content": "## AI label and fair housing\n- Kling creates new frames between real photos. Every caption ends with `ai_label_line`, and **Submit Instagram Reel** has **AI-Generated Content** on.\n- The node doesn't send TikTok's AI label for inbox drafts: turn on 'AI-generated content' in TikTok before posting.\n- Prompts forbid adding furniture, rooms, views or features, but always watch the video against the real photos before posting. Don't use it as your MLS virtual tour unless your MLS allows AI media.\n- Captions describe the property, never who should live there. Have a person review them.",
+        "width": 420,
+        "height": 640,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        7808,
+        224
+      ],
+      "id": "f2609abf-74b0-471c-a57c-32014c895e27",
+      "name": "Sticky Note18"
+    },
+    {
+      "parameters": {
+        "formTitle": "Create a listing walkthrough video",
+        "formDescription": "Upload 3-8 photos of one listing, named in walkthrough order (01-entry.jpg, 02-living.jpg, 03-kitchen.jpg ...). Each pair of neighbouring photos becomes a 5-second AI camera move. The finished vertical video goes to your TikTok inbox as a draft.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Listing Photos",
+              "fieldType": "file",
+              "multipleFiles": true,
+              "acceptFileTypes": ".jpg, .jpeg, .png, .webp",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Property Address",
+              "placeholder": "e.g. 12 Harbor Lane, Portland, ME",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Asking Price",
+              "placeholder": "e.g. $489,000"
+            },
+            {
+              "fieldLabel": "Bedrooms",
+              "placeholder": "e.g. 3"
+            },
+            {
+              "fieldLabel": "Bathrooms",
+              "placeholder": "e.g. 2"
+            },
+            {
+              "fieldLabel": "Interior Size",
+              "placeholder": "e.g. 1,850 sq ft"
+            },
+            {
+              "fieldLabel": "Key Features",
+              "fieldType": "textarea",
+              "placeholder": "One per line. Only true, checkable facts about the property."
+            },
+            {
+              "fieldLabel": "Agent and Brokerage",
+              "placeholder": "e.g. Jane Doe, Harbor Realty",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Listing Link",
+              "placeholder": "Optional public link to the full listing"
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "respondWithOptions": {
+            "values": {
+              "respondWith": "text",
+              "formSubmittedText": "Thanks! Your walkthrough is rendering. It usually lands in your TikTok inbox within 10-30 minutes."
+            }
+          }
+        }
+      },
+      "name": "When Listing Submitted Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        560,
+        400
+      ],
+      "id": "7f926f40-09cf-5cdc-9a85-b4bea35a39e7",
+      "webhookId": "d3c998aa-c47a-50c7-9b44-eb2e391d9800"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51a7d6f1-0289-52b9-8625-8b488955ee4d",
+              "name": "video_model",
+              "type": "string",
+              "value": "fal-ai/kling-video/v3/standard/image-to-video"
+            },
+            {
+              "id": "985d1a28-8a53-5ada-83f9-479a56a8f405",
+              "name": "clip_seconds",
+              "type": "string",
+              "value": "5"
+            },
+            {
+              "id": "e3e54629-e1b7-51e3-91e5-d21bc64daa77",
+              "name": "generate_audio",
+              "type": "boolean",
+              "value": false
+            },
+            {
+              "id": "e9e08b8c-cb7d-591f-89c4-cf7b88a70890",
+              "name": "price_per_second_usd",
+              "type": "number",
+              "value": 0.084
+            },
+            {
+              "id": "1ce211a9-c370-5e95-bdff-8c0f482a9653",
+              "name": "cfg_scale",
+              "type": "number",
+              "value": 0.5
+            },
+            {
+              "id": "8403a1af-0044-5281-811b-cb07515d841b",
+              "name": "negative_prompt",
+              "type": "string",
+              "value": "blur, distortion, warped walls, bent lines, flicker, people, pets, added furniture, extra rooms, text, watermark, logo, low quality"
+            },
+            {
+              "id": "10d43f7d-7678-5557-ab40-a50c0b5d2fe6",
+              "name": "default_camera_prompt",
+              "type": "string",
+              "value": "Slow, steady, eye-level gimbal walkthrough that glides smoothly from the first view to the second, like an agent walking a buyer through the home. Realistic natural light, gentle motion."
+            },
+            {
+              "id": "42edf743-e39d-545a-afbb-6ab26e2bb8ce",
+              "name": "prompt_guardrails",
+              "type": "string",
+              "value": "Keep every wall, window, floor, fixture and piece of furniture exactly as photographed. Do not add, remove or restyle furniture, decor, rooms, views or features. No people, pets, text, logos or watermarks."
+            },
+            {
+              "id": "9f206f1a-2dfb-5e56-9b5e-90036459be32",
+              "name": "use_openai",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "07046e55-8bad-54e6-8e21-75e502a1a56c",
+              "name": "crop_to_vertical",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "50c40611-048e-5be9-8185-5e246251be1f",
+              "name": "sort_photos_by_file_name",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "085d19a6-63d8-5f31-9540-cb48a43f0f9e",
+              "name": "min_photos",
+              "type": "number",
+              "value": 3
+            },
+            {
+              "id": "d0fa211e-6a38-552b-8c23-d8bc892322f0",
+              "name": "max_photos",
+              "type": "number",
+              "value": 8
+            },
+            {
+              "id": "7b2068c1-e051-5db6-922a-b1acc6ca7ff6",
+              "name": "poll_every_seconds",
+              "type": "number",
+              "value": 20
+            },
+            {
+              "id": "6e175cb1-c7ef-573a-9103-a398b8802b48",
+              "name": "timeout_minutes",
+              "type": "number",
+              "value": 60
+            },
+            {
+              "id": "10e83702-1d51-51eb-9e74-46446a90c0ae",
+              "name": "max_file_mb",
+              "type": "number",
+              "value": 200
+            },
+            {
+              "id": "391fe44a-2661-5edf-8cdd-817e3620ed89",
+              "name": "min_seconds",
+              "type": "number",
+              "value": 5
+            },
+            {
+              "id": "179c1e76-09e7-5a82-ac52-1f1dc76013f9",
+              "name": "max_seconds",
+              "type": "number",
+              "value": 60
+            },
+            {
+              "id": "4fa522af-982e-5edf-8c8a-30b6bf148616",
+              "name": "caption_tone",
+              "type": "string",
+              "value": "Warm, clear and factual. No hype."
+            },
+            {
+              "id": "9f12cd89-8162-51ed-a221-c0e2f7076802",
+              "name": "extra_hashtags",
+              "type": "string",
+              "value": "#realestate #hometour #justlisted"
+            },
+            {
+              "id": "8abaadca-9398-5923-bf45-2f2d05e51e2e",
+              "name": "ai_label_line",
+              "type": "string",
+              "value": "AI-generated walkthrough made from real listing photos, for illustration only. See the listing for exact details."
+            },
+            {
+              "id": "ad29384c-7fc2-55d7-b1fd-30015947a93d",
+              "name": "brokerage_footer",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "06556e1f-1e48-5527-b064-fc83aa25659e",
+              "name": "linkedin_account_id",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Set Walkthrough Configurations",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        780,
+        400
+      ],
+      "id": "10f11930-edbd-5ba0-aa94-0f78a670dbd5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "35b58de8-e5c7-54be-bf8f-1ac1d9f658ba",
+              "leftValue": "={{ (n => n >= Math.max(3, Number($('Set Walkthrough Configurations').first().json.min_photos)) && n <= Number($('Set Walkthrough Configurations').first().json.max_photos))(Object.values($('When Listing Submitted Trigger').first().binary || {}).filter(b => String(b.mimeType || '').startsWith('image/')).length) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "If Sufficient Photos Present",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1000,
+        400
+      ],
+      "id": "c511fbee-96ba-5adb-a7bb-f69bd4e827ef"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per listing photo, in walkthrough order.\n// Browsers don't always keep the order you picked files in, so photos are sorted by file name\n// when sort_photos_by_file_name is on: name them 01-entry.jpg, 02-living.jpg, 03-kitchen.jpg ...\nconst s = $('Set Walkthrough Configurations').first().json;\nconst form = $('When Listing Submitted Trigger').first();\nlet photos = Object.values(form.binary || {}).filter(b => String(b.mimeType || '').startsWith('image/'));\nif (s.sort_photos_by_file_name === true || s.sort_photos_by_file_name === 'true') {\n  photos = [...photos].sort((a, b) => String(a.fileName || '').localeCompare(String(b.fileName || ''), undefined, { numeric: true, sensitivity: 'base' }));\n}\nconst ext = { 'image/png': 'png', 'image/webp': 'webp' };\nreturn photos.map((photo, i) => ({\n  json: {\n    photo_number: i + 1,\n    file_name: photo.fileName || `photo_${i + 1}.${ext[photo.mimeType] || 'jpg'}`,\n    mime_type: photo.mimeType || 'image/jpeg',\n  },\n  binary: { photo },\n}));"
+      },
+      "name": "Prepare Photos for Walkthrough",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        400
+      ],
+      "id": "1a16bf5e-d234-5a85-9399-c379a472de96"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Reads each photo's pixel size from its file header (JPEG, PNG, WebP) and plans a centered 9:16 crop.\n// Kling 3.0 takes the video's aspect ratio from the start image, so vertical photos give a vertical video.\nconst s = $('Set Walkthrough Configurations').first().json;\nconst target = 9 / 16;\nconst cropOn = s.crop_to_vertical === true || s.crop_to_vertical === 'true';\n\nfunction exifOrientation(buf, t) {\n  const le = buf.toString('ascii', t, t + 2) === 'II';\n  const u16 = o => (le ? buf.readUInt16LE(o) : buf.readUInt16BE(o));\n  const u32 = o => (le ? buf.readUInt32LE(o) : buf.readUInt32BE(o));\n  const ifd = t + u32(t + 4);\n  const count = u16(ifd);\n  for (let k = 0; k < count; k++) {\n    const e = ifd + 2 + k * 12;\n    if (u16(e) === 0x0112) return u16(e + 8);\n  }\n  return 1;\n}\n\nfunction imageSize(buf) {\n  try {\n    if (buf[0] === 0x89 && buf.toString('ascii', 1, 4) === 'PNG') {\n      return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20), orientation: 1 };\n    }\n    if (buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP') {\n      const kind = buf.toString('ascii', 12, 16);\n      if (kind === 'VP8X') return { w: 1 + buf.readUIntLE(24, 3), h: 1 + buf.readUIntLE(27, 3), orientation: 1 };\n      if (kind === 'VP8L') { const b = buf.readUInt32LE(21); return { w: (b & 0x3fff) + 1, h: ((b >> 14) & 0x3fff) + 1, orientation: 1 }; }\n      if (kind === 'VP8 ') return { w: buf.readUInt16LE(26) & 0x3fff, h: buf.readUInt16LE(28) & 0x3fff, orientation: 1 };\n    }\n    if (buf[0] === 0xff && buf[1] === 0xd8) {\n      let i = 2;\n      let orientation = 1;\n      while (i + 9 < buf.length) {\n        if (buf[i] !== 0xff) { i++; continue; }\n        const marker = buf[i + 1];\n        if (marker === 0xff) { i++; continue; }\n        if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd8)) { i += 2; continue; }\n        const len = buf.readUInt16BE(i + 2);\n        if (marker === 0xe1 && buf.toString('ascii', i + 4, i + 8) === 'Exif') {\n          try { orientation = exifOrientation(buf, i + 10) || 1; } catch (e) { orientation = 1; }\n        }\n        if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {\n          return { w: buf.readUInt16BE(i + 7), h: buf.readUInt16BE(i + 5), orientation };\n        }\n        i += 2 + len;\n      }\n    }\n  } catch (e) {}\n  return null;\n}\n\nconst out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const item = items[i];\n  const buf = await this.helpers.getBinaryDataBuffer(i, 'photo');\n  const size = imageSize(buf);\n  let crop = { x_percent: 0, y_percent: 0, width_percent: 100, height_percent: 100 };\n  let problem = null;\n  let w = null;\n  let h = null;\n  if (!size || !size.w || !size.h) {\n    problem = `Photo ${item.json.photo_number} (${item.json.file_name}): could not read the image size. Use JPG, PNG or WebP.`;\n  } else {\n    // EXIF orientations 5-8 mean the camera stored the photo rotated by 90 degrees.\n    const rotated = size.orientation >= 5 && size.orientation <= 8;\n    w = rotated ? size.h : size.w;\n    h = rotated ? size.w : size.h;\n    const ratio = w / h;\n    if (cropOn && ratio > target * 1.01) {\n      const wp = (target / ratio) * 100;\n      crop = { x_percent: Math.round(((100 - wp) / 2) * 1000) / 1000, y_percent: 0, width_percent: Math.round(wp * 1000) / 1000, height_percent: 100 };\n    } else if (cropOn && ratio < target * 0.99) {\n      const hp = (ratio / target) * 100;\n      crop = { x_percent: 0, y_percent: Math.round(((100 - hp) / 2) * 1000) / 1000, width_percent: 100, height_percent: Math.round(hp * 1000) / 1000 };\n    }\n    const outW = (w * crop.width_percent) / 100;\n    const outH = (h * crop.height_percent) / 100;\n    if (outW < 300 || outH < 300) problem = `Photo ${item.json.photo_number} (${item.json.file_name}) is too small: Kling needs at least 300 x 300 px after cropping.`;\n    if (!cropOn && (w / h < 0.4 || w / h > 2.5)) problem = `Photo ${item.json.photo_number} (${item.json.file_name}) has an aspect ratio Kling does not accept (0.4 to 2.5).`;\n  }\n  out.push({ json: { ...item.json, width: w, height: h, ...crop, size_problem: problem }, binary: item.binary });\n}\nreturn out;"
+      },
+      "name": "Plan Vertical Crop for Photos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1460,
+        400
+      ],
+      "id": "735f7ccc-488f-5d2f-b7f0-0dc133929b18"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://rest.fal.ai/storage/upload/initiate?storage_type=fal-cdn-v3",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ content_type: $json.mime_type, file_name: $json.file_name }) }}",
+        "options": {}
+      },
+      "name": "Post to fal for Upload URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1712,
+        400
+      ],
+      "id": "ba8ec80a-51e5-5d10-bb74-87d8ce0386dc",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// fal returned one upload URL per photo. Put each photo back next to its URL for the upload step.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst photos = $('Plan Vertical Crop for Photos').all();\nreturn $input.all().map((item, i) => ({\n  json: {\n    ...photos[i].json,\n    upload_url: item.json.upload_url || '',\n    file_url: item.json.file_url || '',\n    upload_error: item.json.upload_url ? '' : errText(item.json.error) || 'no upload URL returned',\n  },\n  binary: photos[i].binary,\n}));"
+      },
+      "name": "Prepare Photos for Upload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1936,
+        400
+      ],
+      "id": "36fac633-0458-50c8-90f8-22793c7894fe"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.upload_url }}",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "photo",
+        "options": {}
+      },
+      "name": "Put Photo to fal Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2160,
+        400
+      ],
+      "id": "59cb70d7-e32b-58e4-80f6-076217b9215a",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://fal.run/fal-ai/workflow-utilities/crop-image",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ image_url: $('Prepare Photos for Upload').item.json.file_url, x_percent: $('Prepare Photos for Upload').item.json.x_percent, y_percent: $('Prepare Photos for Upload').item.json.y_percent, width_percent: $('Prepare Photos for Upload').item.json.width_percent, height_percent: $('Prepare Photos for Upload').item.json.height_percent, output_format: 'jpg' }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "name": "Post Crop Request to fal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2368,
+        400
+      ],
+      "id": "f4483a7a-5291-580c-89c3-a678c3f9e425",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Checks every photo made it to fal, then pairs neighbours: clip 1 = photo 1 -> photo 2, clip 2 = photo 2 -> photo 3, ...\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Set Walkthrough Configurations').first().json;\nconst photos = $('Prepare Photos for Upload').all().map(p => p.json);\nconst uploads = $('Put Photo to fal Storage').all().map(p => p.json);\nconst crops = $input.all().map(c => c.json);\nconst problems = [];\nconst frames = photos.map((p, i) => {\n  const crop = crops[i] || {};\n  const url = crop.image && crop.image.url;\n  const label = `Photo ${p.photo_number} (${p.file_name})`;\n  if (p.size_problem) problems.push(p.size_problem);\n  else if (p.upload_error) problems.push(`${label}: fal storage did not return an upload URL (${p.upload_error}).`);\n  else if (uploads[i] && uploads[i].error) problems.push(`${label}: upload to fal storage failed (${errText(uploads[i].error)}).`);\n  else if (!url) problems.push(`${label}: fal could not crop the photo (${errText(crop.error) || 'no image URL returned'}).`);\n  return { photo_number: p.photo_number, file_name: p.file_name, image_url: url || '' };\n});\nif (problems.length) {\n  return [{ json: { route: 'error', ok: false, stage: 'Photo upload', problems } }];\n}\nconst useAi = s.use_openai === true || s.use_openai === 'true';\nconst pairs = [];\nfor (let i = 0; i < frames.length - 1; i++) {\n  pairs.push({\n    json: {\n      route: useAi ? 'ai' : 'template',\n      ok: true,\n      pair_number: i + 1,\n      pair_count: frames.length - 1,\n      start_photo: frames[i].file_name,\n      end_photo: frames[i + 1].file_name,\n      start_image_url: frames[i].image_url,\n      end_image_url: frames[i + 1].image_url,\n    },\n  });\n}\nreturn pairs;"
+      },
+      "name": "Pair Photos into Clips",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2608,
+        400
+      ],
+      "id": "fbe02e03-b99b-5fd3-ab77-2cb9bb8047cb"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "error",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6a9f3d92-5e18-5aa0-b978-edc2385c620b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Photo Problem"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "ai",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "ad85b42d-f12f-5d60-a4c0-01a0c383a11f"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Use OpenAI"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Default Prompt"
+        }
+      },
+      "name": "Route by Walkthrough Plan",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2832,
+        400
+      ],
+      "id": "2d370ec3-bd3e-536c-b19a-d9bc704b7747"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You direct an AI image-to-video model (Kling 3.0) that animates one step of a real estate walkthrough between two real listing photos.\nImage 1 is the START frame ({{ $json.start_photo }}). Image 2 is the END frame ({{ $json.end_photo }}).\nThis is clip {{ $json.pair_number }} of {{ $json.pair_count }}, {{ $('Set Walkthrough Configurations').first().json.clip_seconds }} seconds, vertical 9:16.\nListing context (do not add anything that is not visible in the two photos): {{ $('When Listing Submitted Trigger').first().json['Property Address'] }}. Features: {{ ($('When Listing Submitted Trigger').first().json['Key Features'] || 'none given').replace(/\\n/g, '; ') }}\n\nReturn:\n- start_room: a short name for the room or area in image 1 (for example 'living room', 'kitchen', 'front exterior'), based only on what you see.\n- end_room: the same for image 2.\n- camera_prompt: one paragraph in English, under 600 characters, describing a single smooth, steady, eye-level gimbal move that starts exactly on image 1 and ends exactly on image 2 (for example a slow walk forward through a doorway, a gentle pan, or a slow turn). Mention only things visible in the photos.\n\nRules for camera_prompt: keep every wall, window, floor, ceiling, fixture, finish and piece of furniture exactly as photographed. Do not add, remove, move or restyle furniture, decor, appliances, rooms, doors, windows, views, landscaping, pools or any other feature. No people, pets, text, logos or watermarks. No change of time of day, weather or season. Realistic natural lighting, no fast moves, no fisheye, no drone shot unless both photos are aerial exteriors. If the two spaces do not look connected, use a slow forward move with a soft natural transition instead of inventing a hallway or a new room.",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "type": "HumanMessagePromptTemplate",
+              "messageType": "imageUrl",
+              "imageUrl": "={{ $json.start_image_url }}",
+              "imageDetail": "low"
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "messageType": "imageUrl",
+              "imageUrl": "={{ $json.end_image_url }}",
+              "imageDetail": "low"
+            }
+          ]
+        }
+      },
+      "name": "Generate Camera Move Prompts",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        3088,
+        400
+      ],
+      "id": "fbc9d82b-0e9c-54c1-bca6-1a8d45f4130c",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"start_room\": \"living room\",\n  \"end_room\": \"kitchen\",\n  \"camera_prompt\": \"Slow, steady eye-level glide from the living room sofa area toward the open kitchen ...\"\n}"
+      },
+      "name": "Format Camera Move Prompts",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3136,
+        640
+      ],
+      "id": "6be0a19e-5d5c-513b-b2f2-c7643ca5fcf7"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gpt-6-luna"
+        },
+        "options": {}
+      },
+      "name": "OpenAI Luna Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3744,
+        640
+      ],
+      "id": "b2f80bba-f638-5f40-97e6-4db8d50c99cf"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item with every room pair and its AI camera prompt.\n// If OpenAI failed for a pair, that pair falls back to the default camera prompt from the settings.\nconst s = $('Set Walkthrough Configurations').first().json;\nconst pairs = $('Pair Photos into Clips').all().map(p => p.json);\nconst outs = $input.all().map(o => (o.json && o.json.output) || {});\nlet fallbacks = 0;\nconst merged = pairs.map((p, i) => {\n  const o = outs[i] || {};\n  let prompt = typeof o.camera_prompt === 'string' ? o.camera_prompt.trim() : '';\n  if (!prompt) {\n    fallbacks++;\n    prompt = String(s.default_camera_prompt || '').trim();\n  }\n  return {\n    ...p,\n    start_room: String(o.start_room || p.start_photo).slice(0, 60),\n    end_room: String(o.end_room || p.end_photo).slice(0, 60),\n    camera_prompt: prompt.slice(0, 1800),\n  };\n});\nconst rooms = [merged[0].start_room, ...merged.map(p => p.end_room)];\nreturn [{ json: { pairs: merged, rooms, ai_prompt_fallbacks: fallbacks } }];"
+      },
+      "name": "Aggregate Room Notes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        400
+      ],
+      "id": "6f5cb6a9-0039-57cf-87ea-157819098a62"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write social captions for a short AI walkthrough video of a real listing. Use only these facts:\nAddress: {{ $('When Listing Submitted Trigger').first().json['Property Address'] }}\nAsking price: {{ $('When Listing Submitted Trigger').first().json['Asking Price'] || 'not given' }}\nBedrooms: {{ $('When Listing Submitted Trigger').first().json['Bedrooms'] || 'not given' }} | Bathrooms: {{ $('When Listing Submitted Trigger').first().json['Bathrooms'] || 'not given' }} | Interior size: {{ $('When Listing Submitted Trigger').first().json['Interior Size'] || 'not given' }}\nKey features: {{ ($('When Listing Submitted Trigger').first().json['Key Features'] || 'none given').replace(/\\n/g, '; ') }}\nRooms shown, in order: {{ $json.rooms.join(', ') }}\nListed by: {{ $('When Listing Submitted Trigger').first().json['Agent and Brokerage'] }}\nListing link: {{ $('When Listing Submitted Trigger').first().json['Listing Link'] || 'none' }}\nTone: {{ $('Set Walkthrough Configurations').first().json.caption_tone }}\n\nReturn:\n- tiktok_caption: under 300 characters, ending with 3-5 hashtags that include {{ $('Set Walkthrough Configurations').first().json.extra_hashtags }}.\n- instagram_caption: under 600 characters, short line breaks, hashtags at the end (include {{ $('Set Walkthrough Configurations').first().json.extra_hashtags }}).\n- facebook_caption: under 600 characters, at most 2 hashtags, include the listing link if one is given.\n- linkedin_caption: under 700 characters, professional, 0-3 hashtags, include the listing link if one is given.\n\nFair housing rules (US Fair Housing Act and similar laws): describe the property, never the people who should live there. Never mention or imply race, color, religion, sex, gender identity, sexual orientation, disability, familial status, national origin, age or source of income. Do not write phrases like 'perfect for families', 'great for kids', 'adults only', 'ideal for retirees', 'young professionals', 'bachelor pad' or 'exclusive community'. No steering: say nothing about who lives in the area, its safety or crime, school quality, or nearby places of worship. Only state accessibility features if they are in the key features, and state them as facts. No claims beyond the facts given: no invented room sizes, views, upgrades, investment returns, 'won't last' urgency or superlatives like 'best'. Do not write an AI disclosure or a disclaimer; one is added automatically.",
+        "hasOutputParser": true
+      },
+      "name": "Generate Listing Captions",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        3872,
+        400
+      ],
+      "id": "6ac4efe9-3c6d-5aed-96f6-cdaf9f5f49ef",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"tiktok_caption\": \"Walk through 12 Harbor Lane ... #realestate #hometour\",\n  \"instagram_caption\": \"...\",\n  \"facebook_caption\": \"...\",\n  \"linkedin_caption\": \"...\"\n}"
+      },
+      "name": "Format Listing Captions",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4272,
+        640
+      ],
+      "id": "34d5d931-be86-590f-81f1-43262729e1cd"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Builds one fal request per room pair and the captions for every network.\n// The AI label line and your footer are added here, so they are always present.\nconst s = $('Set Walkthrough Configurations').first().json;\nconst f = $('When Listing Submitted Trigger').first().json;\nconst aiRan = $('Generate Listing Captions').isExecuted;\nconst guard = String(s.prompt_guardrails || '').trim();\nlet pairs;\nlet rooms = [];\nlet ai = {};\nlet promptSource = 'default prompt';\nlet aiFallbacks = 0;\nif (aiRan) {\n  const notes = $('Aggregate Room Notes').first().json;\n  pairs = notes.pairs;\n  rooms = notes.rooms || [];\n  aiFallbacks = notes.ai_prompt_fallbacks || 0;\n  ai = ($input.first().json && $input.first().json.output) || {};\n  promptSource = aiFallbacks ? `OpenAI (${aiFallbacks} pair(s) used the default prompt)` : 'OpenAI';\n} else {\n  pairs = $input.all().map(item => ({ ...item.json, camera_prompt: String(s.default_camera_prompt || '').trim() }));\n}\n\n// ---- captions\nconst clean = v => String(v || '').trim();\nconst address = clean(f['Property Address']);\nconst facts = [clean(f['Asking Price']), clean(f['Bedrooms']) && `${clean(f['Bedrooms'])} bed`, clean(f['Bathrooms']) && `${clean(f['Bathrooms'])} bath`, clean(f['Interior Size'])].filter(Boolean);\nconst features = clean(f['Key Features']).split(/\\n|;/).map(t => t.replace(/^[-*\\u2022\\s]+/, '').trim()).filter(Boolean).slice(0, 4);\nconst agent = clean(f['Agent and Brokerage']);\nconst link = clean(f['Listing Link']);\nconst tags = clean(s.extra_hashtags);\nconst label = clean(s.ai_label_line);\nconst footer = clean(s.brokerage_footer);\nconst tail = [label, footer].filter(Boolean).join('\\n');\nconst intro = `Walk through ${address}${facts.length ? ` | ${facts.join(' | ')}` : ''}`;\nconst template = {\n  tiktok: [intro, features.join(' | '), agent, tags].filter(Boolean).join('\\n'),\n  instagram: [intro, features.map(t => `- ${t}`).join('\\n'), link ? `Details: ${link}` : 'Details in bio', `Listed by ${agent}`, tags].filter(Boolean).join('\\n\\n'),\n  facebook: [intro, features.map(t => `- ${t}`).join('\\n'), link ? `Full listing: ${link}` : '', `Listed by ${agent}`].filter(Boolean).join('\\n\\n'),\n  linkedin: [`New listing: ${address}`, facts.join(' | '), features.join(' | '), link ? `Full listing: ${link}` : '', `Listed by ${agent}`].filter(Boolean).join('\\n\\n'),\n};\nconst pick = (key, aiKey, max) => {\n  const body = clean(ai[aiKey]) || template[key];\n  const room = max - tail.length - 2;\n  return `${body.slice(0, room)}\\n\\n${tail}`.trim();\n};\nconst captions = {\n  tiktok: pick('tiktok', 'tiktok_caption', 2200),\n  instagram: pick('instagram', 'instagram_caption', 2200),\n  facebook: pick('facebook', 'facebook_caption', 5000),\n  linkedin: pick('linkedin', 'linkedin_caption', 3000),\n  source: clean(ai.tiktok_caption) ? 'OpenAI' : 'template',\n};\n\n// ---- fal requests (field names from the fal OpenAPI schema of the endpoint in video_model)\nconst isV3 = /kling-video\\/v3\\//.test(String(s.video_model));\nreturn pairs.map(p => {\n  // Kling 3.0 takes duration as one of the strings \"3\"..\"15\". The Kling 4.0 schema on fal\n  // takes an integer (3-30), so the type follows the endpoint.\n  const body = {\n    prompt: `${p.camera_prompt} ${guard}`.trim().slice(0, 2500),\n    start_image_url: p.start_image_url,\n    end_image_url: p.end_image_url,\n    duration: isV3 ? String(s.clip_seconds) : Number(s.clip_seconds),\n  };\n  if (isV3) {\n    body.generate_audio = s.generate_audio === true || s.generate_audio === 'true';\n    body.negative_prompt = String(s.negative_prompt || '');\n    body.cfg_scale = Number(s.cfg_scale);\n  }\n  return {\n    json: {\n      pair_number: p.pair_number,\n      clip_label: `${p.start_room || p.start_photo} -> ${p.end_room || p.end_photo}`,\n      model: s.video_model,\n      body,\n      captions,\n      rooms,\n      prompt_source: promptSource,\n    },\n  };\n});"
+      },
+      "name": "Prepare Clip Requests for Kling",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3888,
+        80
+      ],
+      "id": "049f4ef0-3e96-53ae-8c71-fc409b4420b0"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://queue.fal.run/' + $json.model }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {}
+      },
+      "name": "Post Clip Jobs to Kling",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4096,
+        80
+      ],
+      "id": "b18d63d5-2bec-5257-9a6c-f0733c2da84f",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Every clip job must have a request id from fal. If one failed, the others are canceled.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst requests = $('Prepare Clip Requests for Kling').all().map(r => r.json);\nconst subs = $input.all().map(r => r.json || {});\nconst problems = [];\nconst jobs = [];\nconst now = Date.now();\nrequests.forEach((r, i) => {\n  const j = subs[i] || {};\n  if (!j.request_id || !j.status_url || !j.response_url) {\n    problems.push(`Clip ${r.pair_number} (${r.clip_label}): fal did not accept the job (${errText(j.error) || errText(j.detail) || 'no request id'}).`);\n  } else {\n    jobs.push({ ok: true, pair_number: r.pair_number, clip_label: r.clip_label, request_id: j.request_id, status_url: j.status_url, response_url: j.response_url, cancel_url: j.cancel_url || `${j.response_url}/cancel`, submitted_at: now });\n  }\n});\nif (problems.length) {\n  const stage = 'Kling submit';\n  if (!jobs.length) return [{ json: { ok: false, stage, problems, cancel_url: '' } }];\n  return jobs.map(job => ({ json: { ...job, ok: false, stage, problems } }));\n}\nreturn jobs.map(job => ({ json: job }));"
+      },
+      "name": "Check Clip Jobs Queued",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4352,
+        400
+      ],
+      "id": "9a03600d-3081-542b-9621-438983e6c715"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "83379a12-1142-5427-938f-080af975bbdb",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "If Clip Jobs Successfully Queued",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4576,
+        400
+      ],
+      "id": "4b419ad0-b8ae-577c-9f1d-45ce46f1b6e9"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $('Set Walkthrough Configurations').first().json.poll_every_seconds }}",
+        "unit": "seconds"
+      },
+      "name": "Wait for Clip Checks",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4800,
+        400
+      ],
+      "id": "4d34400f-638c-5c9f-a74b-8e64d89edc7f",
+      "webhookId": "519e3f3c-68b5-5d63-85d6-71b9ab85bc98"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.status_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Get Clip Job Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5008,
+        400
+      ],
+      "id": "c0bf0ff3-e9b3-51ca-8893-3adcb6e667ad",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Looks at every clip status and decides one state for the whole batch:\n// done (all COMPLETED), failed (a clip errored), timed_out, or running (check again).\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Set Walkthrough Configurations').first().json;\nconst jobs = $('Check Clip Jobs Queued').all().map(j => j.json);\nconst checks = $input.all().map(c => c.json || {});\nconst started = Math.min(...jobs.map(j => Number(j.submitted_at) || Date.now()));\nconst minutes = (Date.now() - started) / 60000;\nconst problems = [];\nlet done = 0;\nconst rows = jobs.map((job, i) => {\n  const c = checks[i] || {};\n  const status = c.status || 'UNKNOWN';\n  if (!c.status && c.error) problems.push(`Clip ${job.pair_number}: status check failed (${errText(c.error)}).`);\n  else if (status === 'COMPLETED' && c.error) problems.push(`Clip ${job.pair_number} (${job.clip_label}) failed on fal: ${errText(c.error)}${c.error_type ? ` [${c.error_type}]` : ''}`);\n  else if (status === 'COMPLETED') done++;\n  return { ...job, status, queue_position: c.queue_position ?? null };\n});\nlet state = 'running';\nif (problems.length) state = 'failed';\nelse if (done === jobs.length) state = 'done';\nelse if (minutes > Number(s.timeout_minutes)) {\n  state = 'timed_out';\n  problems.push(`Kling took longer than ${s.timeout_minutes} minutes (${done} of ${jobs.length} clips finished).`);\n}\nreturn rows.map(r => ({\n  json: { ...r, state, stage: 'Kling render', clips_done: done, clips_total: jobs.length, minutes_elapsed: Math.round(minutes * 10) / 10, problems },\n}));"
+      },
+      "name": "Evaluate Clip Completion",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5232,
+        400
+      ],
+      "id": "8e959d28-3c1f-5c39-a647-9373e2ac95d8"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.state }}",
+                    "rightValue": "done",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1de3bed1-5b88-5d6f-89d0-f26c69713230"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "All Clips Done"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.state }}",
+                    "rightValue": "failed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "e69932a4-b5ae-542c-91aa-15a029feeffa"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Failed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.state }}",
+                    "rightValue": "timed_out",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6b9cde83-c339-577c-9528-3e2055a27dd4"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Timed Out"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Still Rendering"
+        }
+      },
+      "name": "Route by Clip Job Status",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        5456,
+        400
+      ],
+      "id": "b414b9b9-f16d-5434-b1fa-038f79ee7cd1"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.cancel_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Put Cancel to fal for Clip Jobs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4460,
+        1240
+      ],
+      "id": "f0d31df7-9849-530a-82f4-216dc8d6f016",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.response_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Get Clip Results from fal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5700,
+        400
+      ],
+      "id": "12e0c985-bd15-5bfc-a365-0bec4e242e03",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item with the clip URLs in walkthrough order, ready for the merge.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst jobs = $('Evaluate Clip Completion').all().map(j => j.json);\nconst results = $input.all().map(r => r.json || {});\nconst problems = [];\nconst urls = jobs.map((job, i) => {\n  const r = results[i] || {};\n  const url = r.video && r.video.url;\n  if (!url) problems.push(`Clip ${job.pair_number} (${job.clip_label}): no video in the fal result (${errText(r.error) || errText(r.detail) || 'empty response'}).`);\n  return url || '';\n});\nreturn [{ json: { ok: problems.length === 0, stage: 'Kling results', problems, video_urls: urls, clips: urls.length } }];"
+      },
+      "name": "Compile Clip URLs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5920,
+        400
+      ],
+      "id": "f7b0dca4-f5ce-51dc-90fb-7664630a0d84"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c249d9ec-1906-5838-8a75-e4beb1cf0a1a",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "If Clip URLs Collected",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6140,
+        400
+      ],
+      "id": "7521dc67-fcfd-56f2-afd7-f87edbf5f757"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://fal.run/fal-ai/ffmpeg-api/merge-videos",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ video_urls: $json.video_urls }) }}",
+        "options": {
+          "timeout": 600000
+        }
+      },
+      "name": "Post to fal for Clip Merge",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6360,
+        400
+      ],
+      "id": "d7417872-ad21-5b1a-b888-563c91dd641e",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 10000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.video && $json.video.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "name": "Get Merged Video from fal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6580,
+        400
+      ],
+      "id": "a2451dba-d683-5823-be7e-8939bbdfd18e",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Checks the merged file before it goes to SocialRobot. Duration comes from the MP4 header (mvhd box).\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Set Walkthrough Configurations').first().json;\nconst merge = $('Post to fal for Clip Merge').first().json || {};\nconst item = $input.first();\nconst video = item.binary && item.binary.data;\nconst problems = [];\nlet sizeMb = 0;\nlet seconds = null;\nif (!merge.video || !merge.video.url) {\n  problems.push(`fal could not merge the clips (${errText(merge.error) || errText(merge.detail) || 'no video URL returned'}).`);\n} else if (!video) {\n  problems.push(`The merged video could not be downloaded (${errText(item.json.error) || 'no file'}).`);\n} else {\n  const buf = await this.helpers.getBinaryDataBuffer(0, 'data');\n  sizeMb = buf.length / 1048576;\n  const i = buf.indexOf('mvhd');\n  if (i > 3) {\n    const v1 = buf[i + 4] === 1;\n    const scale = buf.readUInt32BE(i + (v1 ? 24 : 16));\n    const units = v1 ? Number(buf.readBigUInt64BE(i + 28)) : buf.readUInt32BE(i + 20);\n    if (scale) seconds = Math.round((units / scale) * 10) / 10;\n  }\n  const type = String(video.mimeType || '');\n  if (!/video\\/(mp4|quicktime)/.test(type) && !/\\.(mp4|mov)$/i.test(video.fileName || '')) problems.push(`Unexpected file type ${type || 'unknown'}.`);\n  if (sizeMb > Number(s.max_file_mb)) problems.push(`File is ${sizeMb.toFixed(1)} MB, above the ${s.max_file_mb} MB limit.`);\n  if (seconds === null) problems.push('Could not read the video duration.');\n  else if (seconds < Number(s.min_seconds) || seconds > Number(s.max_seconds)) problems.push(`Video is ${seconds} s; allowed is ${s.min_seconds}-${s.max_seconds} s.`);\n}\nreturn [{\n  json: { ok: problems.length === 0, stage: 'Video check', problems, size_mb: Math.round(sizeMb * 100) / 100, duration_seconds: seconds, video_url: (merge.video && merge.video.url) || '' },\n  binary: item.binary,\n}];"
+      },
+      "name": "Check Video Size and Duration",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6832,
+        400
+      ],
+      "id": "5e419aed-a563-5cc9-9535-10ac665e0441"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d03214c1-161e-5b8e-a6f9-195834dde6d1",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "If Video Size and Duration OK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        7056,
+        400
+      ],
+      "id": "67d76b3d-e141-577b-9f45-cabe187f7af7"
+    },
+    {
+      "parameters": {
+        "resource": "tiktok",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Prepare Clip Requests for Kling').first().json.captions.tiktok }}",
+        "medias": [
+          {
+            "mediaSource": "binary",
+            "binaryPropertyName": "data",
+            "mediaType": "VIDEO"
+          }
+        ],
+        "postMode": "UPLOAD",
+        "publishMode": "NOW"
+      },
+      "name": "Create TikTok Draft Walkthrough",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        7320,
+        400
+      ],
+      "id": "59cf6c39-da35-528f-8ad5-baf7ea37b5cb",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5d0c47e9-1802-5076-a742-6f5cecf0e2d7",
+              "name": "tiktok_post_id",
+              "type": "string",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "id": "288cb23f-88e7-57c3-bd51-10093ddfa034",
+              "name": "status",
+              "type": "string",
+              "value": "={{ $json.status }}"
+            },
+            {
+              "id": "2382e9e5-469e-5fe0-a12b-683c8365af12",
+              "name": "address",
+              "type": "string",
+              "value": "={{ $('When Listing Submitted Trigger').first().json['Property Address'] }}"
+            },
+            {
+              "id": "4eeaf770-8ca1-59bc-b00c-54ef8cfd9a4e",
+              "name": "clips",
+              "type": "number",
+              "value": "={{ $('Compile Clip URLs').first().json.clips }}"
+            },
+            {
+              "id": "9244ca32-0f55-534a-a254-a2b0748e51ca",
+              "name": "video_seconds",
+              "type": "number",
+              "value": "={{ $('Check Video Size and Duration').first().json.duration_seconds }}"
+            },
+            {
+              "id": "e0bcb25f-55b0-5d9a-b532-f02636db85b9",
+              "name": "file_size_mb",
+              "type": "number",
+              "value": "={{ $('Check Video Size and Duration').first().json.size_mb }}"
+            },
+            {
+              "id": "044d2ace-945a-56ba-98ef-fc9bbe3559e2",
+              "name": "estimated_kling_cost_usd",
+              "type": "number",
+              "value": "={{ Math.round($('Compile Clip URLs').first().json.clips * Number($('Set Walkthrough Configurations').first().json.clip_seconds) * Number($('Set Walkthrough Configurations').first().json.price_per_second_usd) * 100) / 100 }}"
+            },
+            {
+              "id": "55754e99-f826-5970-b660-552ff0e801d9",
+              "name": "prompt_source",
+              "type": "string",
+              "value": "={{ $('Prepare Clip Requests for Kling').first().json.prompt_source }}"
+            },
+            {
+              "id": "7efcbddf-6774-50cd-9e3e-43538d4569de",
+              "name": "caption_source",
+              "type": "string",
+              "value": "={{ $('Prepare Clip Requests for Kling').first().json.captions.source }}"
+            },
+            {
+              "id": "0dff6581-9b81-5f99-9e1e-bda75e634613",
+              "name": "fal_video_url",
+              "type": "string",
+              "value": "={{ $('Check Video Size and Duration').first().json.video_url }}"
+            },
+            {
+              "id": "eeaab7c1-52a9-5eda-a61b-680c9405d9c1",
+              "name": "status_note",
+              "type": "string",
+              "value": "In UPLOAD mode SocialRobot returns PUBLISHED when the video is delivered to your TikTok inbox as a draft, not public."
+            },
+            {
+              "id": "3a385bde-4224-525f-9cdc-a5fa9eaa81f0",
+              "name": "next_step",
+              "type": "string",
+              "value": "Watch the whole video against the real photos. In TikTok, open the inbox notification, turn on the AI-generated content label, then post."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Set Walkthrough Summary",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7560,
+        400
+      ],
+      "id": "87e37ab5-b2a3-5f96-8ccd-7ca46113449d"
+    },
+    {
+      "parameters": {
+        "resource": "instagram",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Prepare Clip Requests for Kling').first().json.captions.instagram }}",
+        "mediaSource": "binary",
+        "mediaType": "VIDEO",
+        "binaryPropertyName": "data",
+        "isReel": true,
+        "isAiGenerated": true,
+        "publishMode": "NOW"
+      },
+      "name": "Submit Instagram Reel",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        7328,
+        816
+      ],
+      "id": "1ea0dce3-f687-590f-b9fc-02a5678e0bba",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "facebook",
+        "operation": "create",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "caption": "={{ $('Prepare Clip Requests for Kling').first().json.captions.facebook }}",
+        "medias": [
+          {
+            "mediaSource": "binary",
+            "binaryPropertyName": "data",
+            "mediaType": "VIDEO"
+          }
+        ],
+        "isReel": true,
+        "publishMode": "NOW"
+      },
+      "name": "Publish Facebook Reel",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "typeVersion": 1,
+      "position": [
+        7328,
+        992
+      ],
+      "id": "ba93a41f-915e-54f9-8510-8271fb6aee36",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://socialrobot.io/api/v1/linkedin/create",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ scheduledFor: { publish: 'NOW' }, post: { accountId: $('Set Walkthrough Configurations').first().json.linkedin_account_id, caption: $('Prepare Clip Requests for Kling').first().json.captions.linkedin, visibility: 'PUBLIC', medias: { mediaType: 'VIDEO', medias: [{ mediaUrl: $('Check Video Size and Duration').first().json.video_url, videoMetadata: { title: ('Walkthrough: ' + $('When Listing Submitted Trigger').first().json['Property Address']).slice(0, 200), aspectRatioWidth: 9, aspectRatioHeight: 16 } }] } } }) }}",
+        "options": {}
+      },
+      "name": "Post LinkedIn Video via SocialRobot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        7328,
+        1168
+      ],
+      "id": "ec8adf0c-98c4-583f-959e-a05b24f570e8",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// One readable reason for whatever went wrong. Add an error workflow in the settings to get alerts.\nconst errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst s = $('Set Walkthrough Configurations').first().json;\nconst f = $('When Listing Submitted Trigger').first();\nconst j = $input.first().json || {};\nlet message;\nif ($('Put Cancel to fal for Clip Jobs').isExecuted) {\n  const src = $('Evaluate Clip Completion').isExecuted ? $('Evaluate Clip Completion').first().json : $('Check Clip Jobs Queued').first().json;\n  message = `Kling clips stopped (${src.stage || 'Kling'}): ${(src.problems || []).join(' ')} Unfinished fal jobs were sent a cancel request.`;\n} else if (Array.isArray(j.problems) && j.problems.length) {\n  message = `${j.stage || 'Check'} failed: ${j.problems.join(' ')}`;\n} else if (j.error && $('Create TikTok Draft Walkthrough').isExecuted) {\n  message = `SocialRobot could not save the TikTok draft: ${errText(j.error)}`;\n} else if (!$('Prepare Photos for Walkthrough').isExecuted) {\n  const count = Object.values(f.binary || {}).filter(b => String(b.mimeType || '').startsWith('image/')).length;\n  message = `Upload ${Math.max(3, Number(s.min_photos))}-${s.max_photos} listing photos (JPG, PNG or WebP). The form had ${count}.`;\n} else {\n  message = `Unexpected failure: ${JSON.stringify(j).slice(0, 500)}`;\n}\nreturn [{ json: { message, address: f.json['Property Address'] || '' } }];"
+      },
+      "name": "Document Walkthrough Errors",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4780,
+        1240
+      ],
+      "id": "462bcf24-d160-581a-adfa-331a331e7c93"
+    },
+    {
+      "parameters": {
+        "errorMessage": "={{ $json.message }}"
+      },
+      "name": "Terminate on Error Stop",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        5080,
+        1240
+      ],
+      "id": "3c7cd8b3-ac40-5d75-b393-1872d3e40412"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "connections": {
+    "When Listing Submitted Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Walkthrough Configurations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Walkthrough Configurations": {
+      "main": [
+        [
+          {
+            "node": "If Sufficient Photos Present",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Sufficient Photos Present": {
+      "main": [
+        [
+          {
+            "node": "Prepare Photos for Walkthrough",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Document Walkthrough Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Photos for Walkthrough": {
+      "main": [
+        [
+          {
+            "node": "Plan Vertical Crop for Photos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan Vertical Crop for Photos": {
+      "main": [
+        [
+          {
+            "node": "Post to fal for Upload URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to fal for Upload URL": {
+      "main": [
+        [
+          {
+            "node": "Prepare Photos for Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Photos for Upload": {
+      "main": [
+        [
+          {
+            "node": "Put Photo to fal Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Put Photo to fal Storage": {
+      "main": [
+        [
+          {
+            "node": "Post Crop Request to fal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Crop Request to fal": {
+      "main": [
+        [
+          {
+            "node": "Pair Photos into Clips",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pair Photos into Clips": {
+      "main": [
+        [
+          {
+            "node": "Route by Walkthrough Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Walkthrough Plan": {
+      "main": [
+        [
+          {
+            "node": "Document Walkthrough Errors",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Camera Move Prompts",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Clip Requests for Kling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Camera Move Prompts": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Generate Camera Move Prompts",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Luna Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Camera Move Prompts",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Generate Listing Captions",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Listing Captions": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Generate Listing Captions",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Camera Move Prompts": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Room Notes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Room Notes": {
+      "main": [
+        [
+          {
+            "node": "Generate Listing Captions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Listing Captions": {
+      "main": [
+        [
+          {
+            "node": "Prepare Clip Requests for Kling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Clip Requests for Kling": {
+      "main": [
+        [
+          {
+            "node": "Post Clip Jobs to Kling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Clip Jobs to Kling": {
+      "main": [
+        [
+          {
+            "node": "Check Clip Jobs Queued",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Clip Jobs Queued": {
+      "main": [
+        [
+          {
+            "node": "If Clip Jobs Successfully Queued",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Clip Jobs Successfully Queued": {
+      "main": [
+        [
+          {
+            "node": "Wait for Clip Checks",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Put Cancel to fal for Clip Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Clip Checks": {
+      "main": [
+        [
+          {
+            "node": "Get Clip Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Clip Job Status": {
+      "main": [
+        [
+          {
+            "node": "Evaluate Clip Completion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluate Clip Completion": {
+      "main": [
+        [
+          {
+            "node": "Route by Clip Job Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Clip Job Status": {
+      "main": [
+        [
+          {
+            "node": "Get Clip Results from fal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Put Cancel to fal for Clip Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Put Cancel to fal for Clip Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for Clip Checks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Put Cancel to fal for Clip Jobs": {
+      "main": [
+        [
+          {
+            "node": "Document Walkthrough Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Clip Results from fal": {
+      "main": [
+        [
+          {
+            "node": "Compile Clip URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compile Clip URLs": {
+      "main": [
+        [
+          {
+            "node": "If Clip URLs Collected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Clip URLs Collected": {
+      "main": [
+        [
+          {
+            "node": "Post to fal for Clip Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Document Walkthrough Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to fal for Clip Merge": {
+      "main": [
+        [
+          {
+            "node": "Get Merged Video from fal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Merged Video from fal": {
+      "main": [
+        [
+          {
+            "node": "Check Video Size and Duration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Video Size and Duration": {
+      "main": [
+        [
+          {
+            "node": "If Video Size and Duration OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Video Size and Duration OK": {
+      "main": [
+        [
+          {
+            "node": "Create TikTok Draft Walkthrough",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Submit Instagram Reel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publish Facebook Reel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post LinkedIn Video via SocialRobot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Document Walkthrough Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create TikTok Draft Walkthrough": {
+      "main": [
+        [
+          {
+            "node": "Set Walkthrough Summary",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Document Walkthrough Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Document Walkthrough Errors": {
+      "main": [
+        [
+          {
+            "node": "Terminate on Error Stop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
