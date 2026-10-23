@@ -32,7 +32,7 @@ the source, so each node shows only the fields that platform supports.
 
 Note: the TikTok product-video drafts template requires `@socialrobot-io/n8n-nodes-socialrobot` version 3.1.1 or newer (new TikTok/Instagram fields).
 
-## The templates (42)
+## The templates (43)
 
 | Category | Templates |
 |---|---|
@@ -42,7 +42,7 @@ Note: the TikTok product-video drafts template requires `@socialrobot-io/n8n-nod
 | Content sources | RSS to every platform, RSS to Bluesky+Mastodon, blog to X/LinkedIn/Facebook |
 | AI captions | All 9 platforms flagship, Instagram+Pinterest, daily Bluesky/Mastodon, RSS summaries, Sheets calendar, repurposing |
 | Draft review | AI writes for all 9 platforms, saves as drafts for human approval, weekly performance digest + next-week drafts (MCP + OpenAI) |
-| AI media | Seedance text-to-video -> TikTok; Seedance 2.5 -> TikTok drafts (+ optional Instagram Reel); gpt-image-2 -> Instagram + Pinterest; convert carousels to Reels and TikTok slideshow (ffmpeg); Turn listing photos into AI real estate walkthrough Reels and TikToks with Kling 3.0 and SocialRobot; Turn café and bakery dish photos into ASMR AI food videos with Kling 3.0 and SocialRobot |
+| AI media | Seedance text-to-video -> TikTok; Seedance 2.5 -> TikTok drafts (+ optional Instagram Reel); gpt-image-2 -> Instagram + Pinterest; convert carousels to Reels and TikTok slideshow (ffmpeg); Turn listing photos into AI real estate walkthrough Reels and TikToks with Kling 3.0 and SocialRobot; Turn café and bakery dish photos into ASMR AI food videos with Kling 3.0 and SocialRobot; Create AI unboxing videos from Etsy product photos with Kling 3.0, OpenAI and SocialRobot |
 | Management | List scheduled/failed posts, get/delete/reschedule post, list accounts, chat-manage your calendar (AI agent + SocialRobot MCP) |
 
 AI templates use n8n's real LangChain nodes (`lmChatOpenAi`, `agent`,
