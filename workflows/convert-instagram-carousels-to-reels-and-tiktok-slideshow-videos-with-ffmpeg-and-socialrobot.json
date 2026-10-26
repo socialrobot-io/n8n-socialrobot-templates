@@ -1,155 +1,279 @@
 {
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
   "name": "Convert Instagram carousels to Reels and TikTok slideshow videos with ffmpeg and SocialRobot",
+  "tags": [
+    {
+      "name": "SocialRobot"
+    },
+    {
+      "name": "Instagram Reels"
+    },
+    {
+      "name": "Carousel"
+    },
+    {
+      "name": "TikTok"
+    },
+    {
+      "name": "Slideshow"
+    },
+    {
+      "name": "ffmpeg"
+    },
+    {
+      "name": "Video"
+    },
+    {
+      "name": "Facebook Reels"
+    }
+  ],
   "nodes": [
     {
       "parameters": {
-        "content": "## Convert Instagram carousels to Reels and TikTok slideshow videos with ffmpeg\n\nUpload 2-10 carousel slides and get a 1080x1920 Reel with pan-and-zoom on each slide, crossfades and optional music. It renders on your own n8n server with ffmpeg, so there are no render fees. SocialRobot sends the video to your TikTok inbox as a draft and can also post it as an Instagram Reel, a Facebook Reel or a Threads video.\n\n### How it works\n1. A form takes 2-10 slides (in carousel order), a caption, the seconds per slide and an optional music URL.\n2. The workflow checks that ffmpeg is installed, then writes the slides to a temporary folder.\n3. ffmpeg places each slide on a blurred 9:16 background (so square and 4:5 slides keep their text), adds a zoom or pan, crossfades between slides and mixes in the music.\n4. The MP4 is read back, size and duration are checked, then SocialRobot sends it to your TikTok inbox.\n5. Optional: the original slides also go to TikTok as a photo slideshow draft.\n6. Temp files are deleted at the end, and on errors too.\n\n### Setup steps\n- [ ] **Self-hosted n8n with ffmpeg installed** and the Execute Command node enabled (see the yellow note)\n- [ ] SocialRobot community node 3.1.1+ (npm latest 3.1.2) and your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Save TikTok Video Draft**\n- [ ] Check `temp_dir` in **Set Render Settings**: it must be a folder n8n is allowed to write to\n\n### Customization\n- Change slide length, crossfade, motions, zoom and size in **Set Render Settings**.\n- Enable **Optional Instagram Reel**, **Optional Facebook Reel** or **Optional Threads Video** (disabled by default) and pick accounts.\n- SocialRobot does not publish to YouTube.\n\nCost per run: $0. ffmpeg runs on your own server and no AI model is used.",
-        "width": 560,
-        "height": 940
+        "content": "## Convert Instagram carousels to Reels and TikTok slideshow videos with ffmpeg and SocialRobot\n\nUpload 2-10 carousel slides and get a 1080x1920 Reel with pan-and-zoom on each slide, crossfades and optional music. It renders on your own n8n server with ffmpeg, so there are no render fees. SocialRobot sends the video to your TikTok inbox as a draft and can also post it as an Instagram Reel, a Facebook Reel or a Threads video.\n\n### How it works\n1. **When Carousel Submitted** takes 2-10 slides (in carousel order), a caption, the seconds per slide and an optional music URL.\n2. The workflow checks that ffmpeg is installed and the slide count is right, then writes the slides to a temporary folder.\n3. ffmpeg places each slide on a blurred 9:16 background (so square and 4:5 slides keep their text), adds a zoom or pan, crossfades between slides and mixes in the music.\n4. The MP4 is read back, size and duration are checked, then SocialRobot sends it to your TikTok inbox as a draft.\n5. Optional: the original slides also go to TikTok as a photo slideshow draft.\n6. Temp files are deleted at the end, and on errors too.\n\n### Setup steps\n- [ ] **Self-hosted n8n with ffmpeg installed** and the Execute Command node enabled (see the yellow note)\n- [ ] SocialRobot community node 3.1.1+ (npm latest 3.1.2) and your SocialRobot API key\n- [ ] Connect TikTok in SocialRobot and pick the account in **Draft TikTok Video** (and **Draft TikTok Slideshow** if you use it)\n- [ ] Check `temp_dir` in **Set Video Render Settings**: it must be a folder n8n is allowed to write to and delete from\n\n### Customization\n- Change slide length, crossfade, transition, motions, zoom, size and video limits in **Set Video Render Settings**.\n- Enable **Draft Instagram Reel**, **Draft Facebook Reel** or **Draft Threads Video** (disabled by default) and pick accounts.\n- SocialRobot does not publish to YouTube.\n\nCost per run: $0. ffmpeg runs on your own server and no AI model is used.",
+        "width": 480,
+        "height": 1000
       },
-      "id": "8241e991-4815-40b8-9fa4-5fc502341b85",
-      "name": "Template Overview",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -80,
-        32
-      ]
+        -48,
+        224
+      ],
+      "id": "d8b5b31c-b127-4a6b-9ff7-6455710345a0",
+      "name": "Sticky Note"
     },
     {
       "parameters": {
-        "content": "## Install ffmpeg (self-hosted only)\nn8n Cloud can't run this template: it has no Execute Command node and no ffmpeg.\n\n**Docker:** build a small image on top of n8n:\n```\nFROM docker.n8n.io/n8nio/n8n:latest\nUSER root\nRUN apk add --no-cache ffmpeg\nUSER node\n```\nThen `docker build -t n8n-ffmpeg .` and run `n8n-ffmpeg` instead of the stock image. On Debian/Ubuntu installs use `sudo apt install ffmpeg`.\n\n**n8n 2.x:** Execute Command is turned off by default. Enable it with `NODES_EXCLUDE=[]`. Read/Write Files only works inside `N8N_RESTRICT_FILE_ACCESS_TO` (default `~/.n8n-files`), so keep `temp_dir` in there.",
-        "width": 560,
-        "height": 560,
-        "color": 6
-      },
-      "id": "709e145b-c83d-4ce0-820c-894297f8e24d",
-      "name": "Note Install ffmpeg",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -80,
-        1000
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Check ffmpeg and collect slides\n**Check ffmpeg Installed** stops with a clear message if ffmpeg is missing. **Has 2-10 Slides?** checks the upload count.",
-        "width": 1000,
-        "height": 520,
+        "content": "## Collect render request\n\nStarts from the upload form. **Set Video Render Settings** holds every value you'd want to tweak: pacing, crossfade, motions, zoom, size and limits.",
+        "width": 384,
+        "height": 320,
         "color": 7
       },
-      "id": "16a10745-887a-452e-9ecd-3ca488fb5780",
-      "name": "Section Slides",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         512,
-        224
-      ]
+        240
+      ],
+      "id": "58c263bd-2595-4588-b5de-1ade9c687776",
+      "name": "Sticky Note1"
     },
     {
       "parameters": {
-        "content": "## Render with ffmpeg\nSlides are written to a temp folder named after the execution ID. **Build ffmpeg Command** creates one zoompan + xfade filter graph; the music link is used only if it's a plain http(s) URL. ffmpeg's error log is kept for the error message.",
-        "width": 1180,
-        "height": 520,
+        "content": "## Preflight validation checks\n\n**Verify ffmpeg Installation** stops the run with a clear message if ffmpeg is missing. **Check Slide Count** makes sure there are 2-10 images before any files are created.",
+        "width": 576,
+        "height": 320,
         "color": 7
       },
-      "id": "90fc039a-7eb2-492d-94f6-82989c5f1c1a",
-      "name": "Section Render",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        928,
+        240
+      ],
+      "id": "6b8758a4-c42f-4d82-8ec5-8ae30d7fc98e",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Stage carousel slides\n\nCreates a temp folder named after the execution ID and writes each slide to disk in carousel order.",
+        "width": 576,
+        "height": 320,
+        "color": 7
+      },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         1536,
+        240
+      ],
+      "id": "27d5f12a-4191-4f10-86cb-bc80a3b95d55",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Render reel video\n\n**Compose ffmpeg Command** builds one zoompan + xfade filter graph on a blurred 9:16 background. The music link is used only if it's a plain http(s) URL. ffmpeg's error log is kept for the error message.",
+        "width": 576,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        272
+      ],
+      "id": "2ceae93b-3ba8-4457-a6a0-5831188f0f23",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Validate rendered output\n\nReads `reel.mp4` back and checks file size and real duration (from the MP4 header) before anything goes to SocialRobot.",
+        "width": 576,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2752,
+        240
+      ],
+      "id": "23fbecd0-baf1-4d4c-8a34-66f79584f3b2",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Save TikTok draft\n\n**Draft TikTok Video** uses Post Mode *Send to Inbox (Draft)*: nothing goes public until you post it in the TikTok app.",
+        "width": 432,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3392,
+        240
+      ],
+      "id": "8fe903d0-579e-4d84-8909-4fa02fde2ec0",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Clean successful render\n\nRemoves temporary files after the main TikTok draft path has completed successfully.",
+        "width": 240,
+        "height": 336,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3856,
         224
-      ]
+      ],
+      "id": "18dfaf64-b309-4477-8ed3-5e77194d12f3",
+      "name": "Sticky Note7"
     },
     {
       "parameters": {
-        "content": "## Read and check the video\nReads `reel.mp4` back and checks file size and real duration (from the MP4 header).",
-        "width": 620,
-        "height": 520,
+        "content": "## Create photo slideshow\n\nIf you answer Yes on the form, the original slides also go to TikTok as a photo slideshow draft (1-35 images). SocialRobot hosts the files itself, so no public image URLs are needed.",
+        "width": 640,
+        "height": 320,
         "color": 7
       },
-      "id": "69121f4a-086a-4364-8e4d-eeb3f61499c8",
-      "name": "Section Checks",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2740,
-        224
-      ]
+        3632,
+        592
+      ],
+      "id": "76ff3227-fc26-4632-8ddc-90ed6337fe02",
+      "name": "Sticky Note8"
     },
     {
       "parameters": {
-        "content": "## Send to TikTok and others\n**Save TikTok Video Draft** uses Post Mode *Send to Inbox (Draft)*: nothing goes public until you post it in the app. The optional nodes are connected and disabled by default. If you answer Yes on the form, the original slides also go to TikTok as a photo slideshow draft (1-35 images). SocialRobot hosts the files itself, so no public image URLs are needed.",
-        "width": 900,
-        "height": 1060,
+        "content": "## Optional social drafts\n\nConnected and **disabled by default**. Enable the ones you want and pick an account in each.",
+        "width": 240,
+        "height": 752,
         "color": 7
       },
-      "id": "8f2480ca-578d-4c32-8452-3a6135f18a39",
-      "name": "Section Publish",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        3380,
-        0
-      ]
+        3360,
+        592
+      ],
+      "id": "c6f2f054-c2dd-45f0-b5ff-2332d32cd54f",
+      "name": "Sticky Note9"
     },
     {
       "parameters": {
-        "content": "## Handle errors and clean up\nMissing ffmpeg, a wrong slide count, ffmpeg errors, files that fail the checks and SocialRobot errors end here. The temp folder is deleted, then the run stops with one readable message. Add an error workflow in the settings to get alerts.",
-        "width": 1400,
-        "height": 380,
+        "content": "## Handle render failures\n\nMissing ffmpeg, a wrong slide count, ffmpeg errors, files that fail the checks and SocialRobot errors end here. The temp folder is deleted, then the run stops with one readable message. Add an error workflow in the settings to get alerts.",
+        "width": 672,
+        "height": 304,
         "color": 7
       },
-      "id": "276ebd3b-5a0f-46e0-b540-a5f7018cab7f",
-      "name": "Section Errors",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1536,
-        800
-      ]
+        1792,
+        832
+      ],
+      "id": "2bcc8fea-1e06-457a-863e-023e890b270b",
+      "name": "Sticky Note10"
     },
     {
       "parameters": {
-        "content": "## AI label\nPan-and-zoom isn't generative AI, so the label is off. If your slides were made with AI, turn on **AI-Generated Content** in the Instagram node and the 'AI-generated content' label in TikTok before posting. The node doesn't send TikTok's AI label for inbox drafts.",
+        "content": "## Install ffmpeg (self-hosted only)\nn8n Cloud can't run this template: it has no Execute Command node and no ffmpeg.\n\n**Docker:** build a small image on top of n8n:\n```\nFROM docker.n8n.io/n8nio/n8n:latest\nUSER root\nRUN apk add --no-cache ffmpeg\nUSER node\n```\nThen `docker build -t n8n-ffmpeg .` and run `n8n-ffmpeg` instead of the stock image. On Debian/Ubuntu installs use `sudo apt install ffmpeg`.\n\n**n8n 2.x:** Execute Command is turned off by default. Enable it with `NODES_EXCLUDE=[]`. Read/Write Files only works inside `N8N_RESTRICT_FILE_ACCESS_TO` (default `~/.n8n-files`), so keep `temp_dir` in there.",
+        "width": 480,
+        "height": 560,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        1248
+      ],
+      "id": "7eee6583-9a6d-4ebd-b426-c6d042d302fd",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## AI label\nPan-and-zoom isn't generative AI, so the label is off. If your slides were made with AI, turn on **AI-Generated Content** in **Draft Instagram Reel** and the 'AI-generated content' label in TikTok before posting. The node doesn't send TikTok's AI label for inbox drafts.",
         "width": 320,
         "height": 330,
         "color": 3
       },
-      "id": "d3f09148-7a85-46f5-969d-90f6256b3cb8",
-      "name": "Note AI Label",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        4300,
-        0
-      ]
+        4304,
+        224
+      ],
+      "id": "caf06e0e-d34b-4753-8b4d-d4f81c77d0a0",
+      "name": "Sticky Note12"
     },
     {
+      "id": "297d4757-4133-478e-8c31-663a12c51d6e",
+      "name": "When Carousel Submitted",
+      "type": "n8n-nodes-base.formTrigger",
+      "position": [
+        560,
+        400
+      ],
+      "webhookId": "7f22ff0a-fb6a-413c-b993-ad73a831eb88",
       "parameters": {
+        "options": {
+          "respondWithOptions": {
+            "values": {
+              "respondWith": "text",
+              "formSubmittedText": "Thanks! Your Reel is rendering. It shows up in your TikTok inbox in a minute or two."
+            }
+          }
+        },
         "formTitle": "Convert a carousel to a Reel",
-        "formDescription": "Upload 2-10 carousel slides in order. You get a vertical pan-and-zoom video in your TikTok inbox as a draft.",
         "formFields": {
           "values": [
             {
-              "fieldLabel": "Carousel Slides",
               "fieldType": "file",
+              "fieldLabel": "Carousel Slides",
               "multipleFiles": true,
-              "acceptFileTypes": ".jpg, .jpeg, .png, .webp",
-              "requiredField": true
+              "requiredField": true,
+              "acceptFileTypes": ".jpg, .jpeg, .png, .webp"
             },
             {
-              "fieldLabel": "Caption",
               "fieldType": "textarea",
+              "fieldLabel": "Caption",
               "placeholder": "Caption with #hashtags",
               "requiredField": true
             },
             {
-              "fieldLabel": "Seconds per Slide",
               "fieldType": "number",
+              "fieldLabel": "Seconds per Slide",
               "placeholder": "2.5 (1.5 to 6)"
             },
             {
@@ -157,8 +281,8 @@
               "placeholder": "Optional public MP3 link you have the rights to use"
             },
             {
-              "fieldLabel": "Also Send TikTok Photo Slideshow",
               "fieldType": "dropdown",
+              "fieldLabel": "Also Send TikTok Photo Slideshow",
               "fieldOptions": {
                 "values": [
                   {
@@ -178,27 +302,20 @@
           ]
         },
         "responseMode": "onReceived",
-        "options": {
-          "respondWithOptions": {
-            "values": {
-              "respondWith": "text",
-              "formSubmittedText": "Thanks! Your Reel is rendering. It shows up in your TikTok inbox in a minute or two."
-            }
-          }
-        }
+        "formDescription": "Upload 2-10 carousel slides in order. You get a vertical pan-and-zoom video in your TikTok inbox as a draft."
       },
-      "id": "297d4757-4133-478e-8c31-663a12c51d6e",
-      "name": "Carousel Form",
-      "type": "n8n-nodes-base.formTrigger",
-      "typeVersion": 2.3,
-      "position": [
-        560,
-        400
-      ],
-      "webhookId": "7f22ff0a-fb6a-413c-b993-ad73a831eb88"
+      "typeVersion": 2.3
     },
     {
+      "id": "a45298d3-4cf8-40c0-a999-b62191c2c8da",
+      "name": "Set Video Render Settings",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        752,
+        400
+      ],
       "parameters": {
+        "options": {},
         "assignments": {
           "assignments": [
             {
@@ -211,7 +328,7 @@
               "id": "fc0a18a0-7460-45fc-9f9c-4a34fb9c3bea",
               "name": "seconds_per_slide",
               "type": "number",
-              "value": "={{ Math.min(6, Math.max(1.5, Number($('Carousel Form').first().json['Seconds per Slide']) || 2.5)) }}"
+              "value": "={{ Math.min(6, Math.max(1.5, Number($('When Carousel Submitted').first().json['Seconds per Slide']) || 2.5)) }}"
             },
             {
               "id": "7427c15b-a656-4ea9-880f-3411cee47103",
@@ -286,304 +403,304 @@
               "value": 90
             }
           ]
-        },
-        "options": {}
+        }
       },
-      "id": "a45298d3-4cf8-40c0-a999-b62191c2c8da",
-      "name": "Set Render Settings",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        752,
-        400
-      ]
+      "typeVersion": 3.4
     },
     {
-      "parameters": {
-        "executeOnce": true,
-        "command": "command -v ffmpeg >/dev/null 2>&1 && ffmpeg -hide_banner -version | head -n 1 || echo FFMPEG_MISSING"
-      },
       "id": "c708afb3-169d-44ed-8b78-057603bbffdd",
-      "name": "Check ffmpeg Installed",
+      "name": "Verify ffmpeg Installation",
       "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
       "position": [
-        944,
+        976,
         400
-      ]
+      ],
+      "parameters": {
+        "command": "command -v ffmpeg >/dev/null 2>&1 && ffmpeg -hide_banner -version | head -n 1 || echo FFMPEG_MISSING",
+        "executeOnce": true
+      },
+      "typeVersion": 1
     },
     {
+      "id": "52f4bf95-6f0e-4e84-ae00-72a46cdf9298",
+      "name": "If ffmpeg Available",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1168,
+        400
+      ],
       "parameters": {
+        "options": {},
         "conditions": {
           "options": {
-            "caseSensitive": true,
+            "version": 2,
             "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
+            "caseSensitive": true,
+            "typeValidation": "loose"
           },
+          "combinator": "and",
           "conditions": [
             {
               "id": "195b06b0-4f99-410d-93e0-9faa30f9d1ad",
-              "leftValue": "={{ String($json.stdout || '').startsWith('ffmpeg version') }}",
-              "rightValue": "",
               "operator": {
                 "type": "boolean",
                 "operation": "true",
                 "singleValue": true
-              }
+              },
+              "leftValue": "={{ String($json.stdout || '').startsWith('ffmpeg version') }}",
+              "rightValue": ""
             }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
+          ]
+        }
       },
-      "id": "52f4bf95-6f0e-4e84-ae00-72a46cdf9298",
-      "name": "ffmpeg Found?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1136,
-        400
-      ]
+      "typeVersion": 2.2
     },
     {
+      "id": "cf2131b3-ca76-4e30-8e79-fbaa3721e948",
+      "name": "Check Slide Count",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1360,
+        400
+      ],
       "parameters": {
+        "options": {},
         "conditions": {
           "options": {
-            "caseSensitive": true,
+            "version": 2,
             "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
+            "caseSensitive": true,
+            "typeValidation": "loose"
           },
+          "combinator": "and",
           "conditions": [
             {
               "id": "ee409d7e-115e-49ae-a60e-1bdd54011368",
-              "leftValue": "={{ (n => n >= $('Set Render Settings').first().json.min_slides && n <= $('Set Render Settings').first().json.max_slides)(Object.values($('Carousel Form').first().binary || {}).filter(b => String(b.mimeType || '').startsWith('image/')).length) }}",
-              "rightValue": "",
               "operator": {
                 "type": "boolean",
                 "operation": "true",
                 "singleValue": true
-              }
+              },
+              "leftValue": "={{ (n => n >= $('Set Video Render Settings').first().json.min_slides && n <= $('Set Video Render Settings').first().json.max_slides)(Object.values($('When Carousel Submitted').first().binary || {}).filter(b => String(b.mimeType || '').startsWith('image/')).length) }}",
+              "rightValue": ""
             }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
+          ]
+        }
       },
-      "id": "cf2131b3-ca76-4e30-8e79-fbaa3721e948",
-      "name": "Has 2-10 Slides?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1328,
-        400
-      ]
+      "typeVersion": 2.2
     },
     {
-      "parameters": {
-        "executeOnce": true,
-        "command": "=mkdir -p '{{ $('Set Render Settings').first().json.temp_dir }}' && echo OK"
-      },
       "id": "730d08ca-cee4-4d28-9de4-2e993bbf0949",
-      "name": "Create Temp Folder",
+      "name": "Initialize Temp Folder",
       "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
+      "onError": "continueErrorOutput",
       "position": [
         1584,
         400
       ],
-      "onError": "continueErrorOutput"
+      "parameters": {
+        "command": "=mkdir -p '{{ $('Set Video Render Settings').first().json.temp_dir }}' && echo OK",
+        "executeOnce": true
+      },
+      "typeVersion": 1
     },
     {
-      "parameters": {
-        "jsCode": "// One item per slide, in upload order, with the path it gets in the temp folder.\nconst s = $('Set Render Settings').first().json;\nconst form = $('Carousel Form').first();\nconst slides = Object.values(form.binary || {}).filter(b => String(b.mimeType || '').startsWith('image/'));\nconst ext = b => ({ 'image/png': 'png', 'image/webp': 'webp' }[b.mimeType] || 'jpg');\nreturn slides.map((image, i) => {\n  const name = `slide_${String(i + 1).padStart(2, '0')}.${ext(image)}`;\n  return { json: { slide: i + 1, path: `${s.temp_dir}/${name}` }, binary: { image } };\n});"
-      },
       "id": "60abf2a8-99b0-4809-9081-848699e8c2c8",
-      "name": "Prepare Slides",
+      "name": "Arrange Slides",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
       "position": [
         1776,
         400
-      ]
+      ],
+      "parameters": {
+        "jsCode": "// One item per slide, in upload order, with the path it gets in the temp folder.\nconst s = $('Set Video Render Settings').first().json;\nconst form = $('When Carousel Submitted').first();\nconst slides = Object.values(form.binary || {}).filter(b => String(b.mimeType || '').startsWith('image/'));\nconst ext = b => ({ 'image/png': 'png', 'image/webp': 'webp' }[b.mimeType] || 'jpg');\nreturn slides.map((image, i) => {\n  const name = `slide_${String(i + 1).padStart(2, '0')}.${ext(image)}`;\n  return { json: { slide: i + 1, path: `${s.temp_dir}/${name}` }, binary: { image } };\n});"
+      },
+      "typeVersion": 2
     },
     {
-      "parameters": {
-        "operation": "write",
-        "fileName": "={{ $json.path }}",
-        "dataPropertyName": "image",
-        "options": {}
-      },
       "id": "1d5a2ac1-021e-4ba8-9f1a-c80829eacb56",
-      "name": "Write Slide to Disk",
+      "name": "Save Slide to Disk",
       "type": "n8n-nodes-base.readWriteFile",
-      "typeVersion": 1,
+      "onError": "continueErrorOutput",
       "position": [
         1968,
         400
       ],
-      "onError": "continueErrorOutput"
+      "parameters": {
+        "options": {},
+        "fileName": "={{ $json.path }}",
+        "operation": "write",
+        "dataPropertyName": "image"
+      },
+      "typeVersion": 1
     },
     {
-      "parameters": {
-        "jsCode": "// Builds one ffmpeg command: zoompan per slide, xfade between slides, optional music.\nconst s = $('Set Render Settings').first().json;\nconst slides = $('Prepare Slides').all().map(i => i.json);\nconst music = String($('Carousel Form').first().json['Music URL'] || '').trim();\nconst W = Number(s.width), H = Number(s.height), FPS = Number(s.fps);\nconst D = Number(s.seconds_per_slide), T = Number(s.crossfade_seconds);\nconst L = D + T; // each clip overlaps the next by T seconds\nconst F = Math.round(L * FPS);\nconst q = p => \"'\" + String(p).replace(/'/g, \"'\\\\''\") + \"'\";\nconst motions = String(s.motions).split(',').map(m => m.trim()).filter(Boolean);\nconst Z = Number(s.zoom_amount);\nconst zp = {\n  zoomIn:   `z='1+${Z}*on/${F}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,\n  zoomOut:  `z='1+${Z}-${Z}*on/${F}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,\n  panLeft:  `z='1+${Z}':x='(iw-iw/zoom)*(1-on/${F})':y='ih/2-(ih/zoom/2)'`,\n  panRight: `z='1+${Z}':x='(iw-iw/zoom)*on/${F}':y='ih/2-(ih/zoom/2)'`,\n  panUp:    `z='1+${Z}':x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/${F})'`,\n};\nconst inputs = slides.map(sl => `-i ${q(sl.path)}`);\nconst filters = slides.map((sl, i) => {\n  const m = zp[motions[i % motions.length]] || zp.zoomIn;\n  // Blurred cover background + fitted slide, so square and 4:5 slides fill 9:16 without cropping text.\n  return `[${i}:v]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H},boxblur=30:5,setsar=1[bg${i}];` +\n    `[${i}:v]scale=${W}:${H}:force_original_aspect_ratio=decrease,setsar=1[fg${i}];` +\n    `[bg${i}][fg${i}]overlay=(W-w)/2:(H-h)/2,scale=${W * 2}:${H * 2},` +\n    `zoompan=${m}:d=${F}:s=${W}x${H}:fps=${FPS},format=yuv420p,setsar=1[v${i}]`;\n});\nlet last = 'v0';\nfor (let i = 1; i < slides.length; i++) {\n  const out = i === slides.length - 1 ? 'vout' : `x${i}`;\n  const offset = Math.round(i * (L - T) * 1000) / 1000;\n  filters.push(`[${last}][v${i}]xfade=transition=${s.transition}:duration=${T}:offset=${offset}[${out}]`);\n  last = out;\n}\nif (slides.length === 1) filters.push('[v0]null[vout]');\nconst total = Math.round((slides.length * (L - T) + T) * 100) / 100;\nlet audioIn = '', audioMap = '';\nif (/^https?:\\/\\/[^\\s'\"]+$/.test(music)) {\n  audioIn = `-stream_loop -1 -i ${q(music)}`;\n  filters.push(`[${slides.length}:a]atrim=0:${total},afade=t=out:st=${Math.max(0, total - 1.5)}:d=1.5[aout]`);\n  audioMap = '-map \"[aout]\" -c:a aac -b:a 160k';\n}\nconst dir = s.temp_dir;\nconst outFile = `${dir}/reel.mp4`;\nconst cmd = [\n  'ffmpeg -y -hide_banner -loglevel error',\n  inputs.join(' '), audioIn,\n  `-filter_complex ${q(filters.join(';'))}`,\n  '-map \"[vout]\"', audioMap,\n  `-t ${total} -c:v libx264 -preset veryfast -crf 21 -pix_fmt yuv420p -r ${FPS} -movflags +faststart`,\n  q(outFile),\n].filter(Boolean).join(' ');\nconst command = `${cmd} 2> ${q(dir + '/ffmpeg.log')} && echo RENDER_OK || { echo RENDER_FAILED; tail -c 1500 ${q(dir + '/ffmpeg.log')}; }`;\nreturn [{ json: { command, output_file: outFile, expected_seconds: total, slides: slides.length } }];\n"
-      },
       "id": "9d8b0319-c583-41ff-b099-07107a244ea3",
-      "name": "Build ffmpeg Command",
+      "name": "Compose ffmpeg Command",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
       "position": [
-        2160,
-        400
-      ]
-    },
-    {
-      "parameters": {
-        "executeOnce": true,
-        "command": "={{ $json.command }}"
-      },
-      "id": "f4b27051-be41-4215-b292-e65be8fbc8f5",
-      "name": "Render Reel with ffmpeg",
-      "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
-      "position": [
-        2352,
+        2192,
         400
       ],
-      "onError": "continueErrorOutput"
+      "parameters": {
+        "jsCode": "// Builds one ffmpeg command: zoompan per slide, xfade between slides, optional music.\nconst s = $('Set Video Render Settings').first().json;\nconst slides = $('Arrange Slides').all().map(i => i.json);\nconst music = String($('When Carousel Submitted').first().json['Music URL'] || '').trim();\nconst W = Number(s.width), H = Number(s.height), FPS = Number(s.fps);\nconst D = Number(s.seconds_per_slide), T = Number(s.crossfade_seconds);\nconst L = D + T; // each clip overlaps the next by T seconds\nconst F = Math.round(L * FPS);\nconst q = p => \"'\" + String(p).replace(/'/g, \"'\\\\''\") + \"'\";\nconst motions = String(s.motions).split(',').map(m => m.trim()).filter(Boolean);\nconst Z = Number(s.zoom_amount);\nconst zp = {\n  zoomIn:   `z='1+${Z}*on/${F}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,\n  zoomOut:  `z='1+${Z}-${Z}*on/${F}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,\n  panLeft:  `z='1+${Z}':x='(iw-iw/zoom)*(1-on/${F})':y='ih/2-(ih/zoom/2)'`,\n  panRight: `z='1+${Z}':x='(iw-iw/zoom)*on/${F}':y='ih/2-(ih/zoom/2)'`,\n  panUp:    `z='1+${Z}':x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/${F})'`,\n};\nconst inputs = slides.map(sl => `-i ${q(sl.path)}`);\nconst filters = slides.map((sl, i) => {\n  const m = zp[motions[i % motions.length]] || zp.zoomIn;\n  // Blurred cover background + fitted slide, so square and 4:5 slides fill 9:16 without cropping text.\n  return `[${i}:v]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H},boxblur=30:5,setsar=1[bg${i}];` +\n    `[${i}:v]scale=${W}:${H}:force_original_aspect_ratio=decrease,setsar=1[fg${i}];` +\n    `[bg${i}][fg${i}]overlay=(W-w)/2:(H-h)/2,scale=${W * 2}:${H * 2},` +\n    `zoompan=${m}:d=${F}:s=${W}x${H}:fps=${FPS},format=yuv420p,setsar=1[v${i}]`;\n});\nlet last = 'v0';\nfor (let i = 1; i < slides.length; i++) {\n  const out = i === slides.length - 1 ? 'vout' : `x${i}`;\n  const offset = Math.round(i * (L - T) * 1000) / 1000;\n  filters.push(`[${last}][v${i}]xfade=transition=${s.transition}:duration=${T}:offset=${offset}[${out}]`);\n  last = out;\n}\nif (slides.length === 1) filters.push('[v0]null[vout]');\nconst total = Math.round((slides.length * (L - T) + T) * 100) / 100;\nlet audioIn = '', audioMap = '';\nif (/^https?:\\/\\/[^\\s'\"]+$/.test(music)) {\n  audioIn = `-stream_loop -1 -i ${q(music)}`;\n  filters.push(`[${slides.length}:a]atrim=0:${total},afade=t=out:st=${Math.max(0, total - 1.5)}:d=1.5[aout]`);\n  audioMap = '-map \"[aout]\" -c:a aac -b:a 160k';\n}\nconst dir = s.temp_dir;\nconst outFile = `${dir}/reel.mp4`;\nconst cmd = [\n  'ffmpeg -y -hide_banner -loglevel error',\n  inputs.join(' '), audioIn,\n  `-filter_complex ${q(filters.join(';'))}`,\n  '-map \"[vout]\"', audioMap,\n  `-t ${total} -c:v libx264 -preset veryfast -crf 21 -pix_fmt yuv420p -r ${FPS} -movflags +faststart`,\n  q(outFile),\n].filter(Boolean).join(' ');\nconst command = `${cmd} 2> ${q(dir + '/ffmpeg.log')} && echo RENDER_OK || { echo RENDER_FAILED; tail -c 1500 ${q(dir + '/ffmpeg.log')}; }`;\nreturn [{ json: { command, output_file: outFile, expected_seconds: total, slides: slides.length } }];\n"
+      },
+      "typeVersion": 2
     },
     {
+      "id": "f4b27051-be41-4215-b292-e65be8fbc8f5",
+      "name": "Execute ffmpeg Render",
+      "type": "n8n-nodes-base.executeCommand",
+      "onError": "continueErrorOutput",
+      "position": [
+        2384,
+        400
+      ],
       "parameters": {
+        "command": "={{ $json.command }}",
+        "executeOnce": true
+      },
+      "typeVersion": 1
+    },
+    {
+      "id": "4ffbb3de-1bdf-44e1-b4f3-ae15386abbf2",
+      "name": "If Render Successful",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        2576,
+        400
+      ],
+      "parameters": {
+        "options": {},
         "conditions": {
           "options": {
-            "caseSensitive": true,
+            "version": 2,
             "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
+            "caseSensitive": true,
+            "typeValidation": "loose"
           },
+          "combinator": "and",
           "conditions": [
             {
               "id": "b56b6b92-7af7-4e06-ae64-2fddbf3ba70e",
-              "leftValue": "={{ String($json.stdout || '').includes('RENDER_OK') }}",
-              "rightValue": "",
               "operator": {
                 "type": "boolean",
                 "operation": "true",
                 "singleValue": true
-              }
+              },
+              "leftValue": "={{ String($json.stdout || '').includes('RENDER_OK') }}",
+              "rightValue": ""
             }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "id": "4ffbb3de-1bdf-44e1-b4f3-ae15386abbf2",
-      "name": "Render Succeeded?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        2544,
-        400
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "read",
-        "fileSelector": "={{ $('Build ffmpeg Command').first().json.output_file }}",
-        "options": {
-          "dataPropertyName": "data"
+          ]
         }
       },
+      "typeVersion": 2.2
+    },
+    {
       "id": "baca4f97-1e53-4c17-8adc-8712cdc80fe8",
-      "name": "Read Reel from Disk",
+      "name": "Load Reel from Disk",
       "type": "n8n-nodes-base.readWriteFile",
-      "typeVersion": 1,
+      "onError": "continueErrorOutput",
       "position": [
         2800,
         400
       ],
-      "onError": "continueErrorOutput"
+      "parameters": {
+        "options": {
+          "dataPropertyName": "data"
+        },
+        "operation": "read",
+        "fileSelector": "={{ $('Compose ffmpeg Command').first().json.output_file }}"
+      },
+      "typeVersion": 1
     },
     {
-      "parameters": {
-        "jsCode": "// Checks the file before it goes to SocialRobot. Duration comes from the MP4 header (mvhd box).\nconst s = $('Set Render Settings').first().json;\nconst item = $input.first();\nconst video = item.binary && item.binary.data;\nconst problems = [];\nlet sizeMb = 0;\nlet seconds = null;\nif (!video) {\n  problems.push('No video file was downloaded.');\n} else {\n  const buf = await this.helpers.getBinaryDataBuffer(0, 'data');\n  sizeMb = buf.length / 1048576;\n  const i = buf.indexOf('mvhd');\n  if (i > 3) {\n    const v1 = buf[i + 4] === 1;\n    const scale = buf.readUInt32BE(i + (v1 ? 24 : 16));\n    const units = v1 ? Number(buf.readBigUInt64BE(i + 28)) : buf.readUInt32BE(i + 20);\n    if (scale) seconds = Math.round((units / scale) * 10) / 10;\n  }\n  if (sizeMb > Number(s.max_file_mb)) problems.push(`File is ${sizeMb.toFixed(1)} MB, above the ${s.max_file_mb} MB limit.`);\n  if (seconds === null) problems.push('Could not read the video duration.');\n  else if (seconds < Number(s.min_seconds) || seconds > Number(s.max_seconds)) problems.push(`Video is ${seconds} s; allowed is ${s.min_seconds}-${s.max_seconds} s.`);\n}\nreturn [{ json: { ok: problems.length === 0, problems, size_mb: Math.round(sizeMb * 100) / 100, duration_seconds: seconds }, binary: item.binary }];"
-      },
       "id": "7bc7eff5-2766-41eb-8155-873a82c05746",
-      "name": "Check Size and Duration",
+      "name": "Validate Size and Duration",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
       "position": [
         2992,
         400
-      ]
+      ],
+      "parameters": {
+        "jsCode": "// Checks the file before it goes to SocialRobot. Duration comes from the MP4 header (mvhd box).\nconst s = $('Set Video Render Settings').first().json;\nconst item = $input.first();\nconst video = item.binary && item.binary.data;\nconst problems = [];\nlet sizeMb = 0;\nlet seconds = null;\nif (!video) {\n  problems.push('No video file was downloaded.');\n} else {\n  const buf = await this.helpers.getBinaryDataBuffer(0, 'data');\n  sizeMb = buf.length / 1048576;\n  const i = buf.indexOf('mvhd');\n  if (i > 3) {\n    const v1 = buf[i + 4] === 1;\n    const scale = buf.readUInt32BE(i + (v1 ? 24 : 16));\n    const units = v1 ? Number(buf.readBigUInt64BE(i + 28)) : buf.readUInt32BE(i + 20);\n    if (scale) seconds = Math.round((units / scale) * 10) / 10;\n  }\n  if (sizeMb > Number(s.max_file_mb)) problems.push(`File is ${sizeMb.toFixed(1)} MB, above the ${s.max_file_mb} MB limit.`);\n  if (seconds === null) problems.push('Could not read the video duration.');\n  else if (seconds < Number(s.min_seconds) || seconds > Number(s.max_seconds)) problems.push(`Video is ${seconds} s; allowed is ${s.min_seconds}-${s.max_seconds} s.`);\n}\nreturn [{ json: { ok: problems.length === 0, problems, size_mb: Math.round(sizeMb * 100) / 100, duration_seconds: seconds }, binary: item.binary }];"
+      },
+      "typeVersion": 2
     },
     {
+      "id": "d1efe4ae-cd4b-456c-8ea3-21b9391f7d5b",
+      "name": "If Video Verified",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        3184,
+        400
+      ],
       "parameters": {
+        "options": {},
         "conditions": {
           "options": {
-            "caseSensitive": true,
+            "version": 2,
             "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
+            "caseSensitive": true,
+            "typeValidation": "loose"
           },
+          "combinator": "and",
           "conditions": [
             {
               "id": "22049598-37ea-4af8-a586-ca04d75d57e9",
-              "leftValue": "={{ $json.ok }}",
-              "rightValue": "",
               "operator": {
                 "type": "boolean",
                 "operation": "true",
                 "singleValue": true
-              }
+              },
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": ""
             }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
+          ]
+        }
       },
-      "id": "d1efe4ae-cd4b-456c-8ea3-21b9391f7d5b",
-      "name": "Video Passes Checks",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        3184,
-        400
-      ]
+      "typeVersion": 2.2
     },
     {
+      "id": "d374023b-7b50-481b-8c9a-a954e7ad6620",
+      "name": "Draft TikTok Video",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "onError": "continueErrorOutput",
+      "position": [
+        3440,
+        400
+      ],
       "parameters": {
+        "medias": [
+          {
+            "mediaType": "VIDEO",
+            "mediaSource": "binary",
+            "binaryPropertyName": "data"
+          }
+        ],
+        "caption": "={{ $('When Carousel Submitted').first().json.Caption }}",
+        "postMode": "UPLOAD",
         "resource": "tiktok",
-        "operation": "create",
         "accountId": {
           "__rl": true,
           "mode": "list",
           "value": ""
         },
-        "caption": "={{ $('Carousel Form').first().json.Caption }}",
-        "medias": [
-          {
-            "mediaSource": "binary",
-            "binaryPropertyName": "data",
-            "mediaType": "VIDEO"
-          }
-        ],
-        "postMode": "UPLOAD",
+        "operation": "create",
         "publishMode": "NOW"
       },
-      "id": "d374023b-7b50-481b-8c9a-a954e7ad6620",
-      "name": "Save TikTok Video Draft",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
-      "typeVersion": 1,
-      "position": [
-        3440,
-        400
-      ],
-      "onError": "continueErrorOutput"
+      "typeVersion": 1
     },
     {
+      "id": "464c0e8a-7652-4e6e-bea0-ad0bab327b1f",
+      "name": "Summarize Video Results",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        3680,
+        400
+      ],
       "parameters": {
+        "options": {},
         "assignments": {
           "assignments": [
             {
@@ -602,19 +719,19 @@
               "id": "d264b37a-3b6e-4914-9c25-24030d643960",
               "name": "slides",
               "type": "number",
-              "value": "={{ $('Build ffmpeg Command').first().json.slides }}"
+              "value": "={{ $('Compose ffmpeg Command').first().json.slides }}"
             },
             {
               "id": "0b5594e6-7073-4a70-9fb2-d9c3be8140cb",
               "name": "duration_seconds",
               "type": "number",
-              "value": "={{ $('Check Size and Duration').first().json.duration_seconds }}"
+              "value": "={{ $('Validate Size and Duration').first().json.duration_seconds }}"
             },
             {
               "id": "09ae4934-c8b1-4d63-9cb0-34ce6045af49",
               "name": "size_mb",
               "type": "number",
-              "value": "={{ $('Check Size and Duration').first().json.size_mb }}"
+              "value": "={{ $('Validate Size and Duration').first().json.size_mb }}"
             },
             {
               "id": "3be31aa1-31bc-48c1-8005-7391b6665081",
@@ -623,572 +740,535 @@
               "value": "Open the TikTok inbox notification, add sound if you like, then post."
             }
           ]
-        },
-        "options": {}
+        }
       },
-      "id": "464c0e8a-7652-4e6e-bea0-ad0bab327b1f",
-      "name": "Summarize Result",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        3680,
-        400
-      ]
+      "typeVersion": 3.4
     },
     {
-      "parameters": {
-        "executeOnce": true,
-        "command": "=rm -rf -- '{{ $('Set Render Settings').first().json.temp_dir }}' && echo CLEANED"
-      },
       "id": "e1422240-5385-4f02-b2e4-3819459aed1e",
-      "name": "Clean Up Temp Files",
+      "name": "Remove Temp Files",
       "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
+      "onError": "continueRegularOutput",
       "position": [
         3900,
         400
       ],
-      "onError": "continueRegularOutput"
+      "parameters": {
+        "command": "=rm -rf -- '{{ $('Set Video Render Settings').first().json.temp_dir }}' && echo CLEANED",
+        "executeOnce": true
+      },
+      "typeVersion": 1
     },
     {
+      "id": "1d64136c-7883-4c74-8db8-15f6df4bea87",
+      "name": "If Slideshow Required",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        3680,
+        752
+      ],
       "parameters": {
+        "options": {},
         "conditions": {
           "options": {
-            "caseSensitive": true,
+            "version": 2,
             "leftValue": "",
-            "typeValidation": "loose",
-            "version": 2
+            "caseSensitive": true,
+            "typeValidation": "loose"
           },
+          "combinator": "and",
           "conditions": [
             {
               "id": "ef80e42f-792a-4cb6-957d-7a5a2a91cb17",
-              "leftValue": "={{ $('Carousel Form').first().json['Also Send TikTok Photo Slideshow'] === 'Yes' }}",
-              "rightValue": "",
               "operator": {
                 "type": "boolean",
                 "operation": "true",
                 "singleValue": true
-              }
+              },
+              "leftValue": "={{ $('When Carousel Submitted').first().json['Also Send TikTok Photo Slideshow'] === 'Yes' }}",
+              "rightValue": ""
             }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
+          ]
+        }
       },
-      "id": "1d64136c-7883-4c74-8db8-15f6df4bea87",
-      "name": "Wants Photo Slideshow?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        3680,
-        620
-      ]
+      "typeVersion": 2.2
     },
     {
-      "parameters": {
-        "jsCode": "// One item with every slide as its own binary field (slide_1, slide_2, ...).\n// The SocialRobot node uploads binary media to SocialRobot storage itself, so no public URLs are needed.\nconst slides = $('Prepare Slides').all().slice(0, 35);\nconst binary = {};\nslides.forEach((item, i) => { binary[`slide_${i + 1}`] = item.binary.image; });\nreturn [{ json: { slide_fields: slides.map((_, i) => `slide_${i + 1}`) }, binary }];"
-      },
       "id": "9eac90dd-6570-4e14-a424-c4dda21d278f",
-      "name": "Gather Slides for Slideshow",
+      "name": "Collect Slides for Slideshow",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
       "position": [
-        3900,
-        620
-      ]
+        3904,
+        752
+      ],
+      "parameters": {
+        "jsCode": "// One item with every slide as its own binary field (slide_1, slide_2, ...).\n// The SocialRobot node uploads binary media to SocialRobot storage itself, so no public URLs are needed.\nconst slides = $('Arrange Slides').all().slice(0, 35);\nconst binary = {};\nslides.forEach((item, i) => { binary[`slide_${i + 1}`] = item.binary.image; });\nreturn [{ json: { slide_fields: slides.map((_, i) => `slide_${i + 1}`) }, binary }];"
+      },
+      "typeVersion": 2
     },
     {
-      "parameters": {
-        "resource": "tiktok",
-        "operation": "create",
-        "accountId": {
-          "__rl": true,
-          "mode": "list",
-          "value": ""
-        },
-        "caption": "={{ $('Carousel Form').first().json.Caption }}",
-        "medias": "={{ $json.slide_fields.map(name => ({ mediaSource: 'binary', binaryPropertyName: name, mediaType: 'IMAGE' })) }}",
-        "postMode": "UPLOAD",
-        "title": "={{ String($('Carousel Form').first().json['Slideshow Title'] || '').slice(0, 90) }}",
-        "publishMode": "NOW"
-      },
       "id": "f6c7b4ca-3fe9-4084-88ac-2ee36beb07c7",
-      "name": "Save TikTok Photo Slideshow Draft",
+      "name": "Draft TikTok Slideshow",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
-      "typeVersion": 1,
+      "onError": "continueRegularOutput",
       "position": [
-        4120,
-        620
+        4128,
+        752
       ],
-      "onError": "continueRegularOutput"
-    },
-    {
       "parameters": {
-        "resource": "instagram",
-        "operation": "create",
+        "title": "={{ String($('When Carousel Submitted').first().json['Slideshow Title'] || '').slice(0, 90) }}",
+        "medias": "={{ $json.slide_fields.map(name => ({ mediaSource: 'binary', binaryPropertyName: name, mediaType: 'IMAGE' })) }}",
+        "caption": "={{ $('When Carousel Submitted').first().json.Caption }}",
+        "postMode": "UPLOAD",
+        "resource": "tiktok",
         "accountId": {
           "__rl": true,
           "mode": "list",
           "value": ""
         },
-        "caption": "={{ $('Carousel Form').first().json.Caption }}",
-        "mediaSource": "binary",
-        "mediaType": "VIDEO",
-        "binaryPropertyName": "data",
-        "isAiGenerated": false,
-        "isReel": true,
+        "operation": "create",
         "publishMode": "NOW"
       },
+      "typeVersion": 1
+    },
+    {
       "id": "a9e84874-77ac-4308-9616-67f02516462b",
-      "name": "Optional Instagram Reel",
+      "name": "Draft Instagram Reel",
       "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
-      "typeVersion": 1,
-      "position": [
-        3440,
-        640
-      ],
+      "onError": "continueRegularOutput",
       "disabled": true,
-      "onError": "continueRegularOutput"
-    },
-    {
+      "position": [
+        3408,
+        816
+      ],
       "parameters": {
-        "resource": "facebook",
-        "operation": "create",
-        "accountId": {
-          "__rl": true,
-          "mode": "list",
-          "value": ""
-        },
-        "caption": "={{ $('Carousel Form').first().json.Caption }}",
-        "medias": [
-          {
-            "mediaSource": "binary",
-            "binaryPropertyName": "data",
-            "mediaType": "VIDEO"
-          }
-        ],
         "isReel": true,
-        "publishMode": "NOW"
-      },
-      "id": "e6dff207-caa3-4c4d-b01a-c9bf36fde837",
-      "name": "Optional Facebook Reel",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
-      "typeVersion": 1,
-      "position": [
-        3440,
-        820
-      ],
-      "disabled": true,
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "resource": "threads",
-        "operation": "create",
+        "caption": "={{ $('When Carousel Submitted').first().json.Caption }}",
+        "resource": "instagram",
         "accountId": {
           "__rl": true,
           "mode": "list",
           "value": ""
         },
-        "caption": "={{ $('Carousel Form').first().json.Caption }}",
-        "medias": [
-          {
-            "mediaSource": "binary",
-            "binaryPropertyName": "data",
-            "mediaType": "VIDEO"
-          }
-        ],
-        "publishMode": "NOW"
+        "mediaType": "VIDEO",
+        "operation": "create",
+        "mediaSource": "binary",
+        "publishMode": "NOW",
+        "isAiGenerated": false,
+        "binaryPropertyName": "data"
       },
-      "id": "45a8cf78-423b-4a7e-90cb-29e8b5dcef6e",
-      "name": "Optional Threads Video",
-      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
-      "typeVersion": 1,
-      "position": [
-        3440,
-        1000
-      ],
-      "disabled": true,
-      "onError": "continueRegularOutput"
+      "typeVersion": 1
     },
     {
+      "id": "e6dff207-caa3-4c4d-b01a-c9bf36fde837",
+      "name": "Draft Facebook Reel",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "onError": "continueRegularOutput",
+      "disabled": true,
+      "position": [
+        3408,
+        992
+      ],
       "parameters": {
-        "jsCode": "// One readable reason for whatever went wrong. Add an error workflow in the settings to get alerts.\nconst j = $json;\nconst s = $('Set Render Settings').first().json;\nconst out = String(j.stdout || '');\nlet message;\nif (out.includes('FFMPEG_MISSING')) {\n  message = 'ffmpeg is not installed on this n8n server. Install it (see the yellow note) and run again.';\n} else if (out.includes('RENDER_FAILED')) {\n  message = `ffmpeg could not render the Reel: ${out.replace('RENDER_FAILED', '').trim().slice(-800) || 'no log'}`;\n} else if (Array.isArray(j.problems) && j.problems.length) {\n  message = `The video did not pass the checks: ${j.problems.join(' ')}`;\n} else if (j.error) {\n  const e = typeof j.error === 'string' ? j.error : (j.error.message || JSON.stringify(j.error));\n  message = $('Save TikTok Video Draft').isExecuted\n    ? `SocialRobot could not save the TikTok draft: ${e}`\n    : `File or command step failed (check temp_dir \"${s.temp_dir}\" and file access settings): ${e}`;\n} else if (!$('Create Temp Folder').isExecuted) {\n  message = `Upload ${s.min_slides}-${s.max_slides} slide images (JPG, PNG or WebP). The form had a different number.`;\n} else {\n  message = `Unexpected failure: ${JSON.stringify(j).slice(0, 500)}`;\n}\nreturn [{ json: { message } }];"
+        "isReel": true,
+        "medias": [
+          {
+            "mediaType": "VIDEO",
+            "mediaSource": "binary",
+            "binaryPropertyName": "data"
+          }
+        ],
+        "caption": "={{ $('When Carousel Submitted').first().json.Caption }}",
+        "resource": "facebook",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "operation": "create",
+        "publishMode": "NOW"
       },
+      "typeVersion": 1
+    },
+    {
+      "id": "45a8cf78-423b-4a7e-90cb-29e8b5dcef6e",
+      "name": "Draft Threads Video",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "onError": "continueRegularOutput",
+      "disabled": true,
+      "position": [
+        3408,
+        1184
+      ],
+      "parameters": {
+        "medias": [
+          {
+            "mediaType": "VIDEO",
+            "mediaSource": "binary",
+            "binaryPropertyName": "data"
+          }
+        ],
+        "caption": "={{ $('When Carousel Submitted').first().json.Caption }}",
+        "resource": "threads",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "operation": "create",
+        "publishMode": "NOW"
+      },
+      "typeVersion": 1
+    },
+    {
       "id": "49c38ee8-2c56-40be-828e-fafbd5ba59b6",
-      "name": "Describe Failure",
+      "name": "Explain Process Error",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
       "position": [
         1840,
         960
-      ]
+      ],
+      "parameters": {
+        "jsCode": "// One readable reason for whatever went wrong. Add an error workflow in the settings to get alerts.\nconst j = $json;\nconst s = $('Set Video Render Settings').first().json;\nconst out = String(j.stdout || '');\nlet message;\nif (out.includes('FFMPEG_MISSING')) {\n  message = 'ffmpeg is not installed on this n8n server. Install it (see the yellow \"Install ffmpeg\" note) and run again.';\n} else if (out.includes('RENDER_FAILED')) {\n  message = `ffmpeg could not render the Reel: ${out.replace('RENDER_FAILED', '').trim().slice(-800) || 'no log'}`;\n} else if (Array.isArray(j.problems) && j.problems.length) {\n  message = `The video did not pass the checks: ${j.problems.join(' ')}`;\n} else if (j.error) {\n  const e = typeof j.error === 'string' ? j.error : (j.error.message || JSON.stringify(j.error));\n  message = $('Draft TikTok Video').isExecuted\n    ? `SocialRobot could not save the TikTok draft: ${e}`\n    : `File or command step failed (check temp_dir \"${s.temp_dir}\" and file access settings): ${e}`;\n} else if (!$('Initialize Temp Folder').isExecuted) {\n  message = `Upload ${s.min_slides}-${s.max_slides} slide images (JPG, PNG or WebP). The form had a different number.`;\n} else {\n  message = `Unexpected failure: ${JSON.stringify(j).slice(0, 500)}`;\n}\nreturn [{ json: { message } }];"
+      },
+      "typeVersion": 2
     },
     {
-      "parameters": {
-        "executeOnce": true,
-        "command": "=rm -rf -- '{{ $('Set Render Settings').first().json.temp_dir }}' && echo CLEANED"
-      },
       "id": "fc0dd680-b698-49da-8ff6-9ddb5fade3ab",
-      "name": "Clean Up After Error",
+      "name": "Handle Error Cleanup",
       "type": "n8n-nodes-base.executeCommand",
-      "typeVersion": 1,
+      "onError": "continueRegularOutput",
       "position": [
         2080,
         960
       ],
-      "onError": "continueRegularOutput"
+      "parameters": {
+        "command": "=rm -rf -- '{{ $('Set Video Render Settings').first().json.temp_dir }}' && echo CLEANED",
+        "executeOnce": true
+      },
+      "typeVersion": 1
     },
     {
-      "parameters": {
-        "errorMessage": "={{ $('Describe Failure').first().json.message }}"
-      },
       "id": "0b6aa7a5-fc2b-4f62-851c-4f51a40a6508",
-      "name": "Stop With Error",
+      "name": "Terminate on Error",
       "type": "n8n-nodes-base.stopAndError",
-      "typeVersion": 1,
       "position": [
         2320,
         960
-      ]
+      ],
+      "parameters": {
+        "errorMessage": "={{ $('Explain Process Error').first().json.message }}"
+      },
+      "typeVersion": 1
     }
   ],
-  "connections": {
-    "Carousel Form": {
-      "main": [
-        [
-          {
-            "node": "Set Render Settings",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Set Render Settings": {
-      "main": [
-        [
-          {
-            "node": "Check ffmpeg Installed",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check ffmpeg Installed": {
-      "main": [
-        [
-          {
-            "node": "ffmpeg Found?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "ffmpeg Found?": {
-      "main": [
-        [
-          {
-            "node": "Has 2-10 Slides?",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Describe Failure",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Has 2-10 Slides?": {
-      "main": [
-        [
-          {
-            "node": "Create Temp Folder",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Describe Failure",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Create Temp Folder": {
-      "main": [
-        [
-          {
-            "node": "Prepare Slides",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Describe Failure",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare Slides": {
-      "main": [
-        [
-          {
-            "node": "Write Slide to Disk",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Write Slide to Disk": {
-      "main": [
-        [
-          {
-            "node": "Build ffmpeg Command",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Describe Failure",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Build ffmpeg Command": {
-      "main": [
-        [
-          {
-            "node": "Render Reel with ffmpeg",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Render Reel with ffmpeg": {
-      "main": [
-        [
-          {
-            "node": "Render Succeeded?",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Describe Failure",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Render Succeeded?": {
-      "main": [
-        [
-          {
-            "node": "Read Reel from Disk",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Describe Failure",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Read Reel from Disk": {
-      "main": [
-        [
-          {
-            "node": "Check Size and Duration",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Describe Failure",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check Size and Duration": {
-      "main": [
-        [
-          {
-            "node": "Video Passes Checks",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Video Passes Checks": {
-      "main": [
-        [
-          {
-            "node": "Save TikTok Video Draft",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Optional Instagram Reel",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Optional Facebook Reel",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Optional Threads Video",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Describe Failure",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Save TikTok Video Draft": {
-      "main": [
-        [
-          {
-            "node": "Summarize Result",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Describe Failure",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Summarize Result": {
-      "main": [
-        [
-          {
-            "node": "Clean Up Temp Files",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Wants Photo Slideshow?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Wants Photo Slideshow?": {
-      "main": [
-        [
-          {
-            "node": "Gather Slides for Slideshow",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Gather Slides for Slideshow": {
-      "main": [
-        [
-          {
-            "node": "Save TikTok Photo Slideshow Draft",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Describe Failure": {
-      "main": [
-        [
-          {
-            "node": "Clean Up After Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Clean Up After Error": {
-      "main": [
-        [
-          {
-            "node": "Stop With Error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    }
-  },
   "pinData": {},
   "settings": {
     "executionOrder": "v1"
   },
-  "meta": {
-    "templateCredsSetupCompleted": false
-  },
-  "tags": [
-    {
-      "name": "SocialRobot"
+  "connections": {
+    "When Carousel Submitted": {
+      "main": [
+        [
+          {
+            "node": "Set Video Render Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    {
-      "name": "Instagram Reels"
+    "If ffmpeg Available": {
+      "main": [
+        [
+          {
+            "node": "Check Slide Count",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Explain Process Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    {
-      "name": "Carousel"
+    "Arrange Slides": {
+      "main": [
+        [
+          {
+            "node": "Save Slide to Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    {
-      "name": "TikTok"
+    "Explain Process Error": {
+      "main": [
+        [
+          {
+            "node": "Handle Error Cleanup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    {
-      "name": "Slideshow"
+    "Check Slide Count": {
+      "main": [
+        [
+          {
+            "node": "Initialize Temp Folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Explain Process Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    {
-      "name": "ffmpeg"
+    "Summarize Video Results": {
+      "main": [
+        [
+          {
+            "node": "Remove Temp Files",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Slideshow Required",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    {
-      "name": "Video"
+    "If Render Successful": {
+      "main": [
+        [
+          {
+            "node": "Load Reel from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Explain Process Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    {
-      "name": "Facebook Reels"
+    "Initialize Temp Folder": {
+      "main": [
+        [
+          {
+            "node": "Arrange Slides",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Explain Process Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Reel from Disk": {
+      "main": [
+        [
+          {
+            "node": "Validate Size and Duration",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Explain Process Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Video Render Settings": {
+      "main": [
+        [
+          {
+            "node": "Verify ffmpeg Installation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Video Verified": {
+      "main": [
+        [
+          {
+            "node": "Draft TikTok Video",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Draft Instagram Reel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Draft Facebook Reel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Draft Threads Video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Explain Process Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Slide to Disk": {
+      "main": [
+        [
+          {
+            "node": "Compose ffmpeg Command",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Explain Process Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose ffmpeg Command": {
+      "main": [
+        [
+          {
+            "node": "Execute ffmpeg Render",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Error Cleanup": {
+      "main": [
+        [
+          {
+            "node": "Terminate on Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify ffmpeg Installation": {
+      "main": [
+        [
+          {
+            "node": "If ffmpeg Available",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Slideshow Required": {
+      "main": [
+        [
+          {
+            "node": "Collect Slides for Slideshow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Size and Duration": {
+      "main": [
+        [
+          {
+            "node": "If Video Verified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute ffmpeg Render": {
+      "main": [
+        [
+          {
+            "node": "If Render Successful",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Explain Process Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft TikTok Video": {
+      "main": [
+        [
+          {
+            "node": "Summarize Video Results",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Explain Process Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect Slides for Slideshow": {
+      "main": [
+        [
+          {
+            "node": "Draft TikTok Slideshow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
-  ]
+  }
 }
