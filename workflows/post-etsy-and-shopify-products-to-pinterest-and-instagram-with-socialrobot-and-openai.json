@@ -1,0 +1,1642 @@
+{
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "name": "Post Etsy and Shopify products to Pinterest and Instagram with SocialRobot and OpenAI",
+  "tags": [
+    {
+      "name": "SocialRobot"
+    },
+    {
+      "name": "Etsy"
+    },
+    {
+      "name": "Shopify"
+    },
+    {
+      "name": "Pinterest"
+    },
+    {
+      "name": "Instagram"
+    },
+    {
+      "name": "Ecommerce"
+    },
+    {
+      "name": "OpenAI"
+    },
+    {
+      "name": "Data Table"
+    }
+  ],
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Turn Etsy and Shopify products into Pinterest pins and Instagram posts\n\nFor Etsy sellers and Shopify stores: once a day, the workflow takes one product from your shop that it hasn't posted yet, writes a Pinterest title, a pin description and an Instagram caption from the real listing, and posts your **real product photo**. SocialRobot pins it to your Pinterest board with a link to the product, and posts it to Instagram.\n\n**Only Pinterest and Instagram are on by default.** The Instagram carousel, Facebook and Threads nodes are wired in but **disabled by default**; see the sticky note **Optional posts (disabled)**.\n\n### How it works\n1. **Daily Schedule Trigger** (10:00) or **Manual Start Trigger** starts a run. **Configure Catalog Settings** holds every setting.\n2. **Fetch SocialRobot Accounts** and **Fetch Pinterest Board List** find your Pinterest account and the board you named.\n3. **Switch Product Source Route** reads your products from the Etsy shop RSS feed, the Etsy API or Shopify and turns them into one product shape.\n4. **Filter Posted Products** drops products already in the Data Table, and **Select Products for Posting** keeps 1 per run.\n5. **Generate Pin and Caption** writes the copy from the listing facts only. **Assemble Social Media Post** falls back to template copy if the AI mentions sales, reviews, stock or prices.\n6. **Post Pinterest Pin via SocialRobot API** and **Post Instagram Photo** publish. **Log Posted Product** records the product so it isn't posted twice.\n\n### Setup steps\n- [ ] Install the SocialRobot community node `@socialrobot-io/n8n-nodes-socialrobot` (3.1.2+) and add your SocialRobot API key as the SocialRobot credential (used by **Fetch SocialRobot Accounts** and **Post Instagram Photo**)\n- [ ] Connect Pinterest and Instagram in SocialRobot. Pick the Instagram account in **Post Instagram Photo**\n- [ ] Add a **Header Auth** credential for the SocialRobot API calls: name `x-api-key`, value your SocialRobot API key. Select it in **Fetch Pinterest Board List** and **Post Pinterest Pin via SocialRobot API** (and **Post Instagram Carousel via SocialRobot API** if you enable it)\n- [ ] Create the Data Table `socialrobot_posted_products` as described in the sticky note **Data Table setup**\n- [ ] In **Configure Catalog Settings**, set `source` (`etsy_rss`, `etsy_api` or `shopify`), your shop and `pinterest_board_name`\n- [ ] Only for `etsy_api`: add a separate **Header Auth** credential with name `x-api-key` and value `keystring:shared_secret` from your Etsy app. Select it in **Retrieve Etsy Shop Details**, **Fetch Active Etsy Listings** and **Fetch Etsy Listing Images**\n- [ ] Only for `shopify`: add a Shopify Access Token credential (custom app, `read_products` scope) in **Fetch Shopify Products**, and set `shopify_store_url` and `shopify_currency`\n- [ ] Add an OpenAI credential to **OpenAI Luna Chat Model**, or set `use_openai` to false\n- [ ] Click *Execute workflow* once, check the pin and the post, then activate\n\nn8n Cloud: works on Cloud and self-hosted. No Execute Command node, no local files, no image generation.\n\nCommunity node: SocialRobot (`@socialrobot-io/n8n-nodes-socialrobot`) is a community node. It isn't maintained by n8n; install it at your own risk.\n\n### Customization\n- `products_per_run`, `post_order` (newest_first or oldest_first) and the time in **Daily Schedule Trigger**.\n- `pin_image_count` (1-5), `link_tracking_params`, `include_price` (off by default: pins live for years and prices change).\n- `caption_language`, `caption_tone`, `instagram_call_to_action`, `extra_hashtags`, `business_footer`.\n\n### Cost per run\n| Item | Cost |\n|---|---|\n| OpenAI `gpt-6-luna` copy, 1 product | about $0.001 |\n| Etsy RSS, Etsy API, Shopify | $0 |\n| SocialRobot posts | included in your SocialRobot plan |\n\nNo images are generated. OpenAI list prices on 24 Oct 2026: $0.10 per 1M input and $0.50 per 1M output tokens (about 3 cents a month at 1 product a day).",
+        "width": 480,
+        "height": 1488
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        32
+      ],
+      "id": "70cca9e1-7cc2-461b-976d-20333b93a08b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Start and configure\n\nProvides the scheduled and manual entry points, then sets the catalog/source configuration used by the rest of the workflow.",
+        "width": 416,
+        "height": 512,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        512,
+        144
+      ],
+      "id": "4a406174-c3a3-4f8a-a657-16e32ae920c8",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Select Pinterest destination\n\nFetches SocialRobot accounts, chooses the Pinterest account, retrieves available boards, and selects the board for publishing pins.",
+        "width": 848,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        272
+      ],
+      "id": "3bcab049-797b-4505-b915-6b9e359d1ab9",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Route product source\n\nBranches execution to the Etsy RSS, Etsy API, or Shopify product-ingestion path based on the configured catalog source.",
+        "width": 240,
+        "height": 400,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1888,
+        192
+      ],
+      "id": "6d1152a7-6a11-4e2e-8408-0a56872b5480",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Load Etsy RSS products\n\nDownloads an Etsy shop RSS feed, parses the XML, and normalizes feed items into the shared product structure.",
+        "width": 640,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2208,
+        32
+      ],
+      "id": "3dfe2c37-51ed-47d5-bd7d-8204b7289955",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Load Etsy API products\n\nFinds the Etsy shop by name, retrieves active listings and their photos, then normalizes the API response into product items.",
+        "width": 848,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2208,
+        368
+      ],
+      "id": "85c321eb-e275-4235-b6c0-b40ad11cb14a",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Load Shopify products\n\nFetches published products with n8n's Shopify node (Shopify Access Token credential from a custom app with the `read_products` scope) and transforms them into the common product format used by the posting flow. Only active products with a photo are used; links are built from `shopify_store_url`.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2208,
+        704
+      ],
+      "id": "f288963e-83af-4e97-82ae-6163241e00b2",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Filter posting candidates\n\nChecks the posted-products table to skip duplicates, then limits the remaining products to the number selected for the current run.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3200,
+        240
+      ],
+      "id": "d7e2ae76-0c8f-4b01-be47-6843590e96b4",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Generate post copy\n\nDecides whether to use OpenAI, optionally generates structured pin and caption copy with the LLM, and builds final post text for publishing.",
+        "width": 912,
+        "height": 544,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3664,
+        160
+      ],
+      "id": "7cb17a5e-b0fb-4c9c-90da-11a778fb3cb2",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Publish Pinterest Instagram\n\nCreates the Pinterest pin via the SocialRobot API (title, description, alt text and the product link) and posts an Instagram photo with the SocialRobot node. The Instagram carousel request is **disabled by default**; see **Optional posts (disabled)**.",
+        "width": 640,
+        "height": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4672,
+        272
+      ],
+      "id": "65abfeb9-0a1f-440e-a9c6-bbe0aebd8b04",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## Facebook and Threads (disabled)\n\nFacebook and Threads photo posts through SocialRobot nodes. Both are **disabled by default**: enable a node and pick an account to cross-post in the same run.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5360,
+        240
+      ],
+      "id": "b913947d-df1c-4029-ac59-28e3bb9972e8",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## Check posting results\n\nSummarizes the publish attempts and branches based on whether any platform successfully published the product.",
+        "width": 416,
+        "height": 320,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5856,
+        240
+      ],
+      "id": "c23eecc6-60c9-4bf2-a11d-032d1c46ba41",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## Log or fail\n\nRecords successfully posted products in the data table, or stops the workflow with an error when posting failed.",
+        "width": 240,
+        "height": 608,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6352,
+        96
+      ],
+      "id": "af425089-7336-47ee-9f00-bc82ef4f77bb",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## Data Table setup\nIn n8n, open *Data tables* and create `socialrobot_posted_products` (lowercase) with these text columns:\n`product_key`, `source`, `title`, `product_url`, `pinterest_post_id`, `instagram_post_id`, `posted_at`.\n\nTo post a product again, delete its row.",
+        "width": 416,
+        "height": 320,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3200,
+        608
+      ],
+      "id": "b1d6f3a2-5c4e-4f8a-9b71-2e6d0c9a4f13",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "## Optional posts (disabled)\nConnected and **disabled by default**. Enable a node and pick an account; it publishes in the same run.\n- **Post Instagram Carousel via SocialRobot API**: up to `instagram_carousel_images` photos (Etsy API or Shopify). The node takes one photo, so this calls the SocialRobot API: set `instagram_account_id_for_carousel` and disable **Post Instagram Photo** so you don't post twice.\n- **Post Facebook Photo**: photo post with the product link\n- **Post Threads Photo**: photo post with the product link, under 500 characters",
+        "width": 1104,
+        "height": 288,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4672,
+        624
+      ],
+      "id": "c2e7a4b3-6d5f-4a9b-8c82-3f7e1dab5024",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "content": "## AI label and honest product content\n- The photos are your **real product photos** from the listing. Nothing is generated or edited, so the Instagram AI label is off.\n- The text is AI-written from your listing. It may only use facts from the title, description, tags and materials.\n- No reviews, ratings, stars, testimonials or customer quotes. No sales, discounts, stock or shipping promises. **Assemble Social Media Post** replaces AI copy that mentions any of these (or a price) when your listing doesn't.\n- Prices are never written by AI. `include_price` adds the exact shop price with \"Price when posted:\". It's off by default because pins stay up for years.\n- Every pin links to the real product page.\n- Posts go out right away, with no review step. Run it manually first, read the copy, and delete any post that doesn't match the listing.",
+        "width": 480,
+        "height": 608,
+        "color": 1
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        6640,
+        96
+      ],
+      "id": "d3f8b5c4-7e6a-4bac-9d93-4a8f2ebc6135",
+      "name": "Sticky Note15"
+    },
+    {
+      "id": "6938aef7-3560-5443-912e-5231f6a4a0e4",
+      "name": "Daily Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        560,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "typeVersion": 1.2
+    },
+    {
+      "id": "428689ee-fb6c-5817-97ac-3829f922b6fd",
+      "name": "Manual Start Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        560,
+        500
+      ],
+      "parameters": {},
+      "typeVersion": 1
+    },
+    {
+      "id": "d5dbe4c1-0e4b-5d50-9eb6-d180d4d91255",
+      "name": "Configure Catalog Settings",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        780,
+        400
+      ],
+      "parameters": {
+        "options": {},
+        "assignments": {
+          "assignments": [
+            {
+              "id": "89a6fb5e-8695-5610-a239-15df79d91e52",
+              "name": "source",
+              "type": "string",
+              "value": "etsy_rss"
+            },
+            {
+              "id": "f971cb64-70d8-5d74-ae61-e3a4bdd368a9",
+              "name": "etsy_shop_name",
+              "type": "string",
+              "value": "YourEtsyShopName"
+            },
+            {
+              "id": "abe5e489-a9c0-5821-bdd7-5bd827633731",
+              "name": "accept_language",
+              "type": "string",
+              "value": "en-US,en;q=0.9"
+            },
+            {
+              "id": "c8df02bb-491d-50cd-b0a0-d0e5da3e28db",
+              "name": "shopify_store_url",
+              "type": "string",
+              "value": "https://yourstore.com"
+            },
+            {
+              "id": "a056cec7-d8d9-5294-a52a-1e1ad5aae31a",
+              "name": "shopify_currency",
+              "type": "string",
+              "value": "USD"
+            },
+            {
+              "id": "afc949c0-f78e-5d4f-8a5c-3a9ad861ecaa",
+              "name": "shop_name",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "5acf17b5-be70-5aa3-abd8-69ea06a90d3f",
+              "name": "products_per_run",
+              "type": "number",
+              "value": 1
+            },
+            {
+              "id": "dc9103d9-dca4-508b-9424-956fe6c9ef8c",
+              "name": "post_order",
+              "type": "string",
+              "value": "newest_first"
+            },
+            {
+              "id": "e5047d0b-8e6f-5a31-8e69-859c3b17a830",
+              "name": "pinterest_board_name",
+              "type": "string",
+              "value": "Shop"
+            },
+            {
+              "id": "8466c2b1-949d-552b-94f0-f949aa492669",
+              "name": "pinterest_account_handle",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "e6ee35ce-0476-5d4e-a2eb-df4c1cd42211",
+              "name": "pinterest_account_id",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "6f604b4e-9a16-5abf-a0e2-f06e1f4dd58f",
+              "name": "pinterest_board_id",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "6499fc5b-6455-54b0-8d81-e62f5a6af4d4",
+              "name": "pin_image_count",
+              "type": "number",
+              "value": 1
+            },
+            {
+              "id": "ccc17069-4cd7-5ecd-bc69-4199149aad18",
+              "name": "instagram_carousel_images",
+              "type": "number",
+              "value": 5
+            },
+            {
+              "id": "f8e7717b-4d05-5186-9eae-7b4d047cff1c",
+              "name": "instagram_account_id_for_carousel",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "6a83d946-9fa1-5184-ac40-e8c478b715e4",
+              "name": "link_tracking_params",
+              "type": "string",
+              "value": "utm_source=pinterest&utm_medium=social&utm_campaign=socialrobot"
+            },
+            {
+              "id": "0a657e0b-5631-52bb-b958-67a435850e27",
+              "name": "use_openai",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "d5224870-6d6b-574d-8ddb-e6f667bd941c",
+              "name": "caption_language",
+              "type": "string",
+              "value": "English"
+            },
+            {
+              "id": "ac6d67c7-fe2f-5158-a45e-5c09df3ecdd4",
+              "name": "caption_tone",
+              "type": "string",
+              "value": "Warm, simple and personal, like a maker talking about their work. Short sentences. No hype or superlatives."
+            },
+            {
+              "id": "15c24694-d758-559c-8231-25e6d04f71da",
+              "name": "include_price",
+              "type": "boolean",
+              "value": false
+            },
+            {
+              "id": "9f2666f4-e875-58c1-9d4c-6358905be3dc",
+              "name": "price_label",
+              "type": "string",
+              "value": "Price when posted:"
+            },
+            {
+              "id": "8a06754b-4262-5651-80f3-cb43f085d773",
+              "name": "instagram_call_to_action",
+              "type": "string",
+              "value": "Find it in the {shop} shop."
+            },
+            {
+              "id": "9ece110c-76fc-5642-a11a-94c70bfc1ed4",
+              "name": "extra_hashtags",
+              "type": "string",
+              "value": "#shopsmall #smallbusiness"
+            },
+            {
+              "id": "8bc4a0c6-b3b5-52c0-b1b7-011e94c9d88f",
+              "name": "business_footer",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        }
+      },
+      "typeVersion": 3.4
+    },
+    {
+      "id": "d5593f5b-fb55-554c-ab85-6add82e2a8a0",
+      "name": "Fetch SocialRobot Accounts",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "onError": "continueRegularOutput",
+      "position": [
+        1060,
+        400
+      ],
+      "parameters": {
+        "resource": "account",
+        "operation": "getAll"
+      },
+      "typeVersion": 1,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "0fa4e8d5-b041-5fa2-9f4e-119d4b82c1b3",
+      "name": "Select Pinterest Account",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1280,
+        400
+      ],
+      "parameters": {
+        "jsCode": "const errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst decode = t => String(t || '')\n  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#0?39;|&apos;/g, \"'\")\n  .replace(/&#(\\d+);/g, (m, n) => String.fromCodePoint(Number(n))).replace(/&#x([0-9a-f]+);/gi, (m, n) => String.fromCodePoint(parseInt(n, 16)))\n  .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');\nconst htmlToText = h => decode(String(h || '').replace(/<br\\s*\\/?>/gi, '\\n').replace(/<\\/(p|div|li|h\\d)>/gi, '\\n').replace(/<[^>]+>/g, ' '))\n  .replace(/[ \\t]+/g, ' ').replace(/ *\\n */g, '\\n').replace(/\\n{3,}/g, '\\n\\n').trim();\nconst cut = (t, n) => { t = String(t || '').trim(); if (t.length <= n) return t; const c = t.slice(0, n - 1); const sp = c.lastIndexOf(' '); return (sp > n * 0.6 ? c.slice(0, sp) : c).replace(/[\\s,.;:\\u2013-]+$/, '') + '\\u2026'; };\nconst cleanUrl = u => { try { const x = new URL(String(u || '').trim()); if (!/^https?:$/.test(x.protocol)) return ''; x.search = ''; x.hash = ''; return x.toString(); } catch (e) { return ''; } };\nconst igFit = img => !(img.width > 0 && img.height > 0) || (img.width / img.height >= 0.8 && img.width / img.height <= 1.91);\nconst finish = (list, s, label) => {\n  const products = list.filter(p => p.url && p.images.length)\n    .map(p => ({ ...p, ig_images: p.images.filter(igFit) }))\n    .sort((x, y) => s.post_order === 'oldest_first' ? x.created_ms - y.created_ms : y.created_ms - x.created_ms);\n  if (!products.length) throw new Error(`${label}: no products with a photo and a link were found. Check your shop settings in ${'Configure Catalog Settings'}.`);\n  return products.map(p => ({ json: p }));\n};\n// Finds your Pinterest account in SocialRobot (or uses pinterest_account_id if you set it).\nconst s = $('Configure Catalog Settings').first().json;\nconst all = $input.all().map(i => i.json).filter(a => a && a.id);\nconst err = $input.all().map(i => i.json.error).filter(Boolean)[0];\nconst pins = all.filter(a => String(a.platform || '').toLowerCase() === 'pinterest');\nconst want = String(s.pinterest_account_handle || '').replace(/^@/, '').trim().toLowerCase();\nlet acc = null, note = '';\nif (String(s.pinterest_account_id || '').trim()) acc = { id: String(s.pinterest_account_id).trim(), handle: '(from pinterest_account_id)' };\nelse if (want) acc = pins.find(a => [a.handle, a.displayName].some(v => String(v || '').replace(/^@/, '').toLowerCase() === want)) || null;\nelse acc = pins[0] || null;\nif (!acc) note = err ? `Couldn't list your SocialRobot accounts: ${errText(err)}` :\n  !pins.length ? 'No Pinterest account is connected in SocialRobot.' :\n  `No Pinterest account matches pinterest_account_handle \"${s.pinterest_account_handle}\". Connected: ${pins.map(a => a.handle || a.displayName).join(', ')}.`;\nreturn [{ json: { pinterest_account_id: acc ? acc.id : '', pinterest_account_handle: acc ? (acc.handle || acc.displayName || '') : '', pinterest_note: note } }];\n"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "3f3486b2-54dd-5766-9918-fb91f172f01b",
+      "name": "Fetch Pinterest Board List",
+      "type": "n8n-nodes-base.httpRequest",
+      "onError": "continueRegularOutput",
+      "maxTries": 2,
+      "position": [
+        1500,
+        400
+      ],
+      "parameters": {
+        "url": "=https://socialrobot.io/api/v1/pinterest/boards/{{ encodeURIComponent($json.pinterest_account_id || 'none') }}",
+        "options": {},
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "retryOnFail": true,
+      "typeVersion": 4.2,
+      "alwaysOutputData": true,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "8bc26de4-b5fa-5f38-8038-2d314dfc3bd4",
+      "name": "Select Pinterest Board",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1720,
+        400
+      ],
+      "parameters": {
+        "jsCode": "const errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst decode = t => String(t || '')\n  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#0?39;|&apos;/g, \"'\")\n  .replace(/&#(\\d+);/g, (m, n) => String.fromCodePoint(Number(n))).replace(/&#x([0-9a-f]+);/gi, (m, n) => String.fromCodePoint(parseInt(n, 16)))\n  .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');\nconst htmlToText = h => decode(String(h || '').replace(/<br\\s*\\/?>/gi, '\\n').replace(/<\\/(p|div|li|h\\d)>/gi, '\\n').replace(/<[^>]+>/g, ' '))\n  .replace(/[ \\t]+/g, ' ').replace(/ *\\n */g, '\\n').replace(/\\n{3,}/g, '\\n\\n').trim();\nconst cut = (t, n) => { t = String(t || '').trim(); if (t.length <= n) return t; const c = t.slice(0, n - 1); const sp = c.lastIndexOf(' '); return (sp > n * 0.6 ? c.slice(0, sp) : c).replace(/[\\s,.;:\\u2013-]+$/, '') + '\\u2026'; };\nconst cleanUrl = u => { try { const x = new URL(String(u || '').trim()); if (!/^https?:$/.test(x.protocol)) return ''; x.search = ''; x.hash = ''; return x.toString(); } catch (e) { return ''; } };\nconst igFit = img => !(img.width > 0 && img.height > 0) || (img.width / img.height >= 0.8 && img.width / img.height <= 1.91);\nconst finish = (list, s, label) => {\n  const products = list.filter(p => p.url && p.images.length)\n    .map(p => ({ ...p, ig_images: p.images.filter(igFit) }))\n    .sort((x, y) => s.post_order === 'oldest_first' ? x.created_ms - y.created_ms : y.created_ms - x.created_ms);\n  if (!products.length) throw new Error(`${label}: no products with a photo and a link were found. Check your shop settings in ${'Configure Catalog Settings'}.`);\n  return products.map(p => ({ json: p }));\n};\n// Picks the Pinterest board by name (or uses pinterest_board_id) and checks the product source.\nconst s = $('Configure Catalog Settings').first().json;\nconst acc = $('Select Pinterest Account').first().json;\nconst source = String(s.source || '').trim().toLowerCase();\nif (!['etsy_rss', 'etsy_api', 'shopify'].includes(source)) throw new Error(`source must be etsy_rss, etsy_api or shopify (got \"${s.source}\"). Fix it in Configure Catalog Settings.`);\nconst raw = $input.all().map(i => i.json);\nconst boards = raw.flatMap(j => Array.isArray(j.boards) ? j.boards : Array.isArray(j.data) ? j.data : [j]).filter(b => b && b.id && b.name);\nconst err = raw.map(j => j.error).filter(Boolean)[0];\nconst want = String(s.pinterest_board_name || '').trim().toLowerCase();\nlet board = null, note = acc.pinterest_note || '';\nif (String(s.pinterest_board_id || '').trim()) board = { id: String(s.pinterest_board_id).trim(), name: '(from pinterest_board_id)' };\nelse if (acc.pinterest_account_id) {\n  board = want ? boards.find(b => String(b.name).trim().toLowerCase() === want) : (boards.length === 1 ? boards[0] : null);\n  if (!board) note = err ? `Couldn't list your Pinterest boards: ${errText(err)}` :\n    !boards.length ? 'Your Pinterest account has no boards. Create one on Pinterest first.' :\n    `${want ? `No board is called \"${s.pinterest_board_name}\".` : 'Set pinterest_board_name.'} Your boards: ${boards.map(b => b.name).slice(0, 20).join(', ')}.`;\n}\nif (!acc.pinterest_account_id || !board) throw new Error(`Pinterest isn't set up yet. ${note}`);\nreturn [{ json: { source, pinterest_account_id: acc.pinterest_account_id, pinterest_board_id: board ? board.id : '',\n  pinterest_board_name: board ? board.name : '', pinterest_ready: Boolean(acc.pinterest_account_id && board), pinterest_note: note } }];\n"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "cb6c8711-6714-590d-b4be-0a804de0d52a",
+      "name": "Switch Product Source Route",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        1940,
+        400
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "outputKey": "Etsy RSS",
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "3cd64483-b196-5f61-a65c-203bf4b72168",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.source }}",
+                    "rightValue": "etsy_rss"
+                  }
+                ]
+              },
+              "renameOutput": true
+            },
+            {
+              "outputKey": "Etsy API",
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "70906148-8a76-5a18-86e9-c0b19a37e17f",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.source }}",
+                    "rightValue": "etsy_api"
+                  }
+                ]
+              },
+              "renameOutput": true
+            },
+            {
+              "outputKey": "Shopify",
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "1812724d-997c-5524-a4a2-35bb4e2c9597",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.source }}",
+                    "rightValue": "shopify"
+                  }
+                ]
+              },
+              "renameOutput": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "typeVersion": 3.2
+    },
+    {
+      "id": "bd91f32d-d63b-58ae-b9f1-6f027f4e8bb3",
+      "name": "Fetch Etsy Shop RSS",
+      "type": "n8n-nodes-base.httpRequest",
+      "onError": "continueRegularOutput",
+      "maxTries": 3,
+      "position": [
+        2260,
+        160
+      ],
+      "parameters": {
+        "url": "=https://www.etsy.com/shop/{{ encodeURIComponent(String($('Configure Catalog Settings').first().json.etsy_shop_name).trim()) }}/rss",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "data"
+            }
+          }
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Language",
+              "value": "={{ $('Configure Catalog Settings').first().json.accept_language || 'en-US,en;q=0.9' }}"
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "typeVersion": 4.2,
+      "waitBetweenTries": 5000
+    },
+    {
+      "id": "9f7b5b3e-bb55-505f-9ef6-21d1885556a9",
+      "name": "Parse Etsy RSS Feed",
+      "type": "n8n-nodes-base.xml",
+      "onError": "continueRegularOutput",
+      "position": [
+        2480,
+        160
+      ],
+      "parameters": {
+        "mode": "xmlToJson",
+        "options": {},
+        "dataPropertyName": "data"
+      },
+      "typeVersion": 1
+    },
+    {
+      "id": "b936f06b-af91-57a5-bb58-8ccd9c8e3f7b",
+      "name": "Standardize Etsy RSS Products",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2700,
+        160
+      ],
+      "parameters": {
+        "jsCode": "const errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst decode = t => String(t || '')\n  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#0?39;|&apos;/g, \"'\")\n  .replace(/&#(\\d+);/g, (m, n) => String.fromCodePoint(Number(n))).replace(/&#x([0-9a-f]+);/gi, (m, n) => String.fromCodePoint(parseInt(n, 16)))\n  .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');\nconst htmlToText = h => decode(String(h || '').replace(/<br\\s*\\/?>/gi, '\\n').replace(/<\\/(p|div|li|h\\d)>/gi, '\\n').replace(/<[^>]+>/g, ' '))\n  .replace(/[ \\t]+/g, ' ').replace(/ *\\n */g, '\\n').replace(/\\n{3,}/g, '\\n\\n').trim();\nconst cut = (t, n) => { t = String(t || '').trim(); if (t.length <= n) return t; const c = t.slice(0, n - 1); const sp = c.lastIndexOf(' '); return (sp > n * 0.6 ? c.slice(0, sp) : c).replace(/[\\s,.;:\\u2013-]+$/, '') + '\\u2026'; };\nconst cleanUrl = u => { try { const x = new URL(String(u || '').trim()); if (!/^https?:$/.test(x.protocol)) return ''; x.search = ''; x.hash = ''; return x.toString(); } catch (e) { return ''; } };\nconst igFit = img => !(img.width > 0 && img.height > 0) || (img.width / img.height >= 0.8 && img.width / img.height <= 1.91);\nconst finish = (list, s, label) => {\n  const products = list.filter(p => p.url && p.images.length)\n    .map(p => ({ ...p, ig_images: p.images.filter(igFit) }))\n    .sort((x, y) => s.post_order === 'oldest_first' ? x.created_ms - y.created_ms : y.created_ms - x.created_ms);\n  if (!products.length) throw new Error(`${label}: no products with a photo and a link were found. Check your shop settings in ${'Configure Catalog Settings'}.`);\n  return products.map(p => ({ json: p }));\n};\n// Etsy shop RSS -> one product shape. The feed lists your 10 newest listings with one photo each.\nconst s = $('Configure Catalog Settings').first().json;\nconst http = $('Fetch Etsy Shop RSS').first().json;\nconst label = `Etsy RSS feed for \"${s.etsy_shop_name}\"`;\nif (http.error) throw new Error(`Couldn't read the ${label}: ${errText(http.error)}. etsy_shop_name is the part after etsy.com/shop/. If Etsy blocks your server, set source to etsy_api.`);\nconst x = $input.first().json;\nconst ch = x && x.rss && x.rss.channel;\nif (!ch) throw new Error(`The ${label} is not valid RSS${x && x.error ? ': ' + errText(x.error) : ''}. Etsy may have shown a bot check or changed the feed. Set source to etsy_api instead.`);\nconst shop = String(s.shop_name || '').trim() || String(ch.title || '').replace(/^Etsy Shop for\\s*/i, '').trim() || s.etsy_shop_name;\nconst items = ch.item ? (Array.isArray(ch.item) ? ch.item : [ch.item]) : [];\nconst list = items.map(it => {\n  const html = decode(String(it.description || ''));\n  const img = html.match(/<img[^>]+src=\"([^\"]+)\"[^>]*>/i);\n  const w = Number((html.match(/width=\"(\\d+)\"/i) || [])[1]) || 0, h = Number((html.match(/height=\"(\\d+)\"/i) || [])[1]) || 0;\n  const id = (String(it.link || it.guid || '').match(/listing\\/(\\d+)/) || [])[1];\n  const big = img ? img[1].replace(/\\/il_\\d+xN\\./, '/il_1588xN.') : '';\n  const price = htmlToText((html.match(/<p class=\"price\">([\\s\\S]*?)<\\/p>/i) || [])[1]);\n  const descHtml = (html.match(/<p class=\"description\">([\\s\\S]*)$/i) || [])[1] || '';\n  return {\n    product_key: `etsy:${id}`, source: 'etsy_rss', product_id: String(id || ''), shop_name: shop,\n    title: decode(String(it.title || '')).replace(new RegExp('\\\\s+by\\\\s+' + String(s.etsy_shop_name).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&') + '\\\\s*$', 'i'), '').trim(),\n    description_text: cut(htmlToText(descHtml), 1500), price_text: price, url: id ? cleanUrl(it.link) : '',\n    images: big ? [{ url: big, width: w ? 1588 : 0, height: w && h ? Math.round(1588 * h / w) : 0 }] : [],\n    tags: [], materials: [], product_type: '', created_ms: Date.parse(it.pubDate) || 0,\n  };\n});\nreturn finish(list, s, label);\n"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "bceba520-8952-5d34-900c-64d325544072",
+      "name": "Retrieve Etsy Shop Details",
+      "type": "n8n-nodes-base.httpRequest",
+      "onError": "continueRegularOutput",
+      "maxTries": 2,
+      "position": [
+        2256,
+        496
+      ],
+      "parameters": {
+        "url": "https://api.etsy.com/v3/application/shops",
+        "options": {},
+        "sendQuery": true,
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "shop_name",
+              "value": "={{ String($('Configure Catalog Settings').first().json.etsy_shop_name).trim() }}"
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "typeVersion": 4.2,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "95ed5bfa-45fe-5c7e-a560-4340852280e9",
+      "name": "Fetch Active Etsy Listings",
+      "type": "n8n-nodes-base.httpRequest",
+      "onError": "continueRegularOutput",
+      "maxTries": 2,
+      "position": [
+        2480,
+        496
+      ],
+      "parameters": {
+        "url": "=https://api.etsy.com/v3/application/shops/{{ (($json.results || []).find(r => String(r.shop_name).toLowerCase() === String($('Configure Catalog Settings').first().json.etsy_shop_name).trim().toLowerCase()) || {}).shop_id || 0 }}/listings/active",
+        "options": {},
+        "sendQuery": true,
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "25"
+            },
+            {
+              "name": "sort_on",
+              "value": "created"
+            },
+            {
+              "name": "sort_order",
+              "value": "={{ $('Configure Catalog Settings').first().json.post_order === 'oldest_first' ? 'asc' : 'desc' }}"
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "typeVersion": 4.2,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "a92e97ed-8b37-5f28-9631-a72c07266698",
+      "name": "Fetch Etsy Listing Images",
+      "type": "n8n-nodes-base.httpRequest",
+      "onError": "continueRegularOutput",
+      "maxTries": 2,
+      "position": [
+        2704,
+        496
+      ],
+      "parameters": {
+        "url": "https://api.etsy.com/v3/application/listings/batch",
+        "options": {},
+        "sendQuery": true,
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "listing_ids",
+              "value": "={{ ($json.results || []).map(l => l.listing_id).join(',') || '0' }}"
+            },
+            {
+              "name": "includes",
+              "value": "Images"
+            }
+          ]
+        }
+      },
+      "retryOnFail": true,
+      "typeVersion": 4.2,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "a8bba578-c267-5817-bb15-c8c317c8ddc7",
+      "name": "Standardize Etsy API Products",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2928,
+        496
+      ],
+      "parameters": {
+        "jsCode": "const errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst decode = t => String(t || '')\n  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#0?39;|&apos;/g, \"'\")\n  .replace(/&#(\\d+);/g, (m, n) => String.fromCodePoint(Number(n))).replace(/&#x([0-9a-f]+);/gi, (m, n) => String.fromCodePoint(parseInt(n, 16)))\n  .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');\nconst htmlToText = h => decode(String(h || '').replace(/<br\\s*\\/?>/gi, '\\n').replace(/<\\/(p|div|li|h\\d)>/gi, '\\n').replace(/<[^>]+>/g, ' '))\n  .replace(/[ \\t]+/g, ' ').replace(/ *\\n */g, '\\n').replace(/\\n{3,}/g, '\\n\\n').trim();\nconst cut = (t, n) => { t = String(t || '').trim(); if (t.length <= n) return t; const c = t.slice(0, n - 1); const sp = c.lastIndexOf(' '); return (sp > n * 0.6 ? c.slice(0, sp) : c).replace(/[\\s,.;:\\u2013-]+$/, '') + '\\u2026'; };\nconst cleanUrl = u => { try { const x = new URL(String(u || '').trim()); if (!/^https?:$/.test(x.protocol)) return ''; x.search = ''; x.hash = ''; return x.toString(); } catch (e) { return ''; } };\nconst igFit = img => !(img.width > 0 && img.height > 0) || (img.width / img.height >= 0.8 && img.width / img.height <= 1.91);\nconst finish = (list, s, label) => {\n  const products = list.filter(p => p.url && p.images.length)\n    .map(p => ({ ...p, ig_images: p.images.filter(igFit) }))\n    .sort((x, y) => s.post_order === 'oldest_first' ? x.created_ms - y.created_ms : y.created_ms - x.created_ms);\n  if (!products.length) throw new Error(`${label}: no products with a photo and a link were found. Check your shop settings in ${'Configure Catalog Settings'}.`);\n  return products.map(p => ({ json: p }));\n};\n// Etsy Open API v3 -> one product shape (all listing photos, tags and materials).\nconst s = $('Configure Catalog Settings').first().json;\nconst label = `Etsy API for shop \"${s.etsy_shop_name}\"`;\nconst shopRes = $('Retrieve Etsy Shop Details').first().json;\nif (shopRes.error) throw new Error(`Couldn't search Etsy shops: ${errText(shopRes.error)}. Check the Etsy Header Auth credential: name x-api-key, value keystring:shared_secret.`);\nconst shop = (shopRes.results || []).find(r => String(r.shop_name).toLowerCase() === String(s.etsy_shop_name).trim().toLowerCase());\nif (!shop) throw new Error(`No Etsy shop is called \"${s.etsy_shop_name}\". etsy_shop_name is the part after etsy.com/shop/.`);\nconst active = $('Fetch Active Etsy Listings').first().json;\nif (active.error) throw new Error(`Couldn't list active listings for ${shop.shop_name}: ${errText(active.error)}`);\nif (!(active.results || []).length) throw new Error(`${shop.shop_name} has no active listings.`);\nconst batch = $input.first().json;\nif (batch.error) throw new Error(`Couldn't read the listing photos: ${errText(batch.error)}`);\nconst list = (batch.results || []).filter(l => !l.state || l.state === 'active').map(l => {\n  const p = l.price || {};\n  const amount = Number(p.amount) / (Number(p.divisor) || 100);\n  const price = Number.isFinite(amount) && p.currency_code ? `${l.has_variations ? 'from ' : ''}${amount.toFixed(2)} ${p.currency_code}` : '';\n  const images = (l.images || []).slice().sort((x, y) => (x.rank || 0) - (y.rank || 0))\n    .map(i => ({ url: i.url_fullxfull || i.url_570xN, width: Number(i.full_width) || 0, height: Number(i.full_height) || 0 })).filter(i => i.url);\n  return {\n    product_key: `etsy:${l.listing_id}`, source: 'etsy_api', product_id: String(l.listing_id), shop_name: String(s.shop_name || '').trim() || shop.shop_name,\n    title: decode(l.title), description_text: cut(htmlToText(String(l.description || '').replace(/\\n/g, '<br>')), 1500),\n    price_text: price, url: cleanUrl(l.url), images, tags: (l.tags || []).slice(0, 13), materials: (l.materials || []).slice(0, 10),\n    product_type: '', created_ms: (Number(l.original_creation_timestamp || l.created_timestamp) || 0) * 1000,\n  };\n});\nreturn finish(list, s, label);\n"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "eb2fa305-7386-5df9-ae57-23fa065cdc31",
+      "name": "Fetch Shopify Products",
+      "type": "n8n-nodes-base.shopify",
+      "onError": "continueRegularOutput",
+      "position": [
+        2256,
+        864
+      ],
+      "parameters": {
+        "resource": "product",
+        "operation": "getAll",
+        "returnAll": true,
+        "authentication": "accessToken",
+        "additionalFields": {
+          "fields": "id,title,body_html,handle,status,published_at,created_at,product_type,tags,variants,images",
+          "published_status": "published"
+        }
+      },
+      "typeVersion": 1,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "aa130dac-3598-5771-93db-39548def4500",
+      "name": "Standardize Shopify Products",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        2480,
+        864
+      ],
+      "parameters": {
+        "jsCode": "const errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst decode = t => String(t || '')\n  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#0?39;|&apos;/g, \"'\")\n  .replace(/&#(\\d+);/g, (m, n) => String.fromCodePoint(Number(n))).replace(/&#x([0-9a-f]+);/gi, (m, n) => String.fromCodePoint(parseInt(n, 16)))\n  .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');\nconst htmlToText = h => decode(String(h || '').replace(/<br\\s*\\/?>/gi, '\\n').replace(/<\\/(p|div|li|h\\d)>/gi, '\\n').replace(/<[^>]+>/g, ' '))\n  .replace(/[ \\t]+/g, ' ').replace(/ *\\n */g, '\\n').replace(/\\n{3,}/g, '\\n\\n').trim();\nconst cut = (t, n) => { t = String(t || '').trim(); if (t.length <= n) return t; const c = t.slice(0, n - 1); const sp = c.lastIndexOf(' '); return (sp > n * 0.6 ? c.slice(0, sp) : c).replace(/[\\s,.;:\\u2013-]+$/, '') + '\\u2026'; };\nconst cleanUrl = u => { try { const x = new URL(String(u || '').trim()); if (!/^https?:$/.test(x.protocol)) return ''; x.search = ''; x.hash = ''; return x.toString(); } catch (e) { return ''; } };\nconst igFit = img => !(img.width > 0 && img.height > 0) || (img.width / img.height >= 0.8 && img.width / img.height <= 1.91);\nconst finish = (list, s, label) => {\n  const products = list.filter(p => p.url && p.images.length)\n    .map(p => ({ ...p, ig_images: p.images.filter(igFit) }))\n    .sort((x, y) => s.post_order === 'oldest_first' ? x.created_ms - y.created_ms : y.created_ms - x.created_ms);\n  if (!products.length) throw new Error(`${label}: no products with a photo and a link were found. Check your shop settings in ${'Configure Catalog Settings'}.`);\n  return products.map(p => ({ json: p }));\n};\n// Shopify -> one product shape. Only active, published products with a photo are used.\nconst s = $('Configure Catalog Settings').first().json;\nconst label = 'Shopify store';\nconst first = $input.first() && $input.first().json;\nif (first && first.error) throw new Error(`Couldn't read your Shopify products: ${errText(first.error)}. Check the Shopify Access Token credential (read_products scope).`);\nlet base = String(s.shopify_store_url || '').trim().replace(/\\/+$/, '');\nif (!base) throw new Error(`Set shopify_store_url in Configure Catalog Settings, e.g. https://yourstore.com`);\nif (!/^https?:\\/\\//i.test(base)) base = 'https://' + base;\nconst shop = String(s.shop_name || '').trim() || base.replace(/^https?:\\/\\//i, '').replace(/^www\\./, '');\nconst cur = String(s.shopify_currency || '').trim();\nconst list = $input.all().map(i => i.json).filter(p => p && p.id && p.handle && (!p.status || p.status === 'active')).map(p => {\n  const prices = (p.variants || []).map(v => Number(v.price)).filter(Number.isFinite);\n  const min = prices.length ? Math.min(...prices) : NaN, max = prices.length ? Math.max(...prices) : NaN;\n  const price = Number.isFinite(min) && cur ? `${max > min ? 'from ' : ''}${min.toFixed(2)} ${cur}` : '';\n  const images = (p.images || []).slice().sort((x, y) => (x.position || 0) - (y.position || 0)).filter(i => i.src).map(i => {\n    const w = Number(i.width) || 0, h = Number(i.height) || 0;\n    const url = i.src + (i.src.includes('?') ? '&' : '?') + 'width=1600';\n    return { url, width: w ? Math.min(w, 1600) : 0, height: w && h ? Math.round(Math.min(w, 1600) * h / w) : 0 };\n  });\n  return {\n    product_key: `shopify:${p.id}`, source: 'shopify', product_id: String(p.id), shop_name: shop,\n    title: decode(p.title), description_text: cut(htmlToText(p.body_html), 1500), price_text: price,\n    url: `${base}/products/${p.handle}`, images,\n    tags: String(p.tags || '').split(',').map(t => t.trim()).filter(Boolean).slice(0, 13), materials: [],\n    product_type: String(p.product_type || ''), created_ms: Date.parse(p.published_at || p.created_at) || 0,\n  };\n});\nreturn finish(list, s, label);\n"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "b34541a2-81d1-5262-ac97-6e403acc843e",
+      "name": "Filter Posted Products",
+      "type": "n8n-nodes-base.dataTable",
+      "position": [
+        3240,
+        400
+      ],
+      "parameters": {
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "product_key",
+              "keyValue": "={{ $json.product_key }}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "resource": "row",
+        "matchType": "anyCondition",
+        "operation": "rowNotExists",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "socialrobot_posted_products"
+        }
+      },
+      "typeVersion": 1.1
+    },
+    {
+      "id": "aa742b83-9a85-5d2b-991d-3d13888d4c10",
+      "name": "Select Products for Posting",
+      "type": "n8n-nodes-base.limit",
+      "position": [
+        3460,
+        400
+      ],
+      "parameters": {
+        "maxItems": "={{ Math.max(1, Math.round(Number($('Configure Catalog Settings').first().json.products_per_run) || 1)) }}"
+      },
+      "typeVersion": 1
+    },
+    {
+      "id": "257a5176-29de-55d4-b816-109285e84fbe",
+      "name": "Check OpenAI Activation",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        3712,
+        400
+      ],
+      "parameters": {
+        "options": {},
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "8100d454-e967-53d6-8a0c-1a396280752f",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $('Configure Catalog Settings').first().json.use_openai }}",
+              "rightValue": ""
+            }
+          ]
+        }
+      },
+      "typeVersion": 2.2
+    },
+    {
+      "id": "dedf89eb-b6f9-51f6-92c4-5ce72fce1205",
+      "name": "Generate Pin and Caption",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "onError": "continueRegularOutput",
+      "position": [
+        4000,
+        304
+      ],
+      "parameters": {
+        "text": "=You write social media copy for one product from a small online shop. Use ONLY the facts below.\n\nProduct title: {{ $json.title }}\nShop: {{ $json.shop_name }}\nProduct type: {{ $json.product_type || 'not stated' }}\nTags: {{ ($json.tags || []).join(', ') || 'none' }}\nMaterials: {{ ($json.materials || []).join(', ') || 'not stated' }}\nListing description:\n\"\"\"\n{{ $json.description_text || 'none' }}\n\"\"\"\n\nWrite in {{ $('Configure Catalog Settings').first().json.caption_language }}. Tone: {{ $('Configure Catalog Settings').first().json.caption_tone }}\n\nRules:\n- Only use facts stated above. If a detail is not stated, leave it out. Never guess sizes, colors, materials or uses.\n- Never mention prices, discounts, sales, coupons, stock levels, shipping times or delivery promises, even if the description does. Prices are added separately.\n- Never write reviews, ratings, stars, testimonials, customer quotes, bestseller status, awards or numbers that are not in the listing.\n- No health, safety, eco or certification claims unless the description states them.\n- short_name: the plain product name, at most 60 characters, no keyword lists.\n- pinterest_title: at most 100 characters, clear and searchable, starts with the main product keyword.\n- pinterest_description: 2 or 3 sentences, at most 450 characters, with natural keywords a buyer would search for on Pinterest. No hashtags, no links.\n- instagram_caption: 2 to 4 short sentences, then 3 to 5 relevant hashtags. No links.\n- facebook_caption: 1 to 3 sentences, no hashtags, no links (the product link is added automatically).\n- threads_caption: 1 or 2 sentences, at most 300 characters, no links.",
+        "promptType": "define",
+        "hasOutputParser": true
+      },
+      "typeVersion": 1.7
+    },
+    {
+      "id": "91652176-184c-5b70-9c0a-f6538d0b3100",
+      "name": "Parse Pin and Caption Text",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        4192,
+        560
+      ],
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"short_name\": \"Speckled stoneware mug\",\n  \"pinterest_title\": \"Speckled stoneware mug, handmade 350 ml coffee mug with brown rim\",\n  \"pinterest_description\": \"A handmade speckled stoneware mug with a warm brown rim, glazed inside and out. Holds 350 ml, a good size for coffee or tea. Made by hand in a small studio.\",\n  \"instagram_caption\": \"Fresh out of the kiln: our speckled stoneware mug with a brown rim. 350 ml, glazed inside and out. #handmademug #stoneware #ceramics\",\n  \"facebook_caption\": \"Our speckled stoneware mug: 350 ml, glazed inside and out, with a warm brown rim.\",\n  \"threads_caption\": \"New in the shop: a speckled stoneware mug with a brown rim, 350 ml.\"\n}"
+      },
+      "typeVersion": 1.3
+    },
+    {
+      "id": "b6678da9-1f84-5f0b-806b-a62fc4fc1e03",
+      "name": "OpenAI Luna Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        4000,
+        560
+      ],
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gpt-6-luna"
+        },
+        "options": {}
+      },
+      "typeVersion": 1.2
+    },
+    {
+      "id": "c24bf308-6bda-5b0c-bcb3-4dbf4dfe2e0f",
+      "name": "Assemble Social Media Post",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        4432,
+        400
+      ],
+      "parameters": {
+        "jsCode": "const errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst decode = t => String(t || '')\n  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#0?39;|&apos;/g, \"'\")\n  .replace(/&#(\\d+);/g, (m, n) => String.fromCodePoint(Number(n))).replace(/&#x([0-9a-f]+);/gi, (m, n) => String.fromCodePoint(parseInt(n, 16)))\n  .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');\nconst htmlToText = h => decode(String(h || '').replace(/<br\\s*\\/?>/gi, '\\n').replace(/<\\/(p|div|li|h\\d)>/gi, '\\n').replace(/<[^>]+>/g, ' '))\n  .replace(/[ \\t]+/g, ' ').replace(/ *\\n */g, '\\n').replace(/\\n{3,}/g, '\\n\\n').trim();\nconst cut = (t, n) => { t = String(t || '').trim(); if (t.length <= n) return t; const c = t.slice(0, n - 1); const sp = c.lastIndexOf(' '); return (sp > n * 0.6 ? c.slice(0, sp) : c).replace(/[\\s,.;:\\u2013-]+$/, '') + '\\u2026'; };\nconst cleanUrl = u => { try { const x = new URL(String(u || '').trim()); if (!/^https?:$/.test(x.protocol)) return ''; x.search = ''; x.hash = ''; return x.toString(); } catch (e) { return ''; } };\nconst igFit = img => !(img.width > 0 && img.height > 0) || (img.width / img.height >= 0.8 && img.width / img.height <= 1.91);\nconst finish = (list, s, label) => {\n  const products = list.filter(p => p.url && p.images.length)\n    .map(p => ({ ...p, ig_images: p.images.filter(igFit) }))\n    .sort((x, y) => s.post_order === 'oldest_first' ? x.created_ms - y.created_ms : y.created_ms - x.created_ms);\n  if (!products.length) throw new Error(`${label}: no products with a photo and a link were found. Check your shop settings in ${'Configure Catalog Settings'}.`);\n  return products.map(p => ({ json: p }));\n};\n// Builds every caption from the AI copy (or template copy), adds the fixed parts and picks the photos.\n// Prices are never written by the AI: if include_price is on, the exact price from your shop is added here.\nconst s = $('Configure Catalog Settings').first().json;\nconst board = $('Select Pinterest Board').first().json;\nconst products = $('Select Products for Posting').all();\nconst input = $input.all();\nconst fromAi = input.length > 0 && !('product_key' in input[0].json);\nconst tags = String(s.extra_hashtags || '').split(/[\\s,]+/).filter(Boolean).map(t => '#' + t.replace(/^#+/, '')).join(' ');\nconst footer = String(s.business_footer || '').trim();\nconst one = t => String(t || '').replace(/\\s+/g, ' ').trim();\nconst keepLines = (t, n) => { t = String(t || '').replace(/[ \\t]+/g, ' ').replace(/\\n{3,}/g, '\\n\\n').trim(); return t.length <= n ? t : cut(t, n); };\nconst GUARD = [['discount', /\\bdiscount/i], ['sale', /\\bsale\\b/i], ['% off', /\\d+\\s?%\\s?off/i], ['coupon', /coupon|promo code/i],\n  ['review', /\\breview/i], ['rating', /\\brating|\\brated\\b/i], ['stars', /\\b\\d(\\.\\d)?\\s?stars?\\b|\\u2605/i], ['bestseller', /best[\\s-]?sell/i],\n  ['stock', /only \\d+ left|limited stock|low stock|almost gone|selling fast|last (one|few)/i], ['free shipping', /free (shipping|delivery)/i],\n  ['testimonial', /testimonial|customers (love|say)|our customers/i], ['price', /[$\\u20ac\\u00a3\\u00a5]\\s?\\d|\\d+([.,]\\d+)?\\s?(usd|eur|gbp|cad|aud)\\b/i]];\nconst out = products.map((item, i) => {\n  const p = item.json;\n  const src = [p.title, p.description_text, (p.tags || []).join(' '), (p.materials || []).join(' ')].join(' ').toLowerCase();\n  const shortTitle = cut(one(String(p.title).split(/\\s[\\u2022|\\u00b7]\\s|\\s[-\\u2013]\\s|,\\s/)[0]), 60) || cut(one(p.title), 60);\n  // Template copy uses the first real sentences of the listing (skips spaced-out headings like \"D I A M O N D\" and short bullet lines).\n  const prose = String(p.description_text || '').split(/\\n+/).map(l => l.replace(/^[\\s\\u2022*\\-\\u2013\\u00b7\\u2219]+/, '').trim())\n    .filter(l => l.length >= 25 && !/^(\\S[ \\u2219]+){4,}/.test(l)).join(' ');\n  const firstText = n => cut(one(prose || p.description_text), n);\n  const template = {\n    short_name: shortTitle,\n    pinterest_title: (() => { const parts = one(p.title).split(/\\s*[\\u2022|\\u00b7]\\s*/).filter(Boolean); let t = '';\n      for (const part of parts) { const next = t ? `${t}, ${part}` : part; if (next.length > 100) break; t = next; }\n      return t || cut(one(p.title), 100); })(),\n    pinterest_description: cut(`${shortTitle} from ${p.shop_name}. ${firstText(380)}`, 450),\n    instagram_caption: `${shortTitle} from ${p.shop_name}.\\n\\n${firstText(400)}`,\n    facebook_caption: `${shortTitle} from ${p.shop_name}.`, threads_caption: `${shortTitle} from ${p.shop_name}.`,\n  };\n  let copy = template, copySource = fromAi ? 'template (OpenAI failed)' : 'template (use_openai is off)';\n  if (fromAi) {\n    const r = input[i] && input[i].json;\n    const o = r && (r.output || r);\n    if (o && o.pinterest_title && o.instagram_caption && !r.error) {\n      const ai = { ...template, ...Object.fromEntries(Object.entries(o).filter(([, v]) => typeof v === 'string' && v.trim())) };\n      const text = Object.values(ai).join(' ');\n      const hits = GUARD.filter(([, re]) => re.test(text) && !re.test(src)).map(([k]) => k);\n      if (hits.length) copySource = `template (AI copy mentioned ${hits.join(', ')}, which is not in the listing)`;\n      else { copy = ai; copySource = 'openai'; }\n    } else if (r && r.error) copySource = `template (OpenAI error: ${errText(r.error)})`;\n  }\n  const priceLine = s.include_price && p.price_text ? `${s.price_label || 'Price when posted:'} ${p.price_text}` : '';\n  const link = (() => { const extra = String(s.link_tracking_params || '').replace(/^[?&]/, '').trim(); return extra ? p.url + (p.url.includes('?') ? '&' : '?') + extra : p.url; })();\n  const cta = String(s.instagram_call_to_action || '').replace(/\\{shop\\}/g, p.shop_name).trim();\n  const pinCount = Math.min(5, Math.max(1, Math.round(Number(s.pin_image_count) || 1)));\n  const carCount = Math.min(10, Math.max(2, Math.round(Number(s.instagram_carousel_images) || 5)));\n  const igImages = (p.ig_images || []).map(img => img.url);\n  return { json: {\n    product_key: p.product_key, source: p.source, title: p.title, product_url: p.url, price_text: p.price_text, copy_source: copySource,\n    pinterest_account_id: board.pinterest_account_id, pinterest_board_id: board.pinterest_board_id, pinterest_board_name: board.pinterest_board_name,\n    pinterest_ready: board.pinterest_ready, pinterest_note: board.pinterest_note,\n    pin_title: cut(one(copy.pinterest_title), 100),\n    pin_description: cut([one(copy.pinterest_description), priceLine, footer].filter(Boolean).join(' '), 500),\n    alt_text: cut(`Product photo: ${one(copy.short_name) || shortTitle}`, 500),\n    pin_link: link.length <= 2048 ? link : p.url,\n    pin_image_urls: p.images.slice(0, pinCount).map(img => img.url),\n    instagram_caption: keepLines([String(copy.instagram_caption || '').trim(), priceLine, cta, tags, footer].filter(Boolean).join('\\n\\n'), 2200),\n    instagram_image_url: igImages[0] || '',\n    instagram_carousel_urls: igImages.slice(0, carCount),\n    instagram_note: igImages.length ? '' : 'No product photo fits Instagram (4:5 to 1.91:1), so Instagram was skipped for this product.',\n    facebook_caption: keepLines([one(copy.facebook_caption), priceLine, link, footer].filter(Boolean).join('\\n\\n'), 5000),\n    threads_caption: cut([one(copy.threads_caption), link].filter(Boolean).join(' '), 500),\n  }, pairedItem: { item: i } };\n});\nreturn out;\n"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "44c4bd7e-a5d4-5ffc-8944-66910b2f00f2",
+      "name": "Post Pinterest Pin via SocialRobot API",
+      "type": "n8n-nodes-base.httpRequest",
+      "onError": "continueRegularOutput",
+      "position": [
+        4720,
+        400
+      ],
+      "parameters": {
+        "url": "https://socialrobot.io/api/v1/pinterest/create",
+        "method": "POST",
+        "options": {},
+        "jsonBody": "={{ JSON.stringify({ scheduledFor: { publish: 'NOW' }, post: { accountId: $('Assemble Social Media Post').item.json.pinterest_account_id, boardId: $('Assemble Social Media Post').item.json.pinterest_board_id, title: $('Assemble Social Media Post').item.json.pin_title, description: $('Assemble Social Media Post').item.json.pin_description, altText: $('Assemble Social Media Post').item.json.alt_text, link: $('Assemble Social Media Post').item.json.pin_link, mediaType: 'IMAGE', medias: { mediaType: 'IMAGE', medias: $('Assemble Social Media Post').item.json.pin_image_urls.map(u => ({ mediaUrl: u })) } } }) }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "typeVersion": 4.2
+    },
+    {
+      "id": "99c151bb-45d3-5973-bf35-5d0312a873da",
+      "name": "Post Instagram Photo",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "onError": "continueRegularOutput",
+      "position": [
+        4940,
+        400
+      ],
+      "parameters": {
+        "caption": "={{ $('Assemble Social Media Post').item.json.instagram_caption }}",
+        "mediaUrl": "={{ $('Assemble Social Media Post').item.json.instagram_image_url }}",
+        "resource": "instagram",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "mediaType": "IMAGE",
+        "operation": "create",
+        "mediaSource": "url",
+        "publishMode": "NOW",
+        "isAiGenerated": false
+      },
+      "typeVersion": 1
+    },
+    {
+      "id": "cef1b67a-e422-59b6-93d3-a082e38f8b03",
+      "name": "Post Instagram Carousel via SocialRobot API",
+      "type": "n8n-nodes-base.httpRequest",
+      "onError": "continueRegularOutput",
+      "disabled": true,
+      "position": [
+        5160,
+        400
+      ],
+      "parameters": {
+        "url": "https://socialrobot.io/api/v1/instagram/create",
+        "method": "POST",
+        "options": {},
+        "jsonBody": "={{ (() => { const b = $('Assemble Social Media Post').item.json; const urls = b.instagram_carousel_urls || []; return JSON.stringify({ scheduledFor: { publish: 'NOW' }, post: urls.length >= 2 ? { accountId: $('Configure Catalog Settings').first().json.instagram_account_id_for_carousel, caption: b.instagram_caption, mediaType: 'CAROUSEL', isAiGenerated: false, isStory: false, isReel: false, medias: urls.map(u => ({ mediaType: 'IMAGE', mediaUrl: u })) } : { accountId: $('Configure Catalog Settings').first().json.instagram_account_id_for_carousel, caption: b.instagram_caption, mediaType: 'IMAGE', isAiGenerated: false, mediaUrl: urls[0] || '' } }); })() }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "typeVersion": 4.2
+    },
+    {
+      "id": "1748d59f-cfb2-5441-bc3b-1f67e73ace1a",
+      "name": "Post Facebook Photo",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "onError": "continueRegularOutput",
+      "disabled": true,
+      "position": [
+        5408,
+        400
+      ],
+      "parameters": {
+        "medias": [
+          {
+            "altText": "={{ $('Assemble Social Media Post').item.json.alt_text }}",
+            "mediaUrl": "={{ $('Assemble Social Media Post').item.json.pin_image_urls[0] }}",
+            "mediaType": "IMAGE",
+            "mediaSource": "url"
+          }
+        ],
+        "caption": "={{ $('Assemble Social Media Post').item.json.facebook_caption }}",
+        "resource": "facebook",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "operation": "create",
+        "publishMode": "NOW"
+      },
+      "typeVersion": 1
+    },
+    {
+      "id": "c818038d-6eba-5f22-ad4f-fcd588380cc4",
+      "name": "Post Threads Photo",
+      "type": "@socialrobot-io/n8n-nodes-socialrobot.socialRobot",
+      "onError": "continueRegularOutput",
+      "disabled": true,
+      "position": [
+        5632,
+        400
+      ],
+      "parameters": {
+        "medias": [
+          {
+            "altText": "={{ $('Assemble Social Media Post').item.json.alt_text }}",
+            "mediaUrl": "={{ $('Assemble Social Media Post').item.json.pin_image_urls[0] }}",
+            "mediaType": "IMAGE",
+            "mediaSource": "url"
+          }
+        ],
+        "caption": "={{ $('Assemble Social Media Post').item.json.threads_caption }}",
+        "resource": "threads",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "operation": "create",
+        "publishMode": "NOW"
+      },
+      "typeVersion": 1
+    },
+    {
+      "id": "8ba53118-17d0-5301-88b8-57f509ef93b1",
+      "name": "Summarize Product Posts",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        5900,
+        400
+      ],
+      "parameters": {
+        "jsCode": "const errText = e => !e ? '' : (typeof e === 'string' ? e : (e.message || e.description || e.detail || JSON.stringify(e))).toString().slice(0, 300);\nconst decode = t => String(t || '')\n  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '\"').replace(/&#0?39;|&apos;/g, \"'\")\n  .replace(/&#(\\d+);/g, (m, n) => String.fromCodePoint(Number(n))).replace(/&#x([0-9a-f]+);/gi, (m, n) => String.fromCodePoint(parseInt(n, 16)))\n  .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');\nconst htmlToText = h => decode(String(h || '').replace(/<br\\s*\\/?>/gi, '\\n').replace(/<\\/(p|div|li|h\\d)>/gi, '\\n').replace(/<[^>]+>/g, ' '))\n  .replace(/[ \\t]+/g, ' ').replace(/ *\\n */g, '\\n').replace(/\\n{3,}/g, '\\n\\n').trim();\nconst cut = (t, n) => { t = String(t || '').trim(); if (t.length <= n) return t; const c = t.slice(0, n - 1); const sp = c.lastIndexOf(' '); return (sp > n * 0.6 ? c.slice(0, sp) : c).replace(/[\\s,.;:\\u2013-]+$/, '') + '\\u2026'; };\nconst cleanUrl = u => { try { const x = new URL(String(u || '').trim()); if (!/^https?:$/.test(x.protocol)) return ''; x.search = ''; x.hash = ''; return x.toString(); } catch (e) { return ''; } };\nconst igFit = img => !(img.width > 0 && img.height > 0) || (img.width / img.height >= 0.8 && img.width / img.height <= 1.91);\nconst finish = (list, s, label) => {\n  const products = list.filter(p => p.url && p.images.length)\n    .map(p => ({ ...p, ig_images: p.images.filter(igFit) }))\n    .sort((x, y) => s.post_order === 'oldest_first' ? x.created_ms - y.created_ms : y.created_ms - x.created_ms);\n  if (!products.length) throw new Error(`${label}: no products with a photo and a link were found. Check your shop settings in ${'Configure Catalog Settings'}.`);\n  return products.map(p => ({ json: p }));\n};\n// One summary per product. Disabled nodes are skipped. Pinterest and Instagram errors are shown in plain words.\nconst built = $('Assemble Social Media Post').all();\nconst runOf = name => { try { return $(name).all(); } catch (e) { return null; } };\nconst nets = [['pinterest', 'Post Pinterest Pin via SocialRobot API'], ['instagram', 'Post Instagram Photo'], ['instagram_carousel', 'Post Instagram Carousel via SocialRobot API'], ['facebook', 'Post Facebook Photo'], ['threads', 'Post Threads Photo']];\n// A disabled node passes its input through unchanged, so an item equal to the previous node's item means \"did not run\".\nconst chain = ['Assemble Social Media Post', ...nets.map(([, name]) => name)];\nconst results = nets.map(([key, name], k) => [key, name, runOf(name), runOf(chain[k])]);\nreturn built.map((b, i) => {\n  const p = b.json;\n  const posted = {}, errors = {};\n  for (const [key, name, items, prev] of results) {\n    if (!items) continue;\n    const r = items[i] && items[i].json;\n    const before = prev && prev[i] && prev[i].json;\n    if (!r || (before && JSON.stringify(r) === JSON.stringify(before))) continue;\n    if (r.id && !r.error) posted[key] = String(r.id);\n    else if (r.error || r.message) {\n      let msg = errText(r.error || r.message);\n      if (key.startsWith('instagram') && p.instagram_note) msg = p.instagram_note;\n      errors[key] = msg;\n    }\n  }\n  return { json: {\n    product_key: p.product_key, source: p.source, title: p.title, product_url: p.product_url,\n    pinterest_post_id: posted.pinterest || '', instagram_post_id: posted.instagram || posted.instagram_carousel || '',\n    facebook_post_id: posted.facebook || '', threads_post_id: posted.threads || '',\n    posted_networks: Object.keys(posted).join(', '), errors, copy_source: p.copy_source,\n    pinterest_board: p.pinterest_board_name, posted_at: new Date().toISOString(), any_posted: Object.keys(posted).length > 0,\n    error_message: Object.keys(posted).length ? '' : `Nothing was posted for \"${p.title}\". ` + (Object.entries(errors).map(([k, v]) => `${k}: ${v}`).join(' | ') || 'Every posting node is disabled.'),\n  }, pairedItem: { item: i } };\n});\n"
+      },
+      "typeVersion": 2
+    },
+    {
+      "id": "999cc5b0-5bde-5319-a2df-48c9015b77a3",
+      "name": "If Any Post Published",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        6120,
+        400
+      ],
+      "parameters": {
+        "options": {},
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "0c21ffa7-f9f1-5f61-bc49-923126f163de",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.any_posted }}",
+              "rightValue": ""
+            }
+          ]
+        }
+      },
+      "typeVersion": 2.2
+    },
+    {
+      "id": "2fc41656-dd87-5c9a-a43a-3511988b2c36",
+      "name": "Log Posted Product",
+      "type": "n8n-nodes-base.dataTable",
+      "position": [
+        6400,
+        300
+      ],
+      "parameters": {
+        "columns": {
+          "value": {
+            "title": "={{ $json.title }}",
+            "source": "={{ $json.source }}",
+            "posted_at": "={{ $json.posted_at }}",
+            "product_key": "={{ $json.product_key }}",
+            "product_url": "={{ $json.product_url }}",
+            "instagram_post_id": "={{ $json.instagram_post_id }}",
+            "pinterest_post_id": "={{ $json.pinterest_post_id }}"
+          },
+          "schema": [
+            {
+              "id": "product_key",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "product_key",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "source",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "title",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "product_url",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "product_url",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pinterest_post_id",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "pinterest_post_id",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "instagram_post_id",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "instagram_post_id",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "posted_at",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "posted_at",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": []
+        },
+        "options": {},
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "socialrobot_posted_products"
+        }
+      },
+      "typeVersion": 1.1
+    },
+    {
+      "id": "235fd832-2e89-579d-8c4a-ec76bf47df1c",
+      "name": "Stop on Posting Error",
+      "type": "n8n-nodes-base.stopAndError",
+      "position": [
+        6400,
+        540
+      ],
+      "parameters": {
+        "errorMessage": "={{ $json.error_message }}"
+      },
+      "typeVersion": 1
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "connections": {
+    "Manual Start Trigger": {
+      "main": [
+        [
+          {
+            "node": "Configure Catalog Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assemble Social Media Post": {
+      "main": [
+        [
+          {
+            "node": "Post Pinterest Pin via SocialRobot API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check OpenAI Activation": {
+      "main": [
+        [
+          {
+            "node": "Generate Pin and Caption",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Assemble Social Media Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Luna Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Pin and Caption",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Etsy RSS Feed": {
+      "main": [
+        [
+          {
+            "node": "Standardize Etsy RSS Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Threads Photo": {
+      "main": [
+        [
+          {
+            "node": "Summarize Product Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Facebook Photo": {
+      "main": [
+        [
+          {
+            "node": "Post Threads Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Pinterest Board List": {
+      "main": [
+        [
+          {
+            "node": "Select Pinterest Board",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Shopify Products": {
+      "main": [
+        [
+          {
+            "node": "Standardize Shopify Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Instagram Photo": {
+      "main": [
+        [
+          {
+            "node": "Post Instagram Carousel via SocialRobot API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Any Post Published": {
+      "main": [
+        [
+          {
+            "node": "Log Posted Product",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop on Posting Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Pinterest Board": {
+      "main": [
+        [
+          {
+            "node": "Switch Product Source Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Etsy Shop Details": {
+      "main": [
+        [
+          {
+            "node": "Fetch Active Etsy Listings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Etsy Shop RSS": {
+      "main": [
+        [
+          {
+            "node": "Parse Etsy RSS Feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Configure Catalog Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Etsy Listing Images": {
+      "main": [
+        [
+          {
+            "node": "Standardize Etsy API Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Product Source Route": {
+      "main": [
+        [
+          {
+            "node": "Fetch Etsy Shop RSS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retrieve Etsy Shop Details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Shopify Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Product Posts": {
+      "main": [
+        [
+          {
+            "node": "If Any Post Published",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Pinterest Account": {
+      "main": [
+        [
+          {
+            "node": "Fetch Pinterest Board List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Active Etsy Listings": {
+      "main": [
+        [
+          {
+            "node": "Fetch Etsy Listing Images",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch SocialRobot Accounts": {
+      "main": [
+        [
+          {
+            "node": "Select Pinterest Account",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configure Catalog Settings": {
+      "main": [
+        [
+          {
+            "node": "Fetch SocialRobot Accounts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize Shopify Products": {
+      "main": [
+        [
+          {
+            "node": "Filter Posted Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Pin and Caption Text": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Generate Pin and Caption",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Products for Posting": {
+      "main": [
+        [
+          {
+            "node": "Check OpenAI Activation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Pin and Caption": {
+      "main": [
+        [
+          {
+            "node": "Assemble Social Media Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize Etsy API Products": {
+      "main": [
+        [
+          {
+            "node": "Filter Posted Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Standardize Etsy RSS Products": {
+      "main": [
+        [
+          {
+            "node": "Filter Posted Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Posted Products": {
+      "main": [
+        [
+          {
+            "node": "Select Products for Posting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Pinterest Pin via SocialRobot API": {
+      "main": [
+        [
+          {
+            "node": "Post Instagram Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Instagram Carousel via SocialRobot API": {
+      "main": [
+        [
+          {
+            "node": "Post Facebook Photo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -277,6 +277,84 @@ Every setting is in **Set Video Configuration**:
 This workflow uses the SocialRobot community node (`@socialrobot-io/n8n-nodes-socialrobot`). Community nodes are not maintained by n8n, and you install them at your own risk. The node is used for the TikTok post and the optional Instagram, Facebook and Threads posts. The optional Pinterest pin calls the SocialRobot API directly.
 """
 
+ETSY_SHOPIFY_PRODUCT_PINS_MD = """## Who it's for
+
+Etsy sellers, makers and Shopify store owners who know Pinterest and Instagram bring buyers but don't have time to post every product by hand. Once it's set up, one product from your shop goes out each day: a Pinterest pin that links to the product page and an Instagram post with your real product photo. Each product is posted once, and the copy is written from your own listing.
+
+## How it works
+
+1. A **Schedule Trigger** runs once a day at 10:00. A **Manual Trigger** is there for testing. All settings live in one node, **Configure Catalog Settings**.
+2. The SocialRobot node lists your connected accounts and picks your Pinterest account. A call to the SocialRobot API finds the board you named in `pinterest_board_name`. If it can't find the board, the run stops and lists your boards by name.
+3. Products are read from one of three sources and turned into one product shape: title, description, price, link and photos.
+   - **Etsy shop RSS** (default, no API key): `etsy.com/shop/<name>/rss`, sent with an `Accept-Language` header, because Etsy translates the feed based on the server's location. The feed lists your 10 newest listings, with one large photo each.
+   - **Etsy Open API v3**: your active listings with all their photos, tags and materials. It needs an Etsy app key but no OAuth.
+   - **Shopify**: published, active products through n8n's Shopify node (Shopify Access Token credential), with links built from your store URL.
+4. An **n8n Data Table** (`socialrobot_posted_products`) remembers what has been posted. Products already in the table are skipped, and the **Limit** node keeps 1 product per run. When nothing new is left, the run ends quietly.
+5. OpenAI (`gpt-6-luna`, text only) writes a Pinterest title (up to 100 characters), a keyword-rich pin description, short alt text and captions for Instagram, Facebook and Threads. The model only sees your listing text and is told to use only those facts. It may not write prices, discounts, stock or shipping promises, reviews, ratings or testimonials.
+   - A check after the model replaces the AI copy with plain template copy if it mentions any of those things and your listing doesn't.
+   - Template copy is also used if OpenAI fails or you turn it off.
+6. The pin is created through the SocialRobot API, with a title, description, alt text, your product photo and a link to the product page (with UTM tags you can change). The Instagram post uses the SocialRobot community node with the first photo that fits Instagram's 4:5 to 1.91:1 range.
+7. The product is logged in the Data Table once at least one post goes out. If nothing could be posted, the run stops with one readable error and the product is tried again next time.
+
+Only Pinterest and Instagram are on by default. An Instagram carousel (up to 10 photos, through the SocialRobot API), a Facebook photo post and a Threads photo post are already wired in but **disabled by default**. Once you enable one, it publishes in the same run.
+
+## Setup
+
+1. Install the SocialRobot community node `@socialrobot-io/n8n-nodes-socialrobot` (3.1.2 or later) and add your SocialRobot API key as the SocialRobot credential in **Fetch SocialRobot Accounts** and **Post Instagram Photo**.
+2. Connect Pinterest and Instagram in SocialRobot. Pick the Instagram account in **Post Instagram Photo**.
+3. Create a **Header Auth** credential with the name `x-api-key` and your SocialRobot API key as the value. Select it in **Fetch Pinterest Board List** and **Post Pinterest Pin via SocialRobot API** (and in **Post Instagram Carousel via SocialRobot API** if you enable it).
+4. In n8n, open *Data tables* and create `socialrobot_posted_products` (lowercase) with these text columns: `product_key`, `source`, `title`, `product_url`, `pinterest_post_id`, `instagram_post_id`, `posted_at`.
+5. In **Configure Catalog Settings**, set:
+   - `source`: `etsy_rss`, `etsy_api` or `shopify`
+   - `etsy_shop_name` (the part after `etsy.com/shop/`), or `shopify_store_url` and `shopify_currency`
+   - `pinterest_board_name`
+6. Only for `etsy_api`: create an app at etsy.com/developers. Add a Header Auth credential with the name `x-api-key` and the value `keystring:shared_secret`, then select it in **Retrieve Etsy Shop Details**, **Fetch Active Etsy Listings** and **Fetch Etsy Listing Images**.
+7. Only for `shopify`: create a custom app in your Shopify admin with the `read_products` scope. Add its Admin API access token and your shop subdomain as a Shopify Access Token credential in **Fetch Shopify Products**. Also set `shopify_store_url` and `shopify_currency` in **Configure Catalog Settings**.
+8. Add an OpenAI credential to **OpenAI Luna Chat Model**, or set `use_openai` to false.
+9. Click *Execute workflow* once. Check the pin and the post, then activate the workflow.
+
+## Requirements
+
+- n8n, self-hosted or Cloud, with Data Tables. No Execute Command node, no local files, no image generation.
+- The SocialRobot community node `@socialrobot-io/n8n-nodes-socialrobot` (3.1.2+) and a SocialRobot account with Pinterest and Instagram connected.
+- An Etsy shop or a Shopify store. The Etsy RSS source needs no key.
+- Optional: an OpenAI API key.
+
+## Cost
+
+| Item | Cost per product |
+|---|---|
+| OpenAI `gpt-6-luna` copy (about 1,500 tokens in, up to 1,500 out) | about $0.001 |
+| Etsy RSS, Etsy Open API, Shopify Admin API | $0 |
+| SocialRobot posts | included in your SocialRobot plan |
+
+These are OpenAI list prices, checked on 24 Oct 2026: $0.10 per 1M input tokens and $0.50 per 1M output tokens. Posting one product a day costs about 3 cents a month in OpenAI usage. No images are generated: every post uses your real product photos.
+
+## Customize
+
+Every setting is in **Configure Catalog Settings**:
+
+- `products_per_run` and `post_order` (`newest_first` or `oldest_first`). Change the time in **Daily Schedule Trigger**.
+- `pin_image_count` (1 to 5) and `link_tracking_params` (UTM tags added to the pin link; leave it empty for a clean link).
+- `include_price` and `price_label`. This is off by default, because pins stay up for years and prices change. When it's on, the exact shop price is added as "Price when posted: …". The AI never writes prices.
+- `caption_language`, `caption_tone`, `instagram_call_to_action` (`{shop}` is replaced by your shop name), `extra_hashtags` and `business_footer`.
+- `pinterest_account_handle` (if you have more than one Pinterest account), or `pinterest_account_id` and `pinterest_board_id` to skip the lookup.
+- `accept_language` for the language of the Etsy RSS feed.
+- `shop_name` to override the shop name used in the copy.
+- To post a product again, delete its row from the Data Table.
+
+## Good practice
+
+- Every post uses your real listing photos. Nothing is generated or edited, so the Instagram AI label is off. Only the text is AI-written, from your listing.
+- The copy contains no reviews, ratings, stars, testimonials or customer quotes. It makes no sale, discount, stock or shipping claims and invents no materials or sizes.
+- Posts go out right away, with no review step. Run the workflow manually first, read the copy next to your listing, and delete any post that doesn't match.
+- Keep your listing descriptions accurate: they are the only source the copy is written from.
+
+## Community node
+
+This workflow uses the SocialRobot community node (`@socialrobot-io/n8n-nodes-socialrobot`). Community nodes are not maintained by n8n, and you install them at your own risk. The node is used to list your accounts, for the Instagram post and for the optional Facebook and Threads posts. The Pinterest pin, the board lookup and the optional Instagram carousel call the SocialRobot API directly, because the node has no Pinterest title or link fields and only takes one Instagram photo.
+"""
+
 
 def split_nodes(wf):
     nodes = wf.get("nodes", [])
@@ -350,6 +428,9 @@ def describe(wf):
     # Curated gallery description for the Etsy unboxing template (approved in the n8n gallery 2026-10-23)
     if wf.get("name") == "Create AI unboxing videos from Etsy product photos with Kling 3.0, OpenAI and SocialRobot":
         return ETSY_UNBOXING_VIDEO_MD.strip()
+    # Curated gallery description for the Etsy/Shopify product pins template (published in the n8n gallery 2026-10-26)
+    if wf.get("name") == "Post Etsy and Shopify products to Pinterest and Instagram with SocialRobot and OpenAI":
+        return ETSY_SHOPIFY_PRODUCT_PINS_MD.strip()
     non_sticky, trigger, sources, actions = split_nodes(wf)
     _, who_for, how_text, steps, requirements, customization = build_overview(
         wf, non_sticky, trigger, sources, actions
