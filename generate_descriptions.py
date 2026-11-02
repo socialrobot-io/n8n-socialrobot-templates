@@ -31,7 +31,7 @@ Cafés, salons, makers, online shops and solo founders who already design Instag
 
 ## What it does
 1. Form: upload 2-10 slides in order, add a caption, seconds per slide (1.5-6, default 2.5) and an optional music URL. You can also choose whether to send a TikTok photo slideshow.
-2. Check ffmpeg Installed: stops with a clear message if ffmpeg is missing.
+2. Verify ffmpeg Installation: stops with a clear message if ffmpeg is missing.
 3. Slides are written to a temp folder (temp_dir/<execution id>) with Read/Write Files from Disk.
 4. ffmpeg (Execute Command) builds a 1080×1920, 30 fps H.264 MP4:
    - Each slide sits on a blurred 9:16 background, so square and 4:5 slides keep their text.
@@ -57,8 +57,8 @@ Cafés, salons, makers, online shops and solo founders who already design Instag
 $0 per run. Rendering happens on your server, with no render API and no AI model.
 
 ## Customize
-- Set Render Settings: temp_dir, seconds per slide, crossfade length, transition (any ffmpeg xfade name, such as fade, slideleft or circleopen), motion list, zoom amount, size, fps and limits.
-- Build ffmpeg Command: add a logo overlay or text with drawtext.
+- Set Video Render Settings: temp_dir, seconds per slide, crossfade length, transition (any ffmpeg xfade name, such as fade, slideleft or circleopen), motion list, zoom amount, size, fps and limits.
+- Compose ffmpeg Command: add a logo overlay or text with drawtext.
 - Use a Google Drive trigger instead of the form, as long as it outputs one binary per slide.
 
 ## Good practice
